@@ -212,10 +212,10 @@ paths:
       security:
        - bearerAuth: [] 
 #=====================================================================================
-  /users/{id}/followers/:
+  /users/{id}/home/:
     get:
       tags: ["stream"]
-      summary: Obtain the stream from the followers.
+      summary: Obtain the stream.
       description: Get all the photos (stream) from the following users.
       operationId: getMyStream
       
@@ -225,7 +225,7 @@ paths:
 
       responses:
         '200':
-          description: Get a list of photos from follwing users in a reversed chronological order.
+          description: Contains a list of photos from following users in a reversed chronological order.
           content:
             application/json:
               schema:
