@@ -1,0 +1,579 @@
+openapi: 3.0.3
+info:
+  title: WASAPhoto API
+  description: |
+    This is the API for the WASAPhoto Homework 1 for the WaSa course by 1849661.
+  version: 0.0.1
+#=====================================================================================
+paths:
+  /session:
+    post:
+      tags: ["login"]
+      summary: Logs in the user.
+      description: |-
+        If the user does not exist, it will be created,
+        and an identifier is returned.
+        If the user exists, the user identifier is returned.
+      operationId: doLogin
+      requestBody:
+        description: User details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Maria
+                  pattern: 'ˆ.*?$'
+                  minLength: 3
+                  maxLength: 16
+        required: true
+      responses:
+        '201':
+          description: User log-in action successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  identifier:
+                    # change here if you decide to use an integer
+                    # or any other type of identifier
+                    type: string
+                    example: "abcdef012345"
+#=====================================================================================
+  /users:
+    get:
+      tags: ["search"]
+      summary: Gets the profile of the user with a certain id.
+      description: A user can find another user's profile only if he's not banned by the latter.
+      operationId: getUserProfile
+
+      parameters: 
+        - in: query
+          name: id
+          description: id of the user that is being searched
+          schema:
+            type: string
+            example: marietto64
+        #- $ref: "#/components/parameters/identifierHeader"
+
+      responses:
+        '200':
+          description: Nickname found successfully
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Nickname'
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+          
+      security:
+        - bearerAuth: [] 
+#=====================================================================================
+  /users/{id}:
+    put:
+      tags: ["nickname"]
+      summary: Modifies the user's nickname.
+      description: Allows the user to modify his own nickname.
+      operationId: setMyUserName
+
+      parameters: 
+        - $ref: "#/components/parameters/identifier"
+        #- $ref: "#/components/parameters/identifierHeader"
+        
+      requestBody:
+        content:
+          text/plain:
+            schema:
+                $ref: '#/components/schemas/Nickname'
+
+      responses:
+        '200':
+          description: Nickname modified successfully
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+          
+      security:
+        - bearerAuth: [] 
+#=====================================================================================
+  /users/{id}/bannedUsers/{bannedUserId}:
+    put:
+      tags: ["ban"]
+      summary: Bans a user.
+      description: Once a user is blocked he/she won't be able to see anything from whoever banned him/her. That includes comments,likes, photos and the profile of the banning user. Banning multiple times is equivalent to banning a user once.
+      operationId: banUser
+      parameters:
+        - $ref: "#/components/parameters/bannedUserId"
+        - $ref: '#/components/parameters/identifier'
+        #- $ref: '#/components/parameters/identifierHeader'
+      
+      requestBody:
+        description: Contains the id of the user that'll be banned.
+        content:
+          text/plain:
+            schema: 
+              $ref: '#/components/schemas/UserIdentifier'
+        required: true
+      
+      responses:
+        '200':
+          description: User banned successfully
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+    
+    delete:
+      tags: ["ban"]
+      summary: Unbans a user.
+      description: By removing the ban the unbanned user can see the posts,comments and likes of the user that unbanned him/her.
+      operationId: unbanUser
+      parameters:
+        - $ref: "#/components/parameters/bannedUserId"
+        - $ref: '#/components/parameters/identifier'
+        #- $ref: '#/components/parameters/identifierHeader'
+      
+      responses:
+        '200':
+          description: User unbanned successfully
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+      
+      security:
+        - bearerAuth: [] 
+#=====================================================================================
+  /users/{id}/followers/{followerId}:
+    put:
+      tags: ["followers"]
+      summary: Follows a certain user.
+      description: |
+        Allows a user (if he's logged in) to follow another user only if the latter didn't ban him. A user can't follow himself and can't follow a user he already follows. Once a user follows another one then his list of "Following" will be updated too.
+      operationId: followUser
+      parameters:
+        - $ref: "#/components/parameters/followerId"
+        - $ref: '#/components/parameters/identifier'
+        #- $ref: '#/components/parameters/identifierHeader'
+      
+      requestBody:
+        description: Contains the follower id.
+        content:
+          text/plain:
+            schema: 
+              $ref: "#/components/schemas/Follower" 
+        required: true
+      
+      responses:
+        '200':
+          description: User followed successfully
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+          
+    delete:
+      tags: ["followers"]
+      summary: Unfollows a certain user.
+      description: |
+        A user can decide to unfollow another one. He will be able to follow him again in the future.
+      operationId: unfollowUser
+      parameters:
+        - $ref: "#/components/parameters/followerId"
+        - $ref: '#/components/parameters/identifier'
+        #- $ref: '#/components/parameters/identifierHeader'
+      
+      responses:
+        '200':
+          description: User unfollowed successfully
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"      
+          
+      security:
+       - bearerAuth: [] 
+#=====================================================================================
+  /users/{id}/followers/:
+    get:
+      tags: ["stream"]
+      summary: Obtain the stream from the followers.
+      description: Get all the photos (stream) from the following users.
+      operationId: getMyStream
+      
+      parameters: 
+        - $ref: '#/components/parameters/identifier'
+        #- $ref: '#/components/parameters/identifierHeader'
+
+      responses:
+        '200':
+          description: Get a list of photos from follwing users in a reversed chronological order.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Photo"
+          
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+          
+      security:
+        - bearerAuth: [] 
+#=====================================================================================
+  /users/{id}/photos:
+    post:
+      tags: ["photo"]
+      summary: Upload a photo.
+      description: A user can upload one or multiple images on his/her profile.
+      operationId: uploadPhoto
+      
+      requestBody:
+        content:
+          image/png:
+            schema:
+              $ref: "#/components/schemas/UploadPhoto" 
+        required: true
+      
+      parameters: 
+        - $ref: '#/components/parameters/identifier'
+        #- $ref: '#/components/parameters/identifierHeader'
+
+      responses:
+        '200':
+          description: Photo successfully uploaded
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+          
+      security:
+        - bearerAuth: [] 
+#=====================================================================================
+  /users/{id}/photos/{photoId}:
+    delete:
+      tags: ["photo"]
+      summary: Deletes a photo.
+      description: Deletes a user's photo with relative comments and likes.
+      operationId: deletePhoto
+      
+      parameters: 
+        - $ref: '#/components/parameters/identifier'
+        - $ref: '#/components/parameters/photoId'
+        #- $ref: '#/components/parameters/identifierHeader'
+
+      responses:
+        '200':
+          description: Photo deleted successfully.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+          
+      security:
+        - bearerAuth: [] 
+#=====================================================================================
+  /users/{id}/photos/{photoId}/comments:
+    post:
+      tags: ["comments"]
+      summary: Add a comment to a photo.
+      description: Adds a comment to a user's photo. Multiple comments can be made. Owners can comment their own photo.
+      operationId: commentPhoto
+      
+      parameters: 
+        - $ref: '#/components/parameters/identifier'
+        - $ref: '#/components/parameters/photoId'
+        #- $ref: '#/components/parameters/identifierHeader'
+      
+      requestBody:
+        description: Contains the id of who's commenting and the relative comment.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+        required: true
+      
+      responses:
+        '200':
+          description: Comment added successfully.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+          
+      security:
+        - bearerAuth: [] 
+#=====================================================================================
+  /users/{id}/photos/{photoId}/comments/{commentId}:
+    delete:
+      tags: ["comments"]
+      summary: Remove a comment from a photo.
+      description: Removes a comment from a user's photo. Only the owner of the photo can remove comments.
+      operationId: uncommentPhoto
+      
+      parameters: 
+        - $ref: '#/components/parameters/identifier'
+        - $ref: '#/components/parameters/photoId'
+        - $ref: '#/components/parameters/commentId'
+        #- $ref: '#/components/parameters/identifierHeader'
+      
+      responses:
+        '200':
+          description: Comment removed successfully.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+          
+      security:
+        - bearerAuth: [] 
+#=====================================================================================
+  /users/{id}/photos/{photoId}/likes/{likeId}:
+    put:
+      tags: ["likes"]
+      summary: Add a like to a photo.
+      description: Adds a like to a user's photo. A user can only like a photo once (multiple likes count as one). Owners can't like their own photos.
+      operationId: likePhoto
+      
+      parameters: 
+        - $ref: '#/components/parameters/identifier'
+        - $ref: '#/components/parameters/photoId'
+        - $ref: '#/components/parameters/likeId'
+        #- $ref: '#/components/parameters/identifierHeader'
+      
+      requestBody:
+        description: Contains the user's identifier that is liking the photo.
+        content:
+          text/plain:
+            schema:
+                $ref: '#/components/schemas/UserIdentifier'
+        required: true
+      
+      responses:
+        '200':
+          description: Comment added successfully.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+    
+    delete:
+      tags: ["likes"]
+      summary: Remove a like from a photo.
+      description: Removes a like from a user's photo.
+      operationId: unlikePhoto
+      
+      parameters: 
+        - $ref: '#/components/parameters/identifier'
+        - $ref: '#/components/parameters/photoId'
+        - $ref: '#/components/parameters/likeId'
+        #- $ref: '#/components/parameters/identifierHeader'
+      
+      responses:
+        '200':
+          description: Like removed successfully.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+          
+      security:
+        - bearerAuth: [] 
+#=====================================================================================
+#_____________________________________________________________________________________________________
+components:
+  parameters:
+  
+    identifier:
+      name: id
+      in: path
+      description: A user's unique id.
+      required: true
+      schema: 
+        type: string
+        example: marietto64
+        readOnly: true
+        
+    photoId:
+      name: photoId
+      in: path
+      description: A photo unique identifier
+      required: true
+      schema: 
+        type: string
+        example: s72h3k
+        readOnly: true
+        
+    commentId:
+      name: commentId
+      in: path
+      description: A comment unique identifier
+      required: true
+      schema: 
+        type: string
+        example: 9z212l
+        readOnly: true
+        
+    followerId:
+      name: followerId
+      in: path
+      description: A follower's unique identifier. It's exactly his *identifier*.
+      required: true
+      schema: 
+        type: string
+        example: 9z212l
+        readOnly: true
+        
+    likeId:
+      name: likeId
+      in: path
+      description: A like unique identifier. It's exactly the *identifier* of the user that liked the photo.
+      required: true
+      schema: 
+        type: string
+        example: nxjsn12
+        readOnly: true
+        
+    bannedUserId:
+      name: bannedUserId
+      in: path
+      description: A banned user unique identifier. It's exactly the *identifier* of the user.
+      required: true
+      schema: 
+        type: string
+        example: nxjsn12
+        readOnly: true
+            
+    #identifierHeader:
+    #  name: identifier
+    #  in: header
+    #  description: This is the unique identifier given to a user after he has performed the log in.
+    #  required: true
+    #  schema: 
+    #    type: string
+    #    example: luigi64
+    #    readOnly: true
+#_____________________________________________________________________________________________________
+  schemas:
+  
+    Photo:
+      description: A schema that represents a photo on WASAPhoto
+      type: object
+      properties:
+        comments:
+          description: Number of comments in a photo.
+          type: integer
+          example: 124
+        likes:
+          description: Number of comments in a photo.
+          type: integer
+          example: 1274
+        date:
+          description: Date and time of upload.
+          type: string
+          format: date-time
+          example: 2017-07-21T17:32:28Z
+          readOnly: true
+        photoId:
+          description: The photo unique identifier
+          type: string
+          minLength: 3
+          maxLength: 20
+          readOnly: true
+        owner:
+          description: Unique identifier of the photo author.
+          type: string
+          minLength: 3
+          maxLength: 16
+      example: 
+        comments: 0
+        likes: 0
+        date: 2017-07-21T17:32:28Z
+        photoId: 9832ash
+        owner: "marietto64"
+        
+    UploadPhoto:
+      title: PhotoFile
+      description: Represents the file of a photo on WASAPhoto
+      type: string
+      format: binary
+      
+    Nickname:
+      description: It's the nickname of a user. It's *not* *unique*.
+      type: string
+      minLength: 3
+      maxLength: 16
+      example: sapnzGenieBase64
+      
+    Comment:
+      description: A user's comment contains the text of the comment and the *identifier* of who commented.
+      type: object
+      properties:
+        userId: 
+          $ref: '#/components/schemas/UserIdentifier'
+        comment:
+          type: string
+          description: String value of the comment
+      example:
+        user: pannaBoy22
+        comment: "Wow che foto spectacularesss"
+        
+    UserIdentifier:
+      description: The *unique* *identifier* of a user.
+      type: string
+      minLength: 3
+      maxLength: 16
+      example: "topoGiggggggio"
+      
+    Follower:
+      type: string
+      minLength: 3
+      maxLength: 16
+      example: "nonnaRita20"
+      
+#_____________________________________________________________________________________________________  
+  responses:
+    UnauthorizedError:
+      description: Access token is missing. User is not logged in.
+    NotFoundError:
+      description: The requested resource doesn't exist.
+    InternalServerError:
+      description: Server has encountered an unknown error.
+#_____________________________________________________________________________________________________
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+#_____________________________________________________________________________________________________
