@@ -577,6 +577,8 @@ components:
           example: "TopoGiggggggio"
         comment:
           type: string
+          minLength: 1
+          maxLength: 30
           description: String value of the comment
       example:
         user: PannaBoy22
