@@ -66,8 +66,6 @@ paths:
           description: Nickname found successfully
           content:
             text/plain:
-              #schema:
-              #  $ref: '#/components/schemas/Nickname'
               example: "NickNone"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
@@ -92,8 +90,6 @@ paths:
       requestBody:
         content:
           text/plain:
-            #schema:
-            #    $ref: '#/components/schemas/Nickname'
             example: "NickNone"
 
       responses:
@@ -126,8 +122,6 @@ paths:
         description: Contains the id of the user that'll be banned.
         content:
           text/plain:
-            #schema: 
-            #  $ref: '#/components/schemas/UserIdentifier'
             example: "UniqueBarbie"
         required: true
       
@@ -184,8 +178,6 @@ paths:
         description: Contains the follower id.
         content:
           text/plain:
-            #schema: 
-            #  $ref: "#/components/schemas/Follower" 
             example: "Userigno"
         required: true
       
@@ -271,8 +263,6 @@ paths:
       requestBody:
         content:
           image/png:
-            #schema:
-              #$ref: "#/components/schemas/UploadPhoto" 
             example: 010110010
         required: true
       
@@ -399,9 +389,7 @@ paths:
         description: Contains the user's identifier that is liking the photo.
         content:
           text/plain:
-            #schema:
-                #$ref: '#/components/schemas/UserIdentifier'
-            example: "ciao"
+            example: "IdenTic"
         required: true
       
       responses:
@@ -547,26 +535,18 @@ components:
         date: 2017-07-21T17:32:28Z
         photoId: 9832ash
         owner: "Marietto64"
-        
-    #UploadPhoto:
-    #  title: PhotoFile
-    #  description: Represents the file of a photo on WASAPhoto
-    #  type: string
-    #  format: binary
-      
-    #Nickname:
-    #  description: It's the nickname of a user. It's *not* *unique*.
-    #  type: string
-    #  minLength: 3
-    #  maxLength: 16
-    #  example: SapnzGenieBase64
       
     Comment:
       description: A user's comment contains the text of the comment and the *identifier* of who commented.
       type: object
       properties:
         userId: 
-          $ref: '#/components/schemas/UserIdentifier'
+          #$ref: '#/components/schemas/UserIdentifier'
+          type: string
+          minLength: 3
+          maxLength: 16
+          pattern: 'ˆ.*?$'
+          example: "TopoGiggggggio"
         comment:
           type: string
           description: String value of the comment
@@ -581,13 +561,6 @@ components:
       maxLength: 16
       pattern: 'ˆ.*?$'
       example: "TopoGiggggggio"
-      
-    #Follower:
-    #  type: string
-    #  minLength: 3
-    #  maxLength: 16
-    #  pattern: 'ˆ.*?$'
-    #  example: "NonnaRita20"
       
 #_____________________________________________________________________________________________________  
   responses:
