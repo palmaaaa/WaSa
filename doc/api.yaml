@@ -435,8 +435,10 @@ components:
       description: A user's unique id.
       required: true
       schema: 
+        description: Id to search
         type: string
-        example: marietto64
+        pattern: 'ˆ.*?$'
+        example: Marietto64
         readOnly: true
         
     photoId:
@@ -445,8 +447,10 @@ components:
       description: A photo unique identifier
       required: true
       schema: 
+        description: Photo id
         type: string
-        example: s72h3k
+        pattern: 'ˆ.*?$'
+        example: S72h3k
         readOnly: true
         
     commentId:
@@ -455,8 +459,10 @@ components:
       description: A comment unique identifier
       required: true
       schema: 
+        description: Comment unique id
         type: string
-        example: 9z212l
+        pattern: 'ˆ.*?$'
+        example: Z9z212l
         readOnly: true
         
     followerId:
@@ -465,8 +471,10 @@ components:
       description: A follower's unique identifier. It's exactly his *identifier*.
       required: true
       schema: 
+        description: Follower unique id
         type: string
-        example: 9z212l
+        pattern: 'ˆ.*?$'
+        example: Z9z212l
         readOnly: true
         
     likeId:
@@ -475,8 +483,10 @@ components:
       description: A like unique identifier. It's exactly the *identifier* of the user that liked the photo.
       required: true
       schema: 
+        description: Like unique id
         type: string
-        example: nxjsn12
+        pattern: 'ˆ.*?$'
+        example: Nxjsn12
         readOnly: true
         
     bannedUserId:
@@ -485,8 +495,10 @@ components:
       description: A banned user unique identifier. It's exactly the *identifier* of the user.
       required: true
       schema: 
+        description: Banned user unique id
         type: string
-        example: nxjsn12
+        pattern: 'ˆ.*?$'
+        example: Nxjsn12
         readOnly: true
         
     queryId:
@@ -525,6 +537,7 @@ components:
           type: string
           minLength: 3
           maxLength: 20
+          pattern: 'ˆ.*?$'
           readOnly: true
         owner:
           description: Unique identifier of the photo author.
@@ -537,7 +550,7 @@ components:
         comments: 0
         likes: 0
         date: 2017-07-21T17:32:28Z
-        photoId: 9832ash
+        photoId: B9832ash
         owner: "Mariucc"
       
     Comment:
@@ -554,7 +567,7 @@ components:
           type: string
           description: String value of the comment
       example:
-        user: pannaBoy22
+        user: PannaBoy22
         comment: "Wow che foto spectacularesss"
       
 #_____________________________________________________________________________________________________  
