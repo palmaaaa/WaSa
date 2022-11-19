@@ -43,7 +43,7 @@ paths:
                     type: string
                     example: "abcdef012345"
 #=====================================================================================
-  /users:
+  /users/:
     get:
       tags: ["search"]
       summary: Gets the profile of the user with a certain id.
@@ -51,15 +51,7 @@ paths:
       operationId: getUserProfile
 
       parameters: 
-        - in: query
-          name: id
-          description: id of the user that is being searched
-          schema:
-            type: string
-            pattern: 'ˆ.*?$'
-            minLength: 3
-            maxLength: 16
-            example: Marietto64
+        - $ref: "#/components/parameters/queryId"
 
       responses:
         '200':
@@ -496,6 +488,17 @@ components:
         type: string
         example: nxjsn12
         readOnly: true
+        
+    queryId:
+      in: query
+      name: id
+      description: id of the user that is being searched
+      schema:
+        type: string
+        pattern: 'ˆ.*?$'
+        minLength: 3
+        maxLength: 16
+        example: "Marietto64"
 #_____________________________________________________________________________________________________
   schemas:
   
@@ -529,19 +532,19 @@ components:
           minLength: 3
           maxLength: 16
           pattern: 'ˆ.*?$'
+          example: "Mariucc"
       example: 
         comments: 0
         likes: 0
         date: 2017-07-21T17:32:28Z
         photoId: 9832ash
-        owner: "Marietto64"
+        owner: "Mariucc"
       
     Comment:
       description: A user's comment contains the text of the comment and the *identifier* of who commented.
       type: object
       properties:
         userId: 
-          #$ref: '#/components/schemas/UserIdentifier'
           type: string
           minLength: 3
           maxLength: 16
@@ -560,27 +563,18 @@ components:
       description: Access token is missing. User is not logged in.
       content:
         text/plain:
-          #schema:
-          #  description: Response for 401 Error
-          #  type: string
           example: User unauthorized
             
     NotFoundError:
       description: The requested resource doesn't exist.
       content:
         text/plain:
-          #schema:
-          #  description: Response for 404 Error
-          #  type: string
           example: Requested resource unavailable
             
     InternalServerError:
       description: Server has encountered an unknown error.
       content:
         text/plain:
-          #schema:
-          #  description: Response for 501 Error
-          #  type: string
           example: Unknown error 
 #_____________________________________________________________________________________________________
   securitySchemes:
