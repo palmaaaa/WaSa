@@ -99,6 +99,9 @@ paths:
       responses:
         '200':
           description: Nickname modified successfully
+          content:
+            text/plain:
+              example: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -131,6 +134,9 @@ paths:
       responses:
         '200':
           description: User banned successfully
+          content:
+            text/plain:
+              example: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -150,6 +156,9 @@ paths:
       responses:
         '200':
           description: User unbanned successfully
+          content:
+            text/plain:
+              example: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -183,6 +192,9 @@ paths:
       responses:
         '200':
           description: User followed successfully
+          content:
+            text/plain:
+              example: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -203,6 +215,9 @@ paths:
       responses:
         '200':
           description: User unfollowed successfully
+          content:
+            text/plain:
+              example: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -267,6 +282,9 @@ paths:
       responses:
         '201':
           description: Photo successfully uploaded
+          content:
+            text/plain:
+              example: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '500':
@@ -289,6 +307,9 @@ paths:
       responses:
         '200':
           description: Photo deleted successfully.
+          content:
+            text/plain:
+              example: OK
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
@@ -321,6 +342,9 @@ paths:
       responses:
         '201':
           description: Comment added successfully.
+          content:
+            text/plain:
+              example: OK
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
@@ -346,6 +370,9 @@ paths:
       responses:
         '200':
           description: Comment removed successfully.
+          content:
+            text/plain:
+              example: OK
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
@@ -380,6 +407,9 @@ paths:
       responses:
         '200':
           description: Comment added successfully.
+          content:
+            text/plain:
+              example: OK
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
@@ -401,6 +431,9 @@ paths:
       responses:
         '200':
           description: Like removed successfully.
+          content:
+            text/plain:
+              example: OK
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
