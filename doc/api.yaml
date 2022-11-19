@@ -439,6 +439,8 @@ components:
         type: string
         pattern: 'ˆ.*?$'
         example: Marietto64
+        minLength: 3
+        maxLength: 16
         readOnly: true
         
     photoId:
@@ -451,6 +453,8 @@ components:
         type: string
         pattern: 'ˆ.*?$'
         example: S72h3k
+        minLength: 3
+        maxLength: 16
         readOnly: true
         
     commentId:
@@ -463,6 +467,8 @@ components:
         type: string
         pattern: 'ˆ.*?$'
         example: Z9z212l
+        minLength: 3
+        maxLength: 16
         readOnly: true
         
     followerId:
@@ -475,6 +481,8 @@ components:
         type: string
         pattern: 'ˆ.*?$'
         example: Z9z212l
+        minLength: 3
+        maxLength: 16
         readOnly: true
         
     likeId:
@@ -487,6 +495,8 @@ components:
         type: string
         pattern: 'ˆ.*?$'
         example: Nxjsn12
+        minLength: 3
+        maxLength: 16
         readOnly: true
         
     bannedUserId:
@@ -499,6 +509,8 @@ components:
         type: string
         pattern: 'ˆ.*?$'
         example: Nxjsn12
+        minLength: 3
+        maxLength: 16
         readOnly: true
         
     queryId:
