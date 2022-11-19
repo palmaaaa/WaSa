@@ -101,14 +101,18 @@ paths:
         - bearerAuth: [] 
 #=====================================================================================
   /users/{id}/bannedUsers/{bannedUserId}:
+    parameters:
+        - $ref: "#/components/parameters/bannedUserId"
+        - $ref: '#/components/parameters/identifier'
+  
     put:
       tags: ["ban"]
       summary: Bans a user.
       description: Once a user is blocked he/she won't be able to see anything from whoever banned him/her. That includes comments,likes, photos and the profile of the banning user. Banning multiple times is equivalent to banning a user once.
       operationId: banUser
-      parameters:
-        - $ref: "#/components/parameters/bannedUserId"
-        - $ref: '#/components/parameters/identifier'
+      #parameters:
+      #  - $ref: "#/components/parameters/bannedUserId"
+      #  - $ref: '#/components/parameters/identifier'
       
       requestBody:
         description: Contains the id of the user that'll be banned.
@@ -135,9 +139,9 @@ paths:
       summary: Unbans a user.
       description: By removing the ban the unbanned user can see the posts,comments and likes of the user that unbanned him/her.
       operationId: unbanUser
-      parameters:
-        - $ref: "#/components/parameters/bannedUserId"
-        - $ref: '#/components/parameters/identifier'
+      #parameters:
+      #  - $ref: "#/components/parameters/bannedUserId"
+      #  - $ref: '#/components/parameters/identifier'
       
       responses:
         '200':
@@ -156,15 +160,19 @@ paths:
         - bearerAuth: [] 
 #=====================================================================================
   /users/{id}/followers/{followerId}:
+    parameters:
+        - $ref: "#/components/parameters/followerId"
+        - $ref: '#/components/parameters/identifier'
+        
     put:
       tags: ["followers"]
       summary: Follows a certain user.
       description: |
         Allows a user (if he's logged in) to follow another user only if the latter didn't ban him. A user can't follow himself and can't follow a user he already follows. Once a user follows another one then his list of "Following" will be updated too.
       operationId: followUser
-      parameters:
-        - $ref: "#/components/parameters/followerId"
-        - $ref: '#/components/parameters/identifier'
+      #parameters:
+      #  - $ref: "#/components/parameters/followerId"
+      #  - $ref: '#/components/parameters/identifier'
       
       requestBody:
         description: Contains the follower id.
@@ -192,9 +200,9 @@ paths:
       description: |
         A user can decide to unfollow another one. He will be able to follow him again in the future.
       operationId: unfollowUser
-      parameters:
-        - $ref: "#/components/parameters/followerId"
-        - $ref: '#/components/parameters/identifier'
+      #parameters:
+      #  - $ref: "#/components/parameters/followerId"
+      #  - $ref: '#/components/parameters/identifier'
       
       responses:
         '200':
@@ -366,16 +374,21 @@ paths:
         - bearerAuth: [] 
 #=====================================================================================
   /users/{id}/photos/{photoId}/likes/{likeId}:
+    parameters: 
+        - $ref: '#/components/parameters/identifier'
+        - $ref: '#/components/parameters/photoId'
+        - $ref: '#/components/parameters/likeId'
+  
     put:
       tags: ["likes"]
       summary: Add a like to a photo.
       description: Adds a like to a user's photo. A user can only like a photo once (multiple likes count as one). Owners can't like their own photos.
       operationId: likePhoto
       
-      parameters: 
-        - $ref: '#/components/parameters/identifier'
-        - $ref: '#/components/parameters/photoId'
-        - $ref: '#/components/parameters/likeId'
+      #parameters: 
+      #  - $ref: '#/components/parameters/identifier'
+      #  - $ref: '#/components/parameters/photoId'
+      #  - $ref: '#/components/parameters/likeId'
       
       requestBody:
         description: Contains the user's identifier that is liking the photo.
@@ -403,10 +416,10 @@ paths:
       description: Removes a like from a user's photo.
       operationId: unlikePhoto
       
-      parameters: 
-        - $ref: '#/components/parameters/identifier'
-        - $ref: '#/components/parameters/photoId'
-        - $ref: '#/components/parameters/likeId'
+      #parameters: 
+      #  - $ref: '#/components/parameters/identifier'
+      #  - $ref: '#/components/parameters/photoId'
+      #  - $ref: '#/components/parameters/likeId'
       
       responses:
         '200':
