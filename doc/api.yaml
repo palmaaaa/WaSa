@@ -56,16 +56,19 @@ paths:
           description: id of the user that is being searched
           schema:
             type: string
-            example: marietto64
-        #- $ref: "#/components/parameters/identifierHeader"
+            pattern: 'ˆ.*?$'
+            minLength: 3
+            maxLength: 16
+            example: Marietto64
 
       responses:
         '200':
           description: Nickname found successfully
           content:
             text/plain:
-              schema:
-                $ref: '#/components/schemas/Nickname'
+              #schema:
+              #  $ref: '#/components/schemas/Nickname'
+              example: "NickNone"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -85,13 +88,13 @@ paths:
 
       parameters: 
         - $ref: "#/components/parameters/identifier"
-        #- $ref: "#/components/parameters/identifierHeader"
         
       requestBody:
         content:
           text/plain:
-            schema:
-                $ref: '#/components/schemas/Nickname'
+            #schema:
+            #    $ref: '#/components/schemas/Nickname'
+            example: "NickNone"
 
       responses:
         '200':
@@ -115,14 +118,14 @@ paths:
       parameters:
         - $ref: "#/components/parameters/bannedUserId"
         - $ref: '#/components/parameters/identifier'
-        #- $ref: '#/components/parameters/identifierHeader'
       
       requestBody:
         description: Contains the id of the user that'll be banned.
         content:
           text/plain:
-            schema: 
-              $ref: '#/components/schemas/UserIdentifier'
+            #schema: 
+            #  $ref: '#/components/schemas/UserIdentifier'
+            example: "UniqueBarbie"
         required: true
       
       responses:
@@ -143,7 +146,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/bannedUserId"
         - $ref: '#/components/parameters/identifier'
-        #- $ref: '#/components/parameters/identifierHeader'
       
       responses:
         '200':
@@ -168,14 +170,14 @@ paths:
       parameters:
         - $ref: "#/components/parameters/followerId"
         - $ref: '#/components/parameters/identifier'
-        #- $ref: '#/components/parameters/identifierHeader'
       
       requestBody:
         description: Contains the follower id.
         content:
           text/plain:
-            schema: 
-              $ref: "#/components/schemas/Follower" 
+            #schema: 
+            #  $ref: "#/components/schemas/Follower" 
+            example: "Userigno"
         required: true
       
       responses:
@@ -197,7 +199,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/followerId"
         - $ref: '#/components/parameters/identifier'
-        #- $ref: '#/components/parameters/identifierHeader'
       
       responses:
         '200':
@@ -221,7 +222,6 @@ paths:
       
       parameters: 
         - $ref: '#/components/parameters/identifier'
-        #- $ref: '#/components/parameters/identifierHeader'
 
       responses:
         '200':
@@ -230,6 +230,9 @@ paths:
             application/json:
               schema:
                 type: array
+                description: An array of photos
+                minItems: 1
+                maxItems: 5
                 items:
                   $ref: "#/components/schemas/Photo"
           
@@ -253,16 +256,16 @@ paths:
       requestBody:
         content:
           image/png:
-            schema:
-              $ref: "#/components/schemas/UploadPhoto" 
+            #schema:
+              #$ref: "#/components/schemas/UploadPhoto" 
+            example: 010110010
         required: true
       
       parameters: 
         - $ref: '#/components/parameters/identifier'
-        #- $ref: '#/components/parameters/identifierHeader'
 
       responses:
-        '200':
+        '201':
           description: Photo successfully uploaded
         '401':
           $ref: "#/components/responses/UnauthorizedError"
@@ -282,7 +285,6 @@ paths:
       parameters: 
         - $ref: '#/components/parameters/identifier'
         - $ref: '#/components/parameters/photoId'
-        #- $ref: '#/components/parameters/identifierHeader'
 
       responses:
         '200':
@@ -307,7 +309,6 @@ paths:
       parameters: 
         - $ref: '#/components/parameters/identifier'
         - $ref: '#/components/parameters/photoId'
-        #- $ref: '#/components/parameters/identifierHeader'
       
       requestBody:
         description: Contains the id of who's commenting and the relative comment.
@@ -318,7 +319,7 @@ paths:
         required: true
       
       responses:
-        '200':
+        '201':
           description: Comment added successfully.
         '401':
           $ref: '#/components/responses/UnauthorizedError'
@@ -341,7 +342,6 @@ paths:
         - $ref: '#/components/parameters/identifier'
         - $ref: '#/components/parameters/photoId'
         - $ref: '#/components/parameters/commentId'
-        #- $ref: '#/components/parameters/identifierHeader'
       
       responses:
         '200':
@@ -367,14 +367,14 @@ paths:
         - $ref: '#/components/parameters/identifier'
         - $ref: '#/components/parameters/photoId'
         - $ref: '#/components/parameters/likeId'
-        #- $ref: '#/components/parameters/identifierHeader'
       
       requestBody:
         description: Contains the user's identifier that is liking the photo.
         content:
           text/plain:
-            schema:
-                $ref: '#/components/schemas/UserIdentifier'
+            #schema:
+                #$ref: '#/components/schemas/UserIdentifier'
+            example: "ciao"
         required: true
       
       responses:
@@ -397,7 +397,6 @@ paths:
         - $ref: '#/components/parameters/identifier'
         - $ref: '#/components/parameters/photoId'
         - $ref: '#/components/parameters/likeId'
-        #- $ref: '#/components/parameters/identifierHeader'
       
       responses:
         '200':
@@ -476,16 +475,6 @@ components:
         type: string
         example: nxjsn12
         readOnly: true
-            
-    #identifierHeader:
-    #  name: identifier
-    #  in: header
-    #  description: This is the unique identifier given to a user after he has performed the log in.
-    #  required: true
-    #  schema: 
-    #    type: string
-    #    example: luigi64
-    #    readOnly: true
 #_____________________________________________________________________________________________________
   schemas:
   
@@ -518,25 +507,26 @@ components:
           type: string
           minLength: 3
           maxLength: 16
+          pattern: 'ˆ.*?$'
       example: 
         comments: 0
         likes: 0
         date: 2017-07-21T17:32:28Z
         photoId: 9832ash
-        owner: "marietto64"
+        owner: "Marietto64"
         
-    UploadPhoto:
-      title: PhotoFile
-      description: Represents the file of a photo on WASAPhoto
-      type: string
-      format: binary
+    #UploadPhoto:
+    #  title: PhotoFile
+    #  description: Represents the file of a photo on WASAPhoto
+    #  type: string
+    #  format: binary
       
-    Nickname:
-      description: It's the nickname of a user. It's *not* *unique*.
-      type: string
-      minLength: 3
-      maxLength: 16
-      example: sapnzGenieBase64
+    #Nickname:
+    #  description: It's the nickname of a user. It's *not* *unique*.
+    #  type: string
+    #  minLength: 3
+    #  maxLength: 16
+    #  example: SapnzGenieBase64
       
     Comment:
       description: A user's comment contains the text of the comment and the *identifier* of who commented.
@@ -556,22 +546,44 @@ components:
       type: string
       minLength: 3
       maxLength: 16
-      example: "topoGiggggggio"
+      pattern: 'ˆ.*?$'
+      example: "TopoGiggggggio"
       
-    Follower:
-      type: string
-      minLength: 3
-      maxLength: 16
-      example: "nonnaRita20"
+    #Follower:
+    #  type: string
+    #  minLength: 3
+    #  maxLength: 16
+    #  pattern: 'ˆ.*?$'
+    #  example: "NonnaRita20"
       
 #_____________________________________________________________________________________________________  
   responses:
     UnauthorizedError:
       description: Access token is missing. User is not logged in.
+      content:
+        text/plain:
+          #schema:
+          #  description: Response for 401 Error
+          #  type: string
+          example: User unauthorized
+            
     NotFoundError:
       description: The requested resource doesn't exist.
+      content:
+        text/plain:
+          #schema:
+          #  description: Response for 404 Error
+          #  type: string
+          example: Requested resource unavailable
+            
     InternalServerError:
       description: Server has encountered an unknown error.
+      content:
+        text/plain:
+          #schema:
+          #  description: Response for 501 Error
+          #  type: string
+          example: Unknown error 
 #_____________________________________________________________________________________________________
   securitySchemes:
     bearerAuth:
