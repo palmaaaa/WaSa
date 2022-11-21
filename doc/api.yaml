@@ -78,9 +78,6 @@ paths:
       summary: Modifies the user's nickname.
       description: Allows the user to modify his own nickname.
       operationId: setMyUserName
-
-      #parameters: 
-      #  - $ref: "#/components/parameters/identifier"
         
       requestBody:
         content:
@@ -113,9 +110,6 @@ paths:
       summary: Bans a user.
       description: Once a user is blocked he/she won't be able to see anything from whoever banned him/her. That includes comments,likes, photos and the profile of the banning user. Banning multiple times is equivalent to banning a user once.
       operationId: banUser
-      #parameters:
-      #  - $ref: "#/components/parameters/bannedUserId"
-      #  - $ref: '#/components/parameters/identifier'
       
       requestBody:
         description: Contains the id of the user that'll be banned.
@@ -142,9 +136,6 @@ paths:
       summary: Unbans a user.
       description: By removing the ban the unbanned user can see the posts,comments and likes of the user that unbanned him/her.
       operationId: unbanUser
-      #parameters:
-      #  - $ref: "#/components/parameters/bannedUserId"
-      #  - $ref: '#/components/parameters/identifier'
       
       responses:
         '200':
@@ -173,9 +164,6 @@ paths:
       description: |
         Allows a user (if he's logged in) to follow another user only if the latter didn't ban him. A user can't follow himself and can't follow a user he already follows. Once a user follows another one then his list of "Following" will be updated too.
       operationId: followUser
-      #parameters:
-      #  - $ref: "#/components/parameters/followerId"
-      #  - $ref: '#/components/parameters/identifier'
       
       requestBody:
         description: Contains the follower id.
@@ -203,9 +191,6 @@ paths:
       description: |
         A user can decide to unfollow another one. He will be able to follow him again in the future.
       operationId: unfollowUser
-      #parameters:
-      #  - $ref: "#/components/parameters/followerId"
-      #  - $ref: '#/components/parameters/identifier'
       
       responses:
         '200':
@@ -232,9 +217,6 @@ paths:
       summary: Obtain the stream.
       description: Get all the photos (stream) from the following users.
       operationId: getMyStream
-      
-      #parameters: 
-      #  - $ref: '#/components/parameters/identifier'
 
       responses:
         '200':
@@ -242,12 +224,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                description: An array of photos
-                minItems: 1
-                maxItems: 5
-                items:
-                  $ref: "#/components/schemas/Photo"
+                $ref: "#/components/schemas/Photos"
           
         '401':
           $ref: "#/components/responses/UnauthorizedError"
@@ -274,9 +251,6 @@ paths:
           image/png:
             example: 010110010
         required: true
-      
-      #parameters: 
-      #  - $ref: '#/components/parameters/identifier'
 
       responses:
         '201':
@@ -303,10 +277,6 @@ paths:
       description: Deletes a user's photo with relative comments and likes.
       operationId: deletePhoto
       
-      #parameters: 
-      #  - $ref: '#/components/parameters/identifier'
-      #  - $ref: '#/components/parameters/photoId'
-
       responses:
         '200':
           description: Photo deleted successfully.
@@ -333,10 +303,6 @@ paths:
       summary: Add a comment to a photo.
       description: Adds a comment to a user's photo. Multiple comments can be made. Owners can comment their own photo.
       operationId: commentPhoto
-      
-      #parameters: 
-      #  - $ref: '#/components/parameters/identifier'
-      #  - $ref: '#/components/parameters/photoId'
       
       requestBody:
         description: Contains the id of who's commenting and the relative comment.
@@ -374,11 +340,6 @@ paths:
       description: Removes a comment from a user's photo. Only the owner of the photo can remove comments.
       operationId: uncommentPhoto
       
-      #parameters: 
-      #  - $ref: '#/components/parameters/identifier'
-      #  - $ref: '#/components/parameters/photoId'
-      #  - $ref: '#/components/parameters/commentId'
-      
       responses:
         '200':
           description: Comment removed successfully.
@@ -407,11 +368,6 @@ paths:
       description: Adds a like to a user's photo. A user can only like a photo once (multiple likes count as one). Owners can't like their own photos.
       operationId: likePhoto
       
-      #parameters: 
-      #  - $ref: '#/components/parameters/identifier'
-      #  - $ref: '#/components/parameters/photoId'
-      #  - $ref: '#/components/parameters/likeId'
-      
       requestBody:
         description: Contains the user's identifier that is liking the photo.
         content:
@@ -437,11 +393,6 @@ paths:
       summary: Remove a like from a photo.
       description: Removes a like from a user's photo.
       operationId: unlikePhoto
-      
-      #parameters: 
-      #  - $ref: '#/components/parameters/identifier'
-      #  - $ref: '#/components/parameters/photoId'
-      #  - $ref: '#/components/parameters/likeId'
       
       responses:
         '200':
@@ -472,7 +423,7 @@ components:
       schema: 
         description: Id to search
         type: string
-        pattern: 'ˆ.*?$'
+        pattern: 'ˆ*'
         example: Marietto64
         minLength: 3
         maxLength: 16
@@ -486,7 +437,7 @@ components:
       schema: 
         description: Photo id
         type: string
-        pattern: 'ˆ.*?$'
+        pattern: 'ˆ*'
         example: S72h3k
         minLength: 3
         maxLength: 16
@@ -500,7 +451,7 @@ components:
       schema: 
         description: Comment unique id
         type: string
-        pattern: 'ˆ.*?$'
+        pattern: 'ˆ*'
         example: Z9z212l
         minLength: 3
         maxLength: 16
@@ -514,7 +465,7 @@ components:
       schema: 
         description: Follower unique id
         type: string
-        pattern: 'ˆ.*?$'
+        pattern: 'ˆ*'
         example: Z9z212l
         minLength: 3
         maxLength: 16
@@ -554,7 +505,7 @@ components:
       description: id of the user that is being searched
       schema:
         type: string
-        pattern: 'ˆ.*?$'
+        pattern: 'ˆ*'
         minLength: 3
         maxLength: 16
         example: "Marietto64"
@@ -584,7 +535,7 @@ components:
           type: string
           minLength: 3
           maxLength: 20
-          pattern: 'ˆ.*?$'
+          pattern: 'ˆ*'
           readOnly: true
         owner:
           description: Unique identifier of the photo author.
@@ -610,14 +561,26 @@ components:
           maxLength: 16
           pattern: 'ˆ.*?$'
           example: "TopoGiggggggio"
+          description: Usual user *identifier*
         comment:
           type: string
           minLength: 1
           maxLength: 30
+          pattern: 'ˆ*'
+          example: OK my bruh
           description: String value of the comment
       example:
         user: PannaBoy22
         comment: "Wow che foto spectacularesss"
+        
+    Photos:
+      type: array
+      description: An array of photos
+      minItems: 1
+      maxItems: 5
+      items:
+        $ref: "#/components/schemas/Photo"
+      example: "[{0,0,2017-07-21T17:32:28Z,B9832ash,Mariucc}]"
       
 #_____________________________________________________________________________________________________  
   responses:
