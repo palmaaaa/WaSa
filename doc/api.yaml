@@ -40,14 +40,8 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: Maria
-                  pattern: 'ˆ.*?$'
-                  minLength: 3
-                  maxLength: 16
+              $ref: "#/components/schemas/Login2"
+             
         required: true
       responses:
         '201':
@@ -55,13 +49,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  identifier:
-                    # change here if you decide to use an integer
-                    # or any other type of identifier
-                    type: string
-                    example: "abcdef012345"
+               $ref: "#/components/schemas/Login"
 #=====================================================================================
   /users/:
     get:
@@ -75,10 +63,11 @@ paths:
 
       responses:
         '200':
-          description: Nickname found successfully
-          content:
-            text/plain:
-              example: "NickNone"
+          $ref: "#/components/responses/NicknameFound"
+          #description: Nickname found successfully
+          #content:
+          #  text/plain:
+          #    example: "NickNone"
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -103,13 +92,16 @@ paths:
         content:
           text/plain:
             example: "NickNone"
+        required: true
 
       responses:
         '200':
-          description: Nickname modified successfully
-          content:
-            text/plain:
-              example: OK
+          $ref: "#/components/responses/NicknameModified"
+          #description: Nickname modified successfully
+          #content:
+          #  text/plain:
+          #    example: OK
+          
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -140,10 +132,11 @@ paths:
       
       responses:
         '200':
-          description: User banned successfully
-          content:
-            text/plain:
-              example: OK
+          $ref: "#/components/responses/UserBanned"
+          #description: User banned successfully
+          #content:
+          #  text/plain:
+          #    example: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -159,10 +152,11 @@ paths:
       
       responses:
         '200':
-          description: User unbanned successfully
-          content:
-            text/plain:
-              example: OK
+          $ref: "#/components/responses/UserUnbanned"
+          #description: User unbanned successfully
+          #content:
+          #  text/plain:
+          #    example: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -194,10 +188,11 @@ paths:
       
       responses:
         '200':
-          description: User followed successfully
-          content:
-            text/plain:
-              example: OK
+          $ref: "#/components/responses/UserFollowed"
+          #description: User followed successfully
+          #content:
+          #  text/plain:
+          #    example: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -214,10 +209,11 @@ paths:
       
       responses:
         '200':
-          description: User unfollowed successfully
-          content:
-            text/plain:
-              example: OK
+          $ref: "#/components/responses/UserUnfollowed"
+          #description: User unfollowed successfully
+          #content:
+          #  text/plain:
+          #    example: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '404':
@@ -274,10 +270,11 @@ paths:
 
       responses:
         '201':
-          description: Photo successfully uploaded
-          content:
-            text/plain:
-              example: OK
+          $ref: "#/components/responses/PhotoUploaded"
+          #description: Photo successfully uploaded
+          #content:
+          #  text/plain:
+          #    example: OK
         '401':
           $ref: "#/components/responses/UnauthorizedError"
         '500':
@@ -299,10 +296,11 @@ paths:
       
       responses:
         '200':
-          description: Photo deleted successfully.
-          content:
-            text/plain:
-              example: OK
+          $ref: "#/components/responses/PhotoDeleted"
+          #description: Photo deleted successfully.
+          #content:
+          #  text/plain:
+          #    example: OK
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
@@ -334,10 +332,11 @@ paths:
       
       responses:
         '201':
-          description: Comment added successfully.
-          content:
-            text/plain:
-              example: OK
+          $ref: '#/components/responses/CommentAdded'
+          #description: Comment added successfully.
+          #content:
+          #  text/plain:
+          #    example: OK
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
@@ -362,10 +361,11 @@ paths:
       
       responses:
         '200':
-          description: Comment removed successfully.
-          content:
-            text/plain:
-              example: OK
+          $ref: '#/components/responses/CommentRemoved'
+          #description: Comment removed successfully.
+          #content:
+          #  text/plain:
+          #    example: OK
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
@@ -397,10 +397,11 @@ paths:
       
       responses:
         '200':
-          description: Comment added successfully.
-          content:
-            text/plain:
-              example: OK
+          $ref: '#/components/responses/LikeAdded'
+          #description: Comment added successfully.
+          #content:
+          #  text/plain:
+          #    example: OK
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
@@ -416,10 +417,11 @@ paths:
       
       responses:
         '200':
-          description: Like removed successfully.
-          content:
-            text/plain:
-              example: OK
+          $ref: '#/components/responses/LikeRemoved'
+          #description: Like removed successfully.
+          #content:
+          #  text/plain:
+          #    example: OK
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
@@ -443,7 +445,7 @@ components:
       schema: 
         description: Id to search
         type: string
-        pattern: 'ˆ*'
+        pattern: '.*'
         example: Marietto64
         minLength: 3
         maxLength: 16
@@ -457,7 +459,7 @@ components:
       schema: 
         description: Photo id
         type: string
-        pattern: 'ˆ*'
+        pattern: '.*'
         example: S72h3k
         minLength: 3
         maxLength: 16
@@ -471,7 +473,7 @@ components:
       schema: 
         description: Comment unique id
         type: string
-        pattern: 'ˆ*'
+        pattern: '.*'
         example: Z9z212l
         minLength: 3
         maxLength: 16
@@ -485,7 +487,7 @@ components:
       schema: 
         description: Follower unique id
         type: string
-        pattern: 'ˆ*'
+        pattern: '.*'
         example: Z9z212l
         minLength: 3
         maxLength: 16
@@ -499,7 +501,7 @@ components:
       schema: 
         description: Like unique id
         type: string
-        pattern: 'ˆ.*?$'
+        pattern: '.*'
         example: Nxjsn12
         minLength: 3
         maxLength: 16
@@ -513,7 +515,7 @@ components:
       schema: 
         description: Banned user unique id
         type: string
-        pattern: 'ˆ.*?$'
+        pattern: '.*'
         example: Nxjsn12
         minLength: 3
         maxLength: 16
@@ -524,8 +526,9 @@ components:
       name: id
       description: id of the user that is being searched
       schema:
+        description: usual *identifier*
         type: string
-        pattern: 'ˆ*'
+        pattern: '.*'
         minLength: 3
         maxLength: 16
         example: "Marietto64"
@@ -555,16 +558,17 @@ components:
           type: string
           minLength: 3
           maxLength: 20
-          pattern: 'ˆ*'
+          pattern: '.*'
           readOnly: true
         owner:
           description: Unique identifier of the photo author.
           type: string
           minLength: 3
           maxLength: 16
-          pattern: 'ˆ.*?$'
+          pattern: '.*'
           example: "Mariucc"
       example: 
+        description: Example for Photo schema
         comments: 0
         likes: 0
         date: 2017-07-21T17:32:28Z
@@ -579,29 +583,57 @@ components:
           type: string
           minLength: 3
           maxLength: 16
-          pattern: 'ˆ.*?$'
+          pattern: '.*'
           example: "TopoGiggggggio"
           description: Usual user *identifier*
         comment:
           type: string
           minLength: 1
           maxLength: 30
-          pattern: 'ˆ*'
+          pattern: '.*'
           example: OK my bruh
           description: String value of the comment
       example:
+        description: Example for Comment schema
         user: PannaBoy22
         comment: "Wow che foto spectacularesss"
         
     Photos:
       type: array
       description: An array of photos
-      minItems: 1
+      minItems: 0
       maxItems: 5
       items:
         $ref: "#/components/schemas/Photo"
-      example: "[{0,0,2017-07-21T17:32:28Z,B9832ash,Mariucc}]"
-      
+      example:
+        description: Example for Photos schema
+        array: [] #{0,0,"2017-07-21T17:32:28Z","B9832ash","Mariucc2"}
+        
+    Login:
+      description: login stuff
+      type: object
+      properties:
+        identifier:
+          description: login stuff
+          # change here if you decide to use an integer
+          # or any other type of identifier
+          type: string
+          minLength: 3
+          maxLength: 16
+          pattern: '.*'
+          example: "abcdef012345"
+          
+    Login2:
+      description: login stuff
+      type: object
+      properties:
+        name:
+          description: login stuff
+          type: string
+          example: Maria
+          pattern: '.*'
+          minLength: 3
+          maxLength: 16
 #_____________________________________________________________________________________________________  
   responses:
     UnauthorizedError:
@@ -621,6 +653,79 @@ components:
       content:
         text/plain:
           example: Unknown error 
+          
+    UserBanned:
+      description: User banned successfully.
+      content:
+        text/plain:
+          example: OK
+          
+    UserUnbanned:
+      description: User unbanned successfully.
+      content:
+        text/plain:
+          example: OK
+          
+    NicknameFound:
+      description: Nickname found successfully.
+      content:
+        text/plain:
+          example: NickNone
+          
+    NicknameModified:
+      description: Nickname modified successfully.
+      content:
+        text/plain:
+          example: OK
+    
+    LikeAdded:
+      description: Like added successfully.
+      content:
+        text/plain:
+          example: OK
+          
+    LikeRemoved:
+      description: Like removed successfully.
+      content:
+        text/plain:
+          example: OK
+          
+    CommentAdded:
+      description: Comment added successfully.
+      content:
+        text/plain:
+          example: OK
+          
+    CommentRemoved:
+      description: Comment removed successfully.
+      content:
+        text/plain:
+          example: OK
+    
+    UserFollowed:
+      description: User followed successfully.
+      content:
+        text/plain:
+          example: OK
+          
+    UserUnfollowed:
+      description: User unfollowed successfully.
+      content:
+        text/plain:
+          example: OK
+          
+    PhotoUploaded:
+      description: Photo uploaded successfully.
+      content:
+        text/plain:
+          example: OK
+          
+    PhotoDeleted:
+      description: Photo deleted successfully.
+      content:
+        text/plain:
+          example: OK
+
 #_____________________________________________________________________________________________________
   securitySchemes:
     bearerAuth:
