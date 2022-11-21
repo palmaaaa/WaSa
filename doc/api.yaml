@@ -4,6 +4,26 @@ info:
   description: |
     This is the API for the WASAPhoto Homework 1 for the WaSa course by 1849661.
   version: 0.0.1
+
+tags:
+  - name: "login"
+    description: Endpoint that manages the login.
+  - name: "search"
+    description: Endpoint that manages search.
+  - name: "nickname"
+    description: Endpoint that manages nickname change.
+  - name: "ban"
+    description: Endpoint that manages banned users.
+  - name: "followers"
+    description: Endpoint that manages followers.
+  - name: "stream"
+    description: Endpoint that manages stream.
+  - name: "photo"
+    description: Endpoint that manages photos.
+  - name: "comments"
+    description: Endpoint that manages comments.
+  - name: "likes"
+    description: Endpoint that manages likes.
 #=====================================================================================
 paths:
   /session:
