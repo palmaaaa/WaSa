@@ -236,11 +236,12 @@ paths:
 
       responses:
         '200':
-          description: Contains a list of photos from following users in a reversed chronological order.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Photos"
+          $ref: "#/components/responses/Stream"
+          #description: Contains a list of photos from following users in a reversed chronological order.
+          #content:
+          #  application/json:
+          #    schema:
+          #      $ref: "#/components/schemas/Photos"
           
         '401':
           $ref: "#/components/responses/UnauthorizedError"
@@ -568,7 +569,6 @@ components:
           pattern: '.*'
           example: "Mariucc"
       example: 
-        description: Example for Photo schema
         comments: 0
         likes: 0
         date: 2017-07-21T17:32:28Z
@@ -594,7 +594,6 @@ components:
           example: OK my bruh
           description: String value of the comment
       example:
-        description: Example for Comment schema
         user: PannaBoy22
         comment: "Wow che foto spectacularesss"
         
@@ -606,8 +605,7 @@ components:
       items:
         $ref: "#/components/schemas/Photo"
       example:
-        description: Example for Photos schema
-        array: [] #{0,0,"2017-07-21T17:32:28Z","B9832ash","Mariucc2"}
+        Photos: [photo1,photo2,...] #{0,0,"2017-07-21T17:32:28Z","B9832ash","Mariucc2"}
         
     Login:
       description: login stuff
@@ -725,6 +723,13 @@ components:
       content:
         text/plain:
           example: OK
+          
+    Stream:
+      description: Contains a list of photos from following users in a reversed chronological order.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Photos"
 
 #_____________________________________________________________________________________________________
   securitySchemes:
