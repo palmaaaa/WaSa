@@ -70,14 +70,17 @@ paths:
         - bearerAuth: [] 
 #=====================================================================================
   /users/{id}:
+    parameters: 
+        - $ref: "#/components/parameters/identifier"
+        
     put:
       tags: ["nickname"]
       summary: Modifies the user's nickname.
       description: Allows the user to modify his own nickname.
       operationId: setMyUserName
 
-      parameters: 
-        - $ref: "#/components/parameters/identifier"
+      #parameters: 
+      #  - $ref: "#/components/parameters/identifier"
         
       requestBody:
         content:
@@ -221,14 +224,17 @@ paths:
        - bearerAuth: [] 
 #=====================================================================================
   /users/{id}/home/:
+    parameters: 
+        - $ref: '#/components/parameters/identifier'
+        
     get:
       tags: ["stream"]
       summary: Obtain the stream.
       description: Get all the photos (stream) from the following users.
       operationId: getMyStream
       
-      parameters: 
-        - $ref: '#/components/parameters/identifier'
+      #parameters: 
+      #  - $ref: '#/components/parameters/identifier'
 
       responses:
         '200':
@@ -254,6 +260,9 @@ paths:
         - bearerAuth: [] 
 #=====================================================================================
   /users/{id}/photos:
+    parameters: 
+        - $ref: '#/components/parameters/identifier'
+        
     post:
       tags: ["photo"]
       summary: Upload a photo.
@@ -266,8 +275,8 @@ paths:
             example: 010110010
         required: true
       
-      parameters: 
-        - $ref: '#/components/parameters/identifier'
+      #parameters: 
+      #  - $ref: '#/components/parameters/identifier'
 
       responses:
         '201':
@@ -284,15 +293,19 @@ paths:
         - bearerAuth: [] 
 #=====================================================================================
   /users/{id}/photos/{photoId}:
+    parameters: 
+        - $ref: '#/components/parameters/identifier'
+        - $ref: '#/components/parameters/photoId'
+        
     delete:
       tags: ["photo"]
       summary: Deletes a photo.
       description: Deletes a user's photo with relative comments and likes.
       operationId: deletePhoto
       
-      parameters: 
-        - $ref: '#/components/parameters/identifier'
-        - $ref: '#/components/parameters/photoId'
+      #parameters: 
+      #  - $ref: '#/components/parameters/identifier'
+      #  - $ref: '#/components/parameters/photoId'
 
       responses:
         '200':
@@ -311,15 +324,19 @@ paths:
         - bearerAuth: [] 
 #=====================================================================================
   /users/{id}/photos/{photoId}/comments:
+    parameters: 
+        - $ref: '#/components/parameters/identifier'
+        - $ref: '#/components/parameters/photoId'
+        
     post:
       tags: ["comments"]
       summary: Add a comment to a photo.
       description: Adds a comment to a user's photo. Multiple comments can be made. Owners can comment their own photo.
       operationId: commentPhoto
       
-      parameters: 
-        - $ref: '#/components/parameters/identifier'
-        - $ref: '#/components/parameters/photoId'
+      #parameters: 
+      #  - $ref: '#/components/parameters/identifier'
+      #  - $ref: '#/components/parameters/photoId'
       
       requestBody:
         description: Contains the id of who's commenting and the relative comment.
@@ -346,16 +363,21 @@ paths:
         - bearerAuth: [] 
 #=====================================================================================
   /users/{id}/photos/{photoId}/comments/{commentId}:
+    parameters: 
+        - $ref: '#/components/parameters/identifier'
+        - $ref: '#/components/parameters/photoId'
+        - $ref: '#/components/parameters/commentId'
+        
     delete:
       tags: ["comments"]
       summary: Remove a comment from a photo.
       description: Removes a comment from a user's photo. Only the owner of the photo can remove comments.
       operationId: uncommentPhoto
       
-      parameters: 
-        - $ref: '#/components/parameters/identifier'
-        - $ref: '#/components/parameters/photoId'
-        - $ref: '#/components/parameters/commentId'
+      #parameters: 
+      #  - $ref: '#/components/parameters/identifier'
+      #  - $ref: '#/components/parameters/photoId'
+      #  - $ref: '#/components/parameters/commentId'
       
       responses:
         '200':
