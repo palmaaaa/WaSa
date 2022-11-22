@@ -7,23 +7,23 @@ info:
 
 tags:
   - name: "login"
-    description: Endpoint that manages the login.
+    description: Endpoint that manages the login
   - name: "search"
-    description: Endpoint that manages search.
+    description: Endpoint that manages search
   - name: "nickname"
-    description: Endpoint that manages nickname change.
+    description: Endpoint that manages nickname change
   - name: "ban"
-    description: Endpoint that manages banned users.
+    description: Endpoint that manages banned users
   - name: "followers"
-    description: Endpoint that manages followers.
+    description: Endpoint that manages followers
   - name: "stream"
-    description: Endpoint that manages stream.
+    description: Endpoint that manages stream
   - name: "photo"
-    description: Endpoint that manages photos.
+    description: Endpoint that manages photos
   - name: "comments"
-    description: Endpoint that manages comments.
+    description: Endpoint that manages comments
   - name: "likes"
-    description: Endpoint that manages likes.
+    description: Endpoint that manages likes
 #=====================================================================================
 paths:
   /session:
@@ -51,11 +51,11 @@ paths:
               schema:
                $ref: "#/components/schemas/Login"
 #=====================================================================================
-  /users/:
+  /users:
     get:
       tags: ["search"]
-      summary: Gets the profile of the user with a certain id.
-      description: A user can find another user's profile only if he's not banned by the latter.
+      summary: Gets the profile of the user with a certain id
+      description: A user can find another user's profile only if he's not banned by the latter
       operationId: getUserProfile
 
       parameters: 
@@ -85,7 +85,7 @@ paths:
     put:
       tags: ["nickname"]
       summary: Modifies the user's nickname.
-      description: Allows the user to modify his own nickname.
+      description: Allows the user to modify his own nickname
       operationId: setMyUserName
         
       requestBody:
@@ -119,12 +119,12 @@ paths:
   
     put:
       tags: ["ban"]
-      summary: Bans a user.
-      description: Once a user is blocked he/she won't be able to see anything from whoever banned him/her. That includes comments,likes, photos and the profile of the banning user. Banning multiple times is equivalent to banning a user once.
+      summary: Bans a user
+      description: Once a user is blocked he/she won't be able to see anything from whoever banned him/her. That includes comments,likes, photos and the profile of the banning user. Banning multiple times is equivalent to banning a user once
       operationId: banUser
       
       requestBody:
-        description: Contains the id of the user that'll be banned.
+        description: Contains the id of the user that'll be banned
         content:
           text/plain:
             example: "UniqueBarbie"
@@ -146,8 +146,8 @@ paths:
     
     delete:
       tags: ["ban"]
-      summary: Unbans a user.
-      description: By removing the ban the unbanned user can see the posts,comments and likes of the user that unbanned him/her.
+      summary: Unbans a user
+      description: By removing the ban the unbanned user can see the posts,comments and likes of the user that unbanned him/her
       operationId: unbanUser
       
       responses:
@@ -174,13 +174,13 @@ paths:
         
     put:
       tags: ["followers"]
-      summary: Follows a certain user.
+      summary: Follows a certain user
       description: |
-        Allows a user (if he's logged in) to follow another user only if the latter didn't ban him. A user can't follow himself and can't follow a user he already follows. Once a user follows another one then his list of "Following" will be updated too.
+        Allows a user (if he's logged in) to follow another user only if the latter didn't ban him. A user can't follow himself and can't follow a user he already follows. Once a user follows another one then his list of "Following" will be updated too
       operationId: followUser
       
       requestBody:
-        description: Contains the follower id.
+        description: Contains the follower id
         content:
           text/plain:
             example: "Userigno"
@@ -202,9 +202,9 @@ paths:
           
     delete:
       tags: ["followers"]
-      summary: Unfollows a certain user.
+      summary: Unfollows a certain user
       description: |
-        A user can decide to unfollow another one. He will be able to follow him again in the future.
+        A user can decide to unfollow another one. He will be able to follow him again in the future
       operationId: unfollowUser
       
       responses:
@@ -224,14 +224,14 @@ paths:
       security:
        - bearerAuth: [] 
 #=====================================================================================
-  /users/{id}/home/:
+  /users/{id}/home:
     parameters: 
         - $ref: '#/components/parameters/identifier'
         
     get:
       tags: ["stream"]
       summary: Obtain the stream.
-      description: Get all the photos (stream) from the following users.
+      description: Get all the photos (stream) from the following users
       operationId: getMyStream
 
       responses:
@@ -259,8 +259,8 @@ paths:
         
     post:
       tags: ["photo"]
-      summary: Upload a photo.
-      description: A user can upload one or multiple images on his/her profile.
+      summary: Upload a photo
+      description: A user can upload one or multiple images on his/her profile
       operationId: uploadPhoto
       
       requestBody:
@@ -291,8 +291,8 @@ paths:
         
     delete:
       tags: ["photo"]
-      summary: Deletes a photo.
-      description: Deletes a user's photo with relative comments and likes.
+      summary: Deletes a photo
+      description: Deletes a user's photo with relative comments and likes
       operationId: deletePhoto
       
       responses:
@@ -319,12 +319,12 @@ paths:
         
     post:
       tags: ["comments"]
-      summary: Add a comment to a photo.
-      description: Adds a comment to a user's photo. Multiple comments can be made. Owners can comment their own photo.
+      summary: Add a comment to a photo
+      description: Adds a comment to a user's photo. Multiple comments can be made. Owners can comment their own photo
       operationId: commentPhoto
       
       requestBody:
-        description: Contains the id of who's commenting and the relative comment.
+        description: Contains the id of who's commenting and the relative comment
         content:
           application/json:
             schema:
@@ -356,8 +356,8 @@ paths:
         
     delete:
       tags: ["comments"]
-      summary: Remove a comment from a photo.
-      description: Removes a comment from a user's photo. Only the owner of the photo can remove comments.
+      summary: Remove a comment from a photo
+      description: Removes a comment from a user's photo. Only the owner of the photo can remove comments
       operationId: uncommentPhoto
       
       responses:
@@ -385,12 +385,12 @@ paths:
   
     put:
       tags: ["likes"]
-      summary: Add a like to a photo.
-      description: Adds a like to a user's photo. A user can only like a photo once (multiple likes count as one). Owners can't like their own photos.
+      summary: Add a like to a photo
+      description: Adds a like to a user's photo. A user can only like a photo once (multiple likes count as one). Owners can't like their own photos
       operationId: likePhoto
       
       requestBody:
-        description: Contains the user's identifier that is liking the photo.
+        description: Contains the user's identifier that is liking the photo
         content:
           text/plain:
             example: "IdenTic"
@@ -412,8 +412,8 @@ paths:
     
     delete:
       tags: ["likes"]
-      summary: Remove a like from a photo.
-      description: Removes a like from a user's photo.
+      summary: Remove a like from a photo
+      description: Removes a like from a user's photo
       operationId: unlikePhoto
       
       responses:
@@ -441,7 +441,7 @@ components:
     identifier:
       name: id
       in: path
-      description: A user's unique id.
+      description: A user's unique id
       required: true
       schema: 
         description: Id to search
@@ -483,7 +483,7 @@ components:
     followerId:
       name: followerId
       in: path
-      description: A follower's unique identifier. It's exactly his *identifier*.
+      description: A follower's unique identifier. It's exactly his *identifier*
       required: true
       schema: 
         description: Follower unique id
@@ -497,7 +497,7 @@ components:
     likeId:
       name: likeId
       in: path
-      description: A like unique identifier. It's exactly the *identifier* of the user that liked the photo.
+      description: A like unique identifier. It's exactly the *identifier* of the user that liked the photo
       required: true
       schema: 
         description: Like unique id
@@ -511,7 +511,7 @@ components:
     bannedUserId:
       name: bannedUserId
       in: path
-      description: A banned user unique identifier. It's exactly the *identifier* of the user.
+      description: A banned user unique identifier. It's exactly the *identifier* of the user
       required: true
       schema: 
         description: Banned user unique id
@@ -541,15 +541,15 @@ components:
       type: object
       properties:
         comments:
-          description: Number of comments in a photo.
+          description: Number of comments in a photo
           type: integer
           example: 124
         likes:
-          description: Number of comments in a photo.
+          description: Number of comments in a photo
           type: integer
           example: 1274
         date:
-          description: Date and time of upload.
+          description: Date and time of upload
           type: string
           format: date-time
           example: 2017-07-21T17:32:28Z
@@ -562,7 +562,7 @@ components:
           pattern: '.*'
           readOnly: true
         owner:
-          description: Unique identifier of the photo author.
+          description: Unique identifier of the photo author
           type: string
           minLength: 3
           maxLength: 16
@@ -576,7 +576,7 @@ components:
         owner: "Mariucc"
       
     Comment:
-      description: A user's comment contains the text of the comment and the *identifier* of who commented.
+      description: A user's comment contains the text of the comment and the *identifier* of who commented
       type: object
       properties:
         userId: 
@@ -635,97 +635,97 @@ components:
 #_____________________________________________________________________________________________________  
   responses:
     UnauthorizedError:
-      description: Access token is missing. User is not logged in.
+      description: Access token is missing. User is not logged in
       content:
         text/plain:
           example: User unauthorized
             
     NotFoundError:
-      description: The requested resource doesn't exist.
+      description: The requested resource doesn't exist
       content:
         text/plain:
           example: Requested resource unavailable
             
     InternalServerError:
-      description: Server has encountered an unknown error.
+      description: Server has encountered an unknown error
       content:
         text/plain:
           example: Unknown error 
           
     UserBanned:
-      description: User banned successfully.
+      description: User banned successfully
       content:
         text/plain:
           example: OK
           
     UserUnbanned:
-      description: User unbanned successfully.
+      description: User unbanned successfully
       content:
         text/plain:
           example: OK
           
     NicknameFound:
-      description: Nickname found successfully.
+      description: Nickname found successfully
       content:
         text/plain:
           example: NickNone
           
     NicknameModified:
-      description: Nickname modified successfully.
+      description: Nickname modified successfully
       content:
         text/plain:
           example: OK
     
     LikeAdded:
-      description: Like added successfully.
+      description: Like added successfully
       content:
         text/plain:
           example: OK
           
     LikeRemoved:
-      description: Like removed successfully.
+      description: Like removed successfully
       content:
         text/plain:
           example: OK
           
     CommentAdded:
-      description: Comment added successfully.
+      description: Comment added successfully
       content:
         text/plain:
           example: OK
           
     CommentRemoved:
-      description: Comment removed successfully.
+      description: Comment removed successfully
       content:
         text/plain:
           example: OK
     
     UserFollowed:
-      description: User followed successfully.
+      description: User followed successfully
       content:
         text/plain:
           example: OK
           
     UserUnfollowed:
-      description: User unfollowed successfully.
+      description: User unfollowed successfully
       content:
         text/plain:
           example: OK
           
     PhotoUploaded:
-      description: Photo uploaded successfully.
+      description: Photo uploaded successfully
       content:
         text/plain:
           example: OK
           
     PhotoDeleted:
-      description: Photo deleted successfully.
+      description: Photo deleted successfully
       content:
         text/plain:
           example: OK
           
     Stream:
-      description: Contains a list of photos from following users in a reversed chronological order.
+      description: Contains a list of photos from following users in a reversed chronological order
       content:
         application/json:
           schema:
