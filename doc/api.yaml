@@ -279,8 +279,7 @@ paths:
         content:
           image/png:
             schema:
-              type: string
-              format: binary
+              $ref: "#/components/schemas/standard_png"
             example: 010110010
         required: true
 
@@ -664,6 +663,14 @@ components:
           pattern: '.*'
           minLength: 3
           maxLength: 16
+          
+    standard_png:
+      description: standard image/png schema
+      type: string
+      minLength: 1
+      maxLength: 99
+      format: binary
+      example: 1101001
     
     basic_string:
       description: Schema for a simple string 
@@ -701,6 +708,7 @@ components:
       minItems: 0
       maxItems: 10
       items:
+        description: a simple string
         type: string
         minLength: 3
         maxLength: 16
