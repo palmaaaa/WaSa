@@ -278,8 +278,9 @@ paths:
       requestBody:
         content:
           image/png:
-            type: string
-            format: binary
+            schema:
+              type: string
+              format: binary
             example: 010110010
         required: true
 
