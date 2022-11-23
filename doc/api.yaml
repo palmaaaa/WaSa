@@ -55,7 +55,7 @@ paths:
     get:
       tags: ["search"]
       summary: Gets the profile of the user with a certain id
-      description: A user can find another user's profile only if he's not banned by the latter
+      description: A user can find another user's profile only if he's not banned by the latter. Multiple users might match partially the nickname being searched
       operationId: getUserProfile
 
       parameters: 
@@ -114,9 +114,9 @@ paths:
       security:
         - bearerAuth: [] 
 #=====================================================================================
-  /users/{id}/bannedUsers/{bannedUserId}:
+  /users/{id}/banned_users/{banned_user_id}:
     parameters:
-        - $ref: "#/components/parameters/bannedUserId"
+        - $ref: "#/components/parameters/banned_user_id"
         - $ref: '#/components/parameters/identifier'
   
     put:
@@ -174,9 +174,9 @@ paths:
       security:
         - bearerAuth: [] 
 #=====================================================================================
-  /users/{id}/followers/{followerId}:
+  /users/{id}/followers/{follower_id}:
     parameters:
-        - $ref: "#/components/parameters/followerId"
+        - $ref: "#/components/parameters/follower_id"
         - $ref: '#/components/parameters/identifier'
         
     put:
@@ -297,10 +297,10 @@ paths:
       security:
         - bearerAuth: [] 
 #=====================================================================================
-  /users/{id}/photos/{photoId}:
+  /users/{id}/photos/{photo_id}:
     parameters: 
         - $ref: '#/components/parameters/identifier'
-        - $ref: '#/components/parameters/photoId'
+        - $ref: '#/components/parameters/photo_id'
         
     delete:
       tags: ["photo"]
@@ -325,10 +325,10 @@ paths:
       security:
         - bearerAuth: [] 
 #=====================================================================================
-  /users/{id}/photos/{photoId}/comments:
+  /users/{id}/photos/{photo_id}/comments:
     parameters: 
         - $ref: '#/components/parameters/identifier'
-        - $ref: '#/components/parameters/photoId'
+        - $ref: '#/components/parameters/photo_id'
         
     post:
       tags: ["comments"]
@@ -361,11 +361,11 @@ paths:
       security:
         - bearerAuth: [] 
 #=====================================================================================
-  /users/{id}/photos/{photoId}/comments/{commentId}:
+  /users/{id}/photos/{photo_id}/comments/{comment_id}:
     parameters: 
         - $ref: '#/components/parameters/identifier'
-        - $ref: '#/components/parameters/photoId'
-        - $ref: '#/components/parameters/commentId'
+        - $ref: '#/components/parameters/photo_id'
+        - $ref: '#/components/parameters/comment_id'
         
     delete:
       tags: ["comments"]
@@ -390,11 +390,11 @@ paths:
       security:
         - bearerAuth: [] 
 #=====================================================================================
-  /users/{id}/photos/{photoId}/likes/{likeId}:
+  /users/{id}/photos/{photo_id}/likes/{like_id}:
     parameters: 
         - $ref: '#/components/parameters/identifier'
-        - $ref: '#/components/parameters/photoId'
-        - $ref: '#/components/parameters/likeId'
+        - $ref: '#/components/parameters/photo_id'
+        - $ref: '#/components/parameters/like_id'
   
     put:
       tags: ["likes"]
@@ -470,8 +470,8 @@ components:
         maxLength: 16
         readOnly: true
         
-    photoId:
-      name: photoId
+    photo_id:
+      name: photo_id
       in: path
       description: A photo unique identifier
       required: true
@@ -484,8 +484,8 @@ components:
         maxLength: 16
         readOnly: true
         
-    commentId:
-      name: commentId
+    comment_id:
+      name: comment_id
       in: path
       description: A comment unique identifier
       required: true
@@ -498,8 +498,8 @@ components:
         maxLength: 16
         readOnly: true
         
-    followerId:
-      name: followerId
+    follower_id:
+      name: follower_id
       in: path
       description: A follower's unique identifier. It's exactly his *identifier*
       required: true
@@ -512,8 +512,8 @@ components:
         maxLength: 16
         readOnly: true
         
-    likeId:
-      name: likeId
+    like_id:
+      name: like_id
       in: path
       description: A like unique identifier. It's exactly the *identifier* of the user that liked the photo
       required: true
@@ -526,8 +526,8 @@ components:
         maxLength: 16
         readOnly: true
         
-    bannedUserId:
-      name: bannedUserId
+    banned_user_id:
+      name: banned_user_id
       in: path
       description: A banned user unique identifier. It's exactly the *identifier* of the user
       required: true
@@ -572,7 +572,7 @@ components:
           format: date-time
           example: 2017-07-21T17:32:28Z
           readOnly: true
-        photoId:
+        photo_id:
           description: The photo unique identifier
           type: string
           minLength: 3
@@ -590,14 +590,14 @@ components:
         comments: 0
         likes: 0
         date: 2017-07-21T17:32:28Z
-        photoId: B9832ash
+        photo_id: B9832ash
         owner: "Mariucc"
       
     Comment:
       description: A user's comment contains the text of the comment and the *identifier* of who commented
       type: object
       properties:
-        userId: 
+        user_id: 
           type: string
           minLength: 3
           maxLength: 16
@@ -627,14 +627,14 @@ components:
           comments: 1273
           likes: 15983
           date: 2017-07-21T17:32:28Z
-          photoId: B9832ash
+          photo_id: B9832ash
           owner: "Sapienza"
           
         - saUDH2:
           comments: 13
           likes: 60
           date: 2022-11-22T13:10:14Z
-          photoId: saUDH2
+          photo_id: saUDH2
           owner: "Nerd99"
         
     Login:
@@ -693,6 +693,23 @@ components:
       pattern: '.*'
       example: I'm a standard-error content!
       
+    nickname_list:
+      description: List of users found
+      type: array
+      minItems: 0
+      maxItems: 10
+      items:
+        type: string
+        minLength: 3
+        maxLength: 16
+        pattern: '.*'
+        example: NurseNight
+      example:
+        - Wario21
+        - Watermelon
+        - WaveBruh
+        - WantedMan66
+      
 #_____________________________________________________________________________________________________  
   responses:
     UnauthorizedError:
@@ -746,8 +763,8 @@ components:
       content:
         text/plain:
           schema:
-            $ref: "#/components/schemas/basic_string"
-          example: Wussup68
+            $ref: "#/components/schemas/nickname_list"
+          #example: Wussup68
           
     NicknameModified:
       description: Nickname modified successfully
