@@ -29,11 +29,11 @@ paths:
   /session:
     post:
       tags: ["login"]
-      summary: Logs in the user.
+      summary: Logs in the user
       description: |-
         If the user does not exist, it will be created,
         and an identifier is returned.
-        If the user exists, the user identifier is returned.
+        If the user exists, the user identifier is returned
       operationId: doLogin
       requestBody:
         description: User details
@@ -84,13 +84,15 @@ paths:
         
     put:
       tags: ["nickname"]
-      summary: Modifies the user's nickname.
+      summary: Modifies the user's nickname
       description: Allows the user to modify his own nickname
       operationId: setMyUserName
         
       requestBody:
         content:
           text/plain:
+            schema:
+              $ref: "#/components/schemas/basic_string"
             example: "NickNone"
         required: true
 
@@ -127,6 +129,8 @@ paths:
         description: Contains the id of the user that'll be banned
         content:
           text/plain:
+            schema:
+              $ref: "#/components/schemas/basic_string"
             example: "UniqueBarbie"
         required: true
       
@@ -143,6 +147,9 @@ paths:
           $ref: "#/components/responses/NotFoundError"
         '500':
           $ref: "#/components/responses/InternalServerError"
+          
+      security:
+        - bearerAuth: [] 
     
     delete:
       tags: ["ban"]
@@ -183,6 +190,8 @@ paths:
         description: Contains the follower id
         content:
           text/plain:
+            schema:
+              $ref: "#/components/schemas/basic_string"
             example: "Userigno"
         required: true
       
@@ -199,6 +208,9 @@ paths:
           $ref: "#/components/responses/NotFoundError"
         '500':
           $ref: "#/components/responses/InternalServerError"
+      
+      security:
+        - bearerAuth: [] 
           
     delete:
       tags: ["followers"]
@@ -230,7 +242,7 @@ paths:
         
     get:
       tags: ["stream"]
-      summary: Obtain the stream.
+      summary: Obtain the stream
       description: Get all the photos (stream) from the following users
       operationId: getMyStream
 
@@ -266,6 +278,7 @@ paths:
       requestBody:
         content:
           image/png:
+            
             example: 010110010
         required: true
 
@@ -393,6 +406,8 @@ paths:
         description: Contains the user's identifier that is liking the photo
         content:
           text/plain:
+            schema:
+              $ref: "#/components/schemas/basic_string"
             example: "IdenTic"
         required: true
       
@@ -409,6 +424,9 @@ paths:
           $ref: "#/components/responses/NotFoundError"
         '500':
           $ref: "#/components/responses/InternalServerError"
+      
+      security:
+        - bearerAuth: [] 
     
     delete:
       tags: ["likes"]
@@ -549,7 +567,7 @@ components:
           type: integer
           example: 1274
         date:
-          description: Date and time of upload
+          description: Date and time of upload.
           type: string
           format: date-time
           example: 2017-07-21T17:32:28Z
@@ -605,7 +623,19 @@ components:
       items:
         $ref: "#/components/schemas/Photo"
       example:
-        Photos: [photo1,photo2,...] #{0,0,"2017-07-21T17:32:28Z","B9832ash","Mariucc2"}
+        - B9832ash: 
+          comments: 1273
+          likes: 15983
+          date: 2017-07-21T17:32:28Z
+          photoId: B9832ash
+          owner: "Sapienza"
+          
+        - saUDH2:
+          comments: 13
+          likes: 60
+          date: 2022-11-22T13:10:14Z
+          photoId: saUDH2
+          owner: "Nerd99"
         
     Login:
       description: login stuff
@@ -632,100 +662,167 @@ components:
           pattern: '.*'
           minLength: 3
           maxLength: 16
+    
+    basic_string:
+      description: Schema for a simple string 
+      type: string
+      minLength: 3
+      maxLength: 16
+      pattern: '.*'
+      example: I'm a string!
+    
+    #basic_response:
+    #  description: Schema for standard-error responses
+    #  type: object
+    #  properties:
+    #    errorMessage:
+    #      description: Error message
+    #      type: string
+    #      minLength: 3
+    #      maxLength: 30
+    #      pattern: '.*'
+    #      example: I'm a standar-error content!
+    #  example:
+    #    message: I'm an error message
+        
+    basic_response:
+      description: Schema for standard-error responses
+      type: string
+      minLength: 3
+      maxLength: 30
+      pattern: '.*'
+      example: I'm a standard-error content!
+      
 #_____________________________________________________________________________________________________  
   responses:
     UnauthorizedError:
       description: Access token is missing. User is not logged in
       content:
+        #application/json:
         text/plain:
+          schema:
+            $ref: "#/components/schemas/basic_response"
           example: User unauthorized
+            #message: User unauthorized
             
     NotFoundError:
       description: The requested resource doesn't exist
       content:
+        #application/json:
         text/plain:
+          schema:
+              $ref: "#/components/schemas/basic_response"
           example: Requested resource unavailable
+            #message: Requested resource unavailable
             
     InternalServerError:
       description: Server has encountered an unknown error
       content:
+        #application/json:
         text/plain:
+          schema:
+            $ref: "#/components/schemas/basic_response"
           example: Unknown error 
+            #message: Unknown error 
           
     UserBanned:
       description: User banned successfully
       content:
         text/plain:
-          example: OK
+          schema:
+            $ref: "#/components/schemas/basic_string"
+          example: Success
           
     UserUnbanned:
       description: User unbanned successfully
       content:
         text/plain:
-          example: OK
+          schema:
+            $ref: "#/components/schemas/basic_string"
+          example: Success
           
     NicknameFound:
       description: Nickname found successfully
       content:
         text/plain:
-          example: NickNone
+          schema:
+            $ref: "#/components/schemas/basic_string"
+          example: Wussup68
           
     NicknameModified:
       description: Nickname modified successfully
       content:
         text/plain:
-          example: OK
+          schema:
+            $ref: "#/components/schemas/basic_string"
+          example: Success
     
     LikeAdded:
       description: Like added successfully
       content:
         text/plain:
-          example: OK
+          schema:
+            $ref: "#/components/schemas/basic_string"
+          example: Success
           
     LikeRemoved:
       description: Like removed successfully
       content:
         text/plain:
-          example: OK
+          schema:
+            $ref: "#/components/schemas/basic_string"
+          example: Success
           
     CommentAdded:
       description: Comment added successfully
       content:
         text/plain:
-          example: OK
+          schema:
+            $ref: "#/components/schemas/basic_string"
+          example: Success
           
     CommentRemoved:
       description: Comment removed successfully
       content:
         text/plain:
-          example: OK
+          schema:
+            $ref: "#/components/schemas/basic_string"
+          example: Success
     
     UserFollowed:
       description: User followed successfully
       content:
         text/plain:
-          example: OK
+          schema:
+            $ref: "#/components/schemas/basic_string"
+          example: Success
           
     UserUnfollowed:
       description: User unfollowed successfully
       content:
         text/plain:
-          example: OK
+          schema:
+            $ref: "#/components/schemas/basic_string"
+          example: Success
           
     PhotoUploaded:
       description: Photo uploaded successfully
       content:
         text/plain:
-          example: OK
+          schema:
+            $ref: "#/components/schemas/basic_string"
+          example: Success
           
     PhotoDeleted:
       description: Photo deleted successfully
       content:
         text/plain:
-          example: OK
+          schema:
+            $ref: "#/components/schemas/basic_string"
+          example: Success
           
     Stream:
-      description: Contains a list of photos from following users in a reversed chronological order
+      description: Contains a list of photos from following users in a reversed chronological order.
       content:
         application/json:
           schema:
