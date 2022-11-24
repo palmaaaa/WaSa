@@ -280,7 +280,7 @@ paths:
           image/png:
             schema:
               $ref: "#/components/schemas/standard_png"
-            example: 010110010
+            example: "010110010"
         required: true
 
       responses:
@@ -670,7 +670,7 @@ components:
       minLength: 1
       maxLength: 99
       format: binary
-      example: 1101001
+      example: "1101001"
     
     basic_string:
       description: Schema for a simple string 
