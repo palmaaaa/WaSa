@@ -245,7 +245,7 @@ paths:
       tags: ["photo"]
       summary: Upload a photo
       description: A user can upload one or multiple images on his/her profile
-      operationId: uploadphoto
+      operationId: uploadPhoto
       
       requestBody:
         content:
@@ -279,7 +279,7 @@ paths:
       tags: ["photo"]
       summary: Deletes a photo
       description: Deletes a user's photo with relative comments and likes
-      operationId: deletephoto
+      operationId: deletePhoto
       
       responses:
         '204':
@@ -303,7 +303,7 @@ paths:
       tags: ["comments"]
       summary: Add a comment to a photo
       description: Adds a comment to a user's photo. Multiple comments can be made. Owners can comment their own photo
-      operationId: commentphoto
+      operationId: commentPhoto
       
       requestBody:
         description: Contains the id of who's commenting and the relative comment
@@ -336,7 +336,7 @@ paths:
       tags: ["comments"]
       summary: Remove a comment from a photo
       description: Removes a comment from a user's photo. Only the owner of the photo can remove comments
-      operationId: uncommentphoto
+      operationId: uncommentPhoto
       
       responses:
         '204':
