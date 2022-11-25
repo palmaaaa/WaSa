@@ -361,7 +361,7 @@ paths:
       tags: ["likes"]
       summary: Add a like to a photo
       description: Adds a like to a user's photo. A user can only like a photo once (multiple likes count as one). Owners can't like their own photos
-      operationId: likephoto
+      operationId: likePhoto
       
       requestBody:
         description: Contains the user's identifier that is liking the photo
@@ -390,7 +390,7 @@ paths:
       tags: ["likes"]
       summary: Remove a like from a photo
       description: Removes a like from a user's photo
-      operationId: unlikephoto
+      operationId: unlikePhoto
       
       responses:
         '204':
