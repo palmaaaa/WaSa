@@ -4,7 +4,7 @@ package main
 
 import (
 	"fmt"
-	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/webui"
+	"wasaphoto-1849661/webui"
 	"io/fs"
 	"net/http"
 	"strings"
