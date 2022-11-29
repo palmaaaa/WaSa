@@ -36,7 +36,15 @@ var ErrFountainDoesNotExist = errors.New("fountain does not exist")
 // Note that the internal representation of user in the database might be different.
 /**/
 type User struct {
-	IdUser   string
+	IdUser string
+}
+
+type Photo struct{
+	Comments int 
+	Likes int 
+	Owner string 
+	PhotoId string 
+	Date string 
 }
 
 // AppDatabase is the high level interface for the DB
@@ -89,9 +97,23 @@ func (db *appdbimpl) Ping() error {
 // Creates all the necessary sql tables for the WASAPhoto app.
 func createDatabase(db *sql.DB) error {
 	tables := [5]string{
-		"ok",
-		"ok",
-		"ok",
+		`CREATE TABLE comments (
+			id_comment VARCHAR(30) NOT NULL PRIMARY KEY,
+			id_photo VARCHAR(16) NOT NULL,
+			id_user VARCHAR(16) NOT NULL
+			);`,
+		`CREATE TABLE likes (
+			id_photo VARCHAR(16) NOT NULL,
+			id_user VARCHAR(16) NOT NULL,
+			PRIMARY KEY (id_photo,id_user)
+			);`,
+		`CREATE TABLE photos (
+			id_photo VARCHAR(16) NOT NULL PRIMARY KEY,
+			owner VARCHAR(16) NOT NULL,
+			comments INT NOT NULL,
+			likes INT NOT NULL,
+			date DATETIME NOT NULL
+			);`,
 		`CREATE TABLE banned_users (
 			banner VARCHAR(16) NOT NULL,
 			banned VARCHAR(16) NOT NULL,

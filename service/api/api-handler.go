@@ -8,7 +8,7 @@ import (
 func (rt *_router) Handler() http.Handler {
 	// Register routes
 	rt.router.POST("/session", rt.wrap(rt.sessionHandler))
-	rt.router.GET("/", rt.getHelloWorld)
+	rt.router.POST("/", rt.getHelloWorld)
 	rt.router.GET("/users", rt.wrap(rt.getUsersQuery))
 	rt.router.GET("/context", rt.wrap(rt.getContextReply))
 
