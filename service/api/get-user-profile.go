@@ -13,8 +13,11 @@ func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps http
 	identificator := r.URL.Query().Get("id")
 	w.Header().Set("Content-Type", "application/json")
 
+	var u User
+	u.IdUser = identificator
+
 	// Search the user in the database (with the query parameter as a filter).
-	res, err := rt.db.SearchUser(identificator)
+	res, err := rt.db.SearchUser(u.ToDatabase())
 	if err != nil {
 		// In this case, there's an error coming from the database. Return an empty json.
 		w.WriteHeader(http.StatusInternalServerError)

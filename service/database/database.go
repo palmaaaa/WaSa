@@ -38,11 +38,20 @@ var ErrFountainDoesNotExist = errors.New("fountain does not exist")
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	// Creates a new user in the database. It returns the user identifier. //an updated Fountain object (with the ID)
+	// Creates a new user in the database. It returns an error
 	CreateUser(User) error
 
-	// Searches all the users that match the name given (both identifier and nickname)
-	SearchUser(string) ([]User, error)
+	// Modifies the nickname of a user in the database. It returns an error
+	ModifyNickname(User, string) error
+
+	// Searches all the users that match the name given (both identifier and nickname). Returns the list of matching users and an error
+	SearchUser(User) ([]User, error)
+
+	// Creates a new photo in the database. It returns the photo identifier and an error
+	CreatePhoto(Photo) (int64, error)
+
+	// Removes a photo from the database. The removal includes likes and comments.  It returns an error
+	RemovePhoto(PhotoId) error
 
 	// Ping checks whether the database is available or not (in that case, an error will be returned)
 	Ping() error
@@ -60,10 +69,12 @@ func New(db *sql.DB) (AppDatabase, error) {
 	}
 
 	// Activate foreign keys for db
-	_, errPramga := db.Exec(`PRAGMA foreign_keys= ON`)
-	if errPramga != nil {
-		return nil, fmt.Errorf("error setting pragmas: %w", errPramga)
-	}
+	/*
+		_, errPramga := db.Exec(`PRAGMA foreign_keys= ON`)
+		if errPramga != nil {
+			return nil, fmt.Errorf("error setting pragmas: %w", errPramga)
+		}
+	*/
 
 	// Check if table exists. If not, the database is empty, and we need to create the structure
 	var tableName string
@@ -86,37 +97,45 @@ func (db *appdbimpl) Ping() error {
 
 // Creates all the necessary sql tables for the WASAPhoto app.
 func createDatabase(db *sql.DB) error {
-	tables := [5]string{
-		`CREATE TABLE users (
+	tables := [6]string{
+		`CREATE TABLE IF NOT EXISTS users (
 			id_user VARCHAR(16) NOT NULL PRIMARY KEY,
 			nickname VARCHAR(16) NOT NULL
 			);`,
-		`CREATE TABLE photos (
-			id_photo VARCHAR(16) NOT NULL PRIMARY KEY,
-			owner VARCHAR(16) NOT NULL,
+		`CREATE TABLE IF NOT EXISTS photos (
+			id_photo INTEGER PRIMARY KEY AUTOINCREMENT,
+			id_user VARCHAR(16) NOT NULL,
 			comments INT NOT NULL,
 			likes INT NOT NULL,
 			date DATETIME NOT NULL,
-			FOREIGN KEY(owner) REFERENCES users (user) ON DELETE CASCADE
+			FOREIGN KEY(id_user) REFERENCES users (id_user) ON DELETE CASCADE
 			);`,
-		`CREATE TABLE likes (
-			id_photo VARCHAR(16) NOT NULL,
+		`CREATE TABLE IF NOT EXISTS  likes (
+			id_photo INTEGER NOT NULL,
 			id_user VARCHAR(16) NOT NULL,
 			PRIMARY KEY (id_photo,id_user),
 			FOREIGN KEY(id_photo) REFERENCES photos (id_photo) ON DELETE CASCADE
 			);`,
-		`CREATE TABLE comments (
+		`CREATE TABLE IF NOT EXISTS comments (
 			id_comment VARCHAR(30) NOT NULL PRIMARY KEY,
-			id_photo VARCHAR(16) NOT NULL,
+			id_photo INTEGER NOT NULL,
 			id_user VARCHAR(16) NOT NULL,
 			FOREIGN KEY(id_photo) REFERENCES photos (id_photo) ON DELETE CASCADE,
 			FOREIGN KEY(id_user) REFERENCES users (id_user) ON DELETE CASCADE
 			);`,
-		`CREATE TABLE banned_users (
+		`CREATE TABLE IF NOT EXISTS banned_users (
 			banner VARCHAR(16) NOT NULL,
 			banned VARCHAR(16) NOT NULL,
 			PRIMARY KEY (banner,banned),
-			FOREIGN KEY(banner) REFERENCES users (user) ON DELETE CASCADE
+			FOREIGN KEY(banner) REFERENCES users (id_user) ON DELETE CASCADE,
+			FOREIGN KEY(banned) REFERENCES users (id_user) ON DELETE CASCADE
+			);`,
+		`CREATE TABLE IF NOT EXISTS followers(
+			follower VARCHAR(16) NOT NULL,
+			followed VARCHAR(16) NOT NULL,
+			PRIMARY KEY (follower,followed),
+			FOREIGN KEY(follower) REFERENCES users (id_user) ON DELETE CASCADE,
+			FOREIGN KEY(followed) REFERENCES users (id_user) ON DELETE CASCADE
 			);`,
 	}
 

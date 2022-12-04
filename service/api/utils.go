@@ -1,13 +1,17 @@
 package api
 
-//"fmt"
+import "strings"
 
-// function that verifies if the identifier of a user has the right lenght
-func valid_identifier(identifier string) bool {
+// Function that verifies if the identifier of a user has the right lenght
+func validIdentifier(identifier string) bool {
 	return len(identifier) >= 3 && len(identifier) <= 16
 }
 
-// function that creates a photo directory for a certain user
-func create_photo_folder(user_id string, current_dir string) (string, error) {
-	return "bruh", nil
+// Function that extracts the bearer token from the Authorization header
+func extractBearer(authorization string) string {
+	var tokens = strings.Split(authorization, " ")
+	if len(tokens) == 2 {
+		return tokens[1]
+	}
+	return ""
 }
