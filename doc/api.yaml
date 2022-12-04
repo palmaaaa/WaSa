@@ -66,6 +66,8 @@ paths:
           $ref: "#/components/responses/nickname_found"
         '401':
           $ref: "#/components/responses/unauthorized"
+        '403':
+          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':
@@ -98,6 +100,8 @@ paths:
           $ref: "#/components/responses/no_content"
         '401':
           $ref: "#/components/responses/unauthorized"
+        '403':
+          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':
@@ -132,6 +136,8 @@ paths:
           $ref: "#/components/responses/no_content"
         '401':
           $ref: "#/components/responses/unauthorized"
+        '403':
+          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':
@@ -151,6 +157,8 @@ paths:
           $ref: "#/components/responses/no_content"
         '401':
           $ref: "#/components/responses/unauthorized"
+        '403':
+          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':
@@ -186,6 +194,8 @@ paths:
           $ref: "#/components/responses/no_content"
         '401':
           $ref: "#/components/responses/unauthorized"
+        '403':
+          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':
@@ -206,6 +216,8 @@ paths:
           $ref: "#/components/responses/no_content"
         '401':
           $ref: "#/components/responses/unauthorized"
+        '403':
+          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':
@@ -229,6 +241,8 @@ paths:
           $ref: "#/components/responses/stream"
         '401':
           $ref: "#/components/responses/unauthorized"
+        '403':
+          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':
@@ -264,6 +278,8 @@ paths:
           $ref: "#/components/responses/photo_uploaded"
         '401':
           $ref: "#/components/responses/unauthorized"
+        '403':
+          $ref: '#/components/responses/forbidden'
         '500':
           $ref: "#/components/responses/internal_server_error"
           
@@ -286,6 +302,8 @@ paths:
           $ref: "#/components/responses/no_content"
         '401':
           $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':
@@ -318,6 +336,8 @@ paths:
           $ref: '#/components/responses/comment_added'
         '401':
           $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':
@@ -343,6 +363,8 @@ paths:
           $ref: '#/components/responses/no_content'
         '401':
           $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':
@@ -378,6 +400,8 @@ paths:
           $ref: '#/components/responses/no_content'
         '401':
           $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':
@@ -397,6 +421,8 @@ paths:
           $ref: '#/components/responses/no_content'
         '401':
           $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':
@@ -431,11 +457,10 @@ components:
       required: true
       schema: 
         description: photo id
-        type: string
-        pattern: '^.*?$'
-        example: S72h3k
-        minLength: 3
-        maxLength: 16
+        type: integer
+        format: int64
+        minimum: 0
+        maximum: 9999
         readOnly: true
 #........................................................      
     comment_id:
@@ -445,11 +470,11 @@ components:
       required: true
       schema: 
         description: Comment unique id
-        type: string
-        pattern: '^.*?$'
-        example: Z9z212l
-        minLength: 3
-        maxLength: 16
+        type: integer
+        format: int64
+        minimum: 0
+        maximum: 9999
+        example: 122
         readOnly: true
 #........................................................        
     follower_id:
@@ -543,13 +568,13 @@ components:
       properties:
         comment_id:
           description: Comment id
-          type: string
-          minLength: 3
-          maxLength: 16
-          pattern: '^.*?$'
-          example: "9a2ne23"
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 9999
+          example: 965
       example:
-        comment_id: 9a2ne23
+        comment_id: 965
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||        
     photo_identifier:
       description: It's a photo *unique* id
@@ -557,13 +582,13 @@ components:
       properties:
         photo_id:
           description: Photo id
-          type: string
-          minLength: 3
-          maxLength: 16
-          pattern: '^.*?$'
-          example: "xXBVVd"
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 9999
+          example: 273
       example:
-        photo_id: xXBVVd
+        photo_id: 2832
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||            
     comment:
       description: A user's comment contains the text of the comment and the *identifier* of who commented
@@ -608,10 +633,10 @@ components:
           readOnly: true
         photo_id:
           description: The photo unique identifier
-          type: string
-          minLength: 3
-          maxLength: 20
-          pattern: '^.*?$'
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 9999
           readOnly: true
         owner:
           description: Unique identifier of the photo author
@@ -624,7 +649,7 @@ components:
         comments: 0
         likes: 0
         date: 2017-07-21T17:32:28Z
-        photo_id: B9832ash
+        photo_id: 3821
         owner: "Mariucc"
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||      
     photos:
@@ -642,13 +667,13 @@ components:
             - comments: 1273
               likes: 15983
               date: 2017-07-21T17:32:28Z
-              photo_id: B9832ash
+              photo_id: 8321
               owner: "Sapienzagram"
               
             - comments: 13
               likes: 60
               date: 2022-11-22T13:10:14Z
-              photo_id: saUDH2
+              photo_id: 7836
               owner: "Nerd99"
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||      
     nickname_list:
@@ -707,7 +732,10 @@ components:
 #''''''''''''''''''''''''''''''''''''''''''''''''''''''''      
     unauthorized:
       description:  Response associated to the 401 http status (Access token is missing. User is not logged in)
-#''''''''''''''''''''''''''''''''''''''''''''''''''''''''            
+#''''''''''''''''''''''''''''''''''''''''''''''''''''''''          
+    forbidden:
+      description: Response associated to the 403 http status (Access denied )
+#''''''''''''''''''''''''''''''''''''''''''''''''''''''''     
     not_found:
       description: Response associated to the 404 http status (The requested resource doesn't exist)
 #''''''''''''''''''''''''''''''''''''''''''''''''''''''''            
