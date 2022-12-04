@@ -19,22 +19,19 @@ import (
 
 // Function that manages the upload of a photo
 func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+
 	auth := extractBearer(r.Header.Get("Authorization"))
 
-	// If the user requesting to upload the photo has an invalid token then respond with a fobidden status.
-	if auth == "" {
-		w.WriteHeader(http.StatusForbidden)
-		return
-	}
-
-	// If the user requesting to upload the photo is not the same of the indicated path then respond with an unathorized status.
-	if ps.ByName("id") != auth {
-		w.WriteHeader(http.StatusUnauthorized)
+	// Check the user's identity for the operation
+	valid := validateRequestingUser(ps.ByName("id"), auth)
+	if valid != 0 {
+		w.WriteHeader(valid)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 
+	// Initialize an empty Photo
 	var photo Photo
 	photo.Comments = 0
 	photo.Likes = 0
@@ -44,6 +41,8 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	// Create a copy of the body
 	data, err := io.ReadAll(r.Body)
 	if err != nil {
+		ctx.Logger.WithError(err).Error("photo-upload: error reading body content")
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -66,6 +65,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	photoIdInt, err := rt.db.CreatePhoto(photo.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo-upload: error executing db function call")
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -73,6 +73,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	originalPath, err := os.Getwd()
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo-upload: error getting current working directory")
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -81,6 +82,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	newPhotoPath, err := getUserPhotoFolder(auth, ctx)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo-upload: error getting user's photo folder")
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -88,6 +90,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	err = os.Chdir(newPhotoPath)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo-upload: error changing directory")
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -96,7 +99,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("photo-upload: error creating local photo file")
-		_ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INTERNAL_ERROR_MSG})
+		//  = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INTERNAL_ERROR_MSG})
 		return
 	}
 
@@ -105,7 +108,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("photo-upload: error copying body content into file photo")
-		_ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INTERNAL_ERROR_MSG})
+		// _ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INTERNAL_ERROR_MSG})
 		return
 	}
 
@@ -115,6 +118,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	err = os.Chdir(originalPath)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo-upload: error changing directory")
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 

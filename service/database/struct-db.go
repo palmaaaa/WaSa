@@ -20,5 +20,10 @@ type User struct {
 
 // PhotoId structure for the database
 type PhotoId struct {
-	IdPhoto int64 `json:"photo_id"` // Photo unique id
+	IdPhoto int64 // Photo unique id
+}
+
+// Nickname structure for the database
+type Nickname struct {
+	Nickname string // Nickname of a user
 }

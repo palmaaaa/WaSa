@@ -66,8 +66,6 @@ paths:
           $ref: "#/components/responses/nickname_found"
         '401':
           $ref: "#/components/responses/unauthorized"
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: "#/components/responses/not_found"
         '500':

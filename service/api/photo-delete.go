@@ -14,15 +14,10 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	auth := extractBearer(r.Header.Get("Authorization"))
 	photoToDelete := ps.ByName("photo_id")
 
-	// If the user requesting to upload the photo has an invalid token then respond with a fobidden status.
-	if auth == "" {
-		w.WriteHeader(http.StatusForbidden)
-		return
-	}
-
-	// If the user requesting to upload the photo is not the same of the indicated user in the path then respond with an unathorized status.
-	if ps.ByName("id") != auth {
-		w.WriteHeader(http.StatusUnauthorized)
+	// Check the user's identity for the operation
+	valid := validateRequestingUser(ps.ByName("id"), auth)
+	if valid != 0 {
+		w.WriteHeader(valid)
 		return
 	}
 
@@ -32,6 +27,7 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		ctx.Logger.WithError(err).Error("photo-delete: error converting photoId to int")
 		return
 	}
+
 	var photo PhotoId
 	photo.IdPhoto = photoInt
 

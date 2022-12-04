@@ -42,7 +42,7 @@ type AppDatabase interface {
 	CreateUser(User) error
 
 	// Modifies the nickname of a user in the database. It returns an error
-	ModifyNickname(User, string) error
+	ModifyNickname(string, Nickname) error
 
 	// Searches all the users that match the name given (both identifier and nickname). Returns the list of matching users and an error
 	SearchUser(User) ([]User, error)
