@@ -56,6 +56,12 @@ type AppDatabase interface {
 	// Removes the like of a user for a specified photo in the database. It returns an error
 	UnlikePhoto(PhotoId, User) error
 
+	// Inserts a comment from a user to a specified photo in the database. It returns an error
+	CommentPhoto(PhotoId, User, CommentId) error
+
+	// Deletes a comment from a user to a specified photo in the database. It returns an error
+	UncommentPhoto(PhotoId, User, CommentId) error
+
 	// Removes a photo from the database. The removal includes likes and comments.  It returns an error
 	RemovePhoto(PhotoId) error
 
