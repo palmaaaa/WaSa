@@ -27,7 +27,7 @@ func (rt *_router) putNickname(w http.ResponseWriter, r *http.Request, ps httpro
 	}
 
 	// Modify the username with the db function
-	err = rt.db.ModifyNickname(ps.ByName("id"), nick.ToDatabase())
+	err = rt.db.ModifyNickname(User{IdUser: ps.ByName("id")}.ToDatabase(), nick.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("update-nickname: error executing update query")
 		w.WriteHeader(http.StatusInternalServerError)

@@ -17,8 +17,12 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.PUT("/users/:id", rt.wrap(rt.putNickname))
 
 	// Like endpoint
-	rt.router.PUT("/users/:id/photos/:photo_id/:like_id", rt.wrap(rt.putLike))
-	rt.router.DELETE("/users/:id/photos/:photo_id/:like_id", rt.wrap(rt.deleteLike))
+	rt.router.PUT("/users/:id/photos/:photo_id/likes/:like_id", rt.wrap(rt.putLike))
+	rt.router.DELETE("/users/:id/photos/:photo_id/likes/:like_id", rt.wrap(rt.deleteLike))
+
+	// Comment endpoint
+	rt.router.POST("/users/:id/photos/:photo_id/comments", rt.wrap(rt.postComment))
+	rt.router.DELETE("/users/:id/photos/:photo_id/comments/:comment_id", rt.wrap(rt.deleteComment))
 
 	// Photo Endpoint
 	rt.router.POST("/users/:id/photos", rt.wrap(rt.postPhoto))

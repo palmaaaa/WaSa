@@ -28,6 +28,11 @@ type Nickname struct {
 	Nickname string // Nickname of a user
 }
 
+// Comment structure for the database
+type Comment struct {
+	Comment string // Comment content
+}
+
 // CommentId structure for the database
 type CommentId struct {
 	IdComment int64 // Identifier of a comment

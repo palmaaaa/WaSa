@@ -37,12 +37,17 @@ type PhotoId struct {
 	IdPhoto int64 `json:"photo_id"` // Photo unique id
 }
 
-// Nickname structure for the APIs (useful for incoming requests)
+// Nickname structure for the APIs
 type Nickname struct {
 	Nickname string `json:"nickname"` // Nickname of a user
 }
 
-// CommentId structure for the APIs (useful for incoming requests)
+// Comment structure for the APIs
+type Comment struct {
+	Comment string `json:"comment"` // Comment content
+}
+
+// CommentId structure for the APIs
 type CommentId struct {
 	IdComment int64 `json:"comment_id"` // Identifier of a comment
 }
@@ -76,6 +81,13 @@ func (p PhotoId) ToDatabase() database.PhotoId {
 func (n Nickname) ToDatabase() database.Nickname {
 	return database.Nickname{
 		Nickname: n.Nickname,
+	}
+}
+
+// Converts a Comment from the api package to a Comment of the database package
+func (c Comment) ToDatabase() database.Comment {
+	return database.Comment{
+		Comment: c.Comment,
 	}
 }
 

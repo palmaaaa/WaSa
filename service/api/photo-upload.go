@@ -31,22 +31,13 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 	w.Header().Set("Content-Type", "application/json")
 
-	// Initialize an empty Photo
-
+	// Initialize photo struct
 	photo := Photo{
 		Comments: 0,
 		Likes:    0,
 		Owner:    auth,
 		Date:     time.Now().UTC(),
 	}
-
-	/*
-		var photo Photo
-		photo.Comments = 0
-		photo.Likes = 0
-		photo.Owner = auth
-		photo.Date = time.Now().UTC()
-	*/
 
 	// Create a copy of the body
 	data, err := io.ReadAll(r.Body)

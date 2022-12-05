@@ -42,7 +42,7 @@ type AppDatabase interface {
 	CreateUser(User) error
 
 	// Modifies the nickname of a user in the database. It returns an error
-	ModifyNickname(string, Nickname) error
+	ModifyNickname(User, Nickname) error
 
 	// Searches all the users that match the name given (both identifier and nickname). Returns the list of matching users and an error
 	SearchUser(User) ([]User, error)
@@ -56,11 +56,11 @@ type AppDatabase interface {
 	// Removes the like of a user for a specified photo in the database. It returns an error
 	UnlikePhoto(PhotoId, User) error
 
-	// Inserts a comment from a user to a specified photo in the database. It returns an error
-	CommentPhoto(PhotoId, User, CommentId) error
+	// Adds a comment from a user to a specified photo in the database. It returns an error
+	CommentPhoto(PhotoId, User, Comment) (int64, error)
 
-	// Deletes a comment from a user to a specified photo in the database. It returns an error
-	UncommentPhoto(PhotoId, User, CommentId) error
+	// Deletes a comment from a user from a specified photo in the database. It returns an error
+	UncommentPhoto(User, CommentId) error // PhotoId, User,
 
 	// Removes a photo from the database. The removal includes likes and comments.  It returns an error
 	RemovePhoto(PhotoId) error
@@ -129,9 +129,10 @@ func createDatabase(db *sql.DB) error {
 			FOREIGN KEY(id_photo) REFERENCES photos (id_photo) ON DELETE CASCADE
 			);`,
 		`CREATE TABLE IF NOT EXISTS comments (
-			id_comment VARCHAR(30) NOT NULL PRIMARY KEY,
+			id_comment INTEGER PRIMARY KEY AUTOINCREMENT,
 			id_photo INTEGER NOT NULL,
 			id_user VARCHAR(16) NOT NULL,
+			comment VARCHAR(30) NOT NULL,
 			FOREIGN KEY(id_photo) REFERENCES photos (id_photo) ON DELETE CASCADE,
 			FOREIGN KEY(id_user) REFERENCES users (id_user) ON DELETE CASCADE
 			);`,
