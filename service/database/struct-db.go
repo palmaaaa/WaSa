@@ -27,3 +27,8 @@ type PhotoId struct {
 type Nickname struct {
 	Nickname string // Nickname of a user
 }
+
+// CommentId structure for the database
+type CommentId struct {
+	IdComment int64 // Identifier of a comment
+}

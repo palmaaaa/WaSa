@@ -50,6 +50,12 @@ type AppDatabase interface {
 	// Creates a new photo in the database. It returns the photo identifier and an error
 	CreatePhoto(Photo) (int64, error)
 
+	// Inserts the like of a user for a specified photo in the database. It returns an error
+	LikePhoto(PhotoId, User) error
+
+	// Removes the like of a user for a specified photo in the database. It returns an error
+	UnlikePhoto(PhotoId, User) error
+
 	// Removes a photo from the database. The removal includes likes and comments.  It returns an error
 	RemovePhoto(PhotoId) error
 

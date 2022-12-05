@@ -9,13 +9,5 @@ func (db *appdbimpl) RemovePhoto(p PhotoId) error {
 		return err
 	}
 
-	/*
-		_, err = res.RowsAffected()
-		if err != nil {
-			// Error getting numbers of rows affected
-			return err
-		}
-	*/
-
 	return nil
 }

@@ -18,7 +18,7 @@ import (
 )
 
 // Function that manages the upload of a photo
-func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	auth := extractBearer(r.Header.Get("Authorization"))
 
@@ -32,11 +32,21 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	w.Header().Set("Content-Type", "application/json")
 
 	// Initialize an empty Photo
-	var photo Photo
-	photo.Comments = 0
-	photo.Likes = 0
-	photo.Owner = auth
-	photo.Date = time.Now().UTC()
+
+	photo := Photo{
+		Comments: 0,
+		Likes:    0,
+		Owner:    auth,
+		Date:     time.Now().UTC(),
+	}
+
+	/*
+		var photo Photo
+		photo.Comments = 0
+		photo.Likes = 0
+		photo.Owner = auth
+		photo.Date = time.Now().UTC()
+	*/
 
 	// Create a copy of the body
 	data, err := io.ReadAll(r.Body)
