@@ -74,8 +74,13 @@ type AppDatabase interface {
 	//  It returns an error
 	UnbanUser(User, User) error
 
+	// Get the a user's stream (photos of people who are followed by the user in reversed chrono order)
+	GetStream(User) ([]Photo, error)
+
 	// Removes a photo from the database. The removal includes likes and comments.  It returns an error
 	RemovePhoto(PhotoId) error
+
+	//
 
 	// Ping checks whether the database is available or not (in that case, an error will be returned)
 	Ping() error
