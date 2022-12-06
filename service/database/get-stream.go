@@ -2,7 +2,7 @@ package database
 
 // This function gets the stream of a user.
 func (db *appdbimpl) GetStream(user User) ([]Photo, error) {
-	const query = `SELECT * FROM photos WHERE id_user IN (SELECT followed FROM followers WHERE followed = ?) ORDER BY date ASC`
+	const query = `SELECT * FROM photos WHERE id_user IN (SELECT followed FROM followers WHERE follower = ?) ORDER BY date ASC`
 	rows, err := db.c.Query(query, user.IdUser)
 	if err != nil {
 		return nil, err
@@ -14,7 +14,7 @@ func (db *appdbimpl) GetStream(user User) ([]Photo, error) {
 	var res []Photo
 	for rows.Next() {
 		var photo Photo
-		err = rows.Scan(&photo)
+		err = rows.Scan(&photo.PhotoId, &photo.Owner, &photo.Comments, &photo.Likes, &photo.Date)
 		if err != nil {
 			return nil, err
 		}

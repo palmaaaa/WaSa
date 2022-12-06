@@ -17,11 +17,11 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.PUT("/users/:id", rt.wrap(rt.putNickname))
 
 	// Ban endpoint
-	rt.router.PUT("/users/:id/banned_users", rt.wrap(rt.putBan))
+	rt.router.PUT("/users/:id/banned_users/:banned_id", rt.wrap(rt.putBan))
 	rt.router.DELETE("/users/:id/banned_users/:banned_id", rt.wrap(rt.deleteBan))
 
 	// Followers endpoint
-	rt.router.PUT("/users/:id/followers", rt.wrap(rt.putFollow))
+	rt.router.PUT("/users/:id/followers/:follower_id", rt.wrap(rt.putFollow))
 	rt.router.DELETE("/users/:id/followers/:follower_id", rt.wrap(rt.deleteFollow))
 
 	// Stream endpoint, to implement
