@@ -1,8 +1,7 @@
 package database
 
-// This function filters the users by a parameter. If the parameter is missing then all registered user are returned.
-// The db will look throgh any identifier or nickname (they're not necessarily the same) that match the given parameter
-// (even partially) .
+// Database function that filters the users by a parameter. Any partial match is included in the result.
+// Returns a list of matching users (either by nickname or identifier)
 func (db *appdbimpl) SearchUser(user User) ([]User, error) {
 	const query = "SELECT id_user FROM users WHERE (id_user LIKE ?) OR (nickname LIKE ?)"
 	rows, err := db.c.Query(query, user.IdUser+"%", user.IdUser+"%")

@@ -28,9 +28,10 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
-	var photo PhotoId
-	photo.IdPhoto = photoInt
+	// Initialize the photo
+	photo := PhotoId{IdPhoto: photoInt}
 
+	// Call to the db function to remove the photo
 	err = rt.db.RemovePhoto(photo.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo-delete: error coming from database")

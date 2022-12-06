@@ -20,6 +20,7 @@ import (
 // Function that manages the upload of a photo
 func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
+	w.Header().Set("Content-Type", "application/json")
 	auth := extractBearer(r.Header.Get("Authorization"))
 
 	// Check the user's identity for the operation
@@ -28,8 +29,6 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		w.WriteHeader(valid)
 		return
 	}
-
-	w.Header().Set("Content-Type", "application/json")
 
 	// Initialize photo struct
 	photo := Photo{
@@ -80,6 +79,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 	photoId := strconv.FormatInt(photoIdInt, 10)
 
+	// Create the user's folder locally to save his/her images
 	newPhotoPath, err := getUserPhotoFolder(auth, ctx)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo-upload: error getting user's photo folder")
@@ -123,11 +123,8 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	//a, _ := strconv.ParseInt(photoId, 10, 64)
-	var pId PhotoId
-	pId.IdPhoto = photoIdInt
 	w.WriteHeader(http.StatusCreated)
-	_ = json.NewEncoder(w).Encode(pId)
+	_ = json.NewEncoder(w).Encode(PhotoId{IdPhoto: photoIdInt})
 
 }
 

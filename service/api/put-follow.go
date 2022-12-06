@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"wasaphoto-1849661/service/api/reqcontext"
 
@@ -21,12 +20,10 @@ func (rt *_router) putFollow(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	fmt.Println("nome di struct: ", new_follower.IdUser)
-
 	// Check if the id of the follower in the request is the same of bearer
-	if new_follower.IdUser != extractBearer(r.Header.Get("Authentication")) {
+	if new_follower.IdUser != extractBearer(r.Header.Get("Authorization")) {
 		w.WriteHeader(http.StatusBadRequest)
-		ctx.Logger.WithError(errors.New("id in request and authtentication not consistent")).Error("put-follow: users trying to identify as someone else")
+		ctx.Logger.WithError(errors.New("id in request and authentication not consistent")).Error("put-follow: users trying to identify as someone else")
 		return
 	}
 

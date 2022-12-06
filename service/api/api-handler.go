@@ -24,7 +24,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.PUT("/users/:id/followers/:follower_id", rt.wrap(rt.putFollow))
 	rt.router.DELETE("/users/:id/followers/:follower_id", rt.wrap(rt.deleteFollow))
 
-	// Stream endpoint, to implement
+	// Stream endpoint
 	rt.router.GET("/users/:id/home", rt.wrap(rt.getHome))
 
 	// Photo Endpoint

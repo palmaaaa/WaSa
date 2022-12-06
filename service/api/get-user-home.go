@@ -21,19 +21,19 @@ func (rt *_router) getHome(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	// Get all the photos from from people followed by the requesting user
-	res, err := rt.db.GetStream(User{IdUser: identifier}.ToDatabase())
+	photos, err := rt.db.GetStream(User{IdUser: identifier}.ToDatabase())
 	if err != nil {
 		// In this case, there's an error coming from the database. Return an empty json.
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("Database has encountered an error")
-		_ = json.NewEncoder(w).Encode([]User{})
+		_ = json.NewEncoder(w).Encode([]Photo{})
 		return
 	}
 
-	// Send the output to the user. Instead of giving null for no matches return and empty slice of Users.
-	if len(res) == 0 {
-		_ = json.NewEncoder(w).Encode([]User{})
+	// Send the output to the user. Instead of giving null for no matches return and empty slice of photos.
+	if len(photos) == 0 {
+		_ = json.NewEncoder(w).Encode([]Photo{})
 		return
 	}
-	_ = json.NewEncoder(w).Encode(res)
+	_ = json.NewEncoder(w).Encode(photos)
 }

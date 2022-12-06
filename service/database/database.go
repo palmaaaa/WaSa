@@ -34,26 +34,25 @@ import (
 	"fmt"
 )
 
-var ErrFountainDoesNotExist = errors.New("fountain does not exist")
-
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
+
 	// Creates a new user in the database. It returns an error
 	CreateUser(User) error
 
 	// Modifies the nickname of a user in the database. It returns an error
 	ModifyNickname(User, Nickname) error
 
-	// Searches all the users that match the name given (both identifier and nickname). Returns the list of matching users and an error
+	// Searches all the users that match the given name (both identifier and nickname). Returns the list of matching users and an error
 	SearchUser(User) ([]User, error)
 
 	// Creates a new photo in the database. It returns the photo identifier and an error
 	CreatePhoto(Photo) (int64, error)
 
-	// Inserts the like of a user for a specified photo in the database. It returns an error
+	// Inserts a like of a user for a specified photo in the database. It returns an error
 	LikePhoto(PhotoId, User) error
 
-	// Removes the like of a user for a specified photo in the database. It returns an error
+	// Removes a like of a user for a specified photo from the database. It returns an error
 	UnlikePhoto(PhotoId, User) error
 
 	// Adds a comment from a user to a specified photo in the database. It returns an error
@@ -62,25 +61,23 @@ type AppDatabase interface {
 	// Deletes a comment from a user from a specified photo in the database. It returns an error
 	UncommentPhoto(PhotoId, User, CommentId) error
 
-	// A. It returns an error
+	// Adds a follower to the user that is being followed. It returns an error
 	FollowUser(User, User) error
 
-	//  It returns an error
+	//  Removes a follower from the user that is being unfollowed. It returns an error
 	UnfollowUser(User, User) error
 
-	// A. It returns an error
+	// Adds a user to the banned list of another. It returns an error
 	BanUser(User, User) error
 
-	//  It returns an error
+	// Removes a user from the banned list of another. It returns an error
 	UnbanUser(User, User) error
 
-	// Get the a user's stream (photos of people who are followed by the user in reversed chrono order)
+	// Get the a user's stream (photos of people who are followed by the user in reversed chronological order)
 	GetStream(User) ([]Photo, error)
 
 	// Removes a photo from the database. The removal includes likes and comments.  It returns an error
 	RemovePhoto(PhotoId) error
-
-	//
 
 	// Ping checks whether the database is available or not (in that case, an error will be returned)
 	Ping() error
@@ -169,6 +166,7 @@ func createDatabase(db *sql.DB) error {
 			);`,
 	}
 
+	// Iteration to create all the needed sql schemas
 	for i := 0; i < len(tables); i++ {
 
 		sqlStmt := tables[i]

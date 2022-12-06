@@ -1,6 +1,6 @@
 package database
 
-// Function creates a photo on the database and returns the photo id
+// Database function that creates a photo on the database and returns the unique photo id
 func (db *appdbimpl) CreatePhoto(p Photo) (int64, error) {
 	res, err := db.c.Exec("INSERT INTO photos (id_user,comments,likes,date) VALUES (?,?,?,?)",
 		p.Owner, p.Comments, p.Likes, p.Date)
@@ -17,4 +17,16 @@ func (db *appdbimpl) CreatePhoto(p Photo) (int64, error) {
 	}
 
 	return photoId, nil
+}
+
+// Database function that removes a photo from the database
+func (db *appdbimpl) RemovePhoto(p PhotoId) error {
+	_, err := db.c.Exec("DELETE FROM photos WHERE id_photo=?",
+		p.IdPhoto)
+	if err != nil {
+		// Error during the execution of the query
+		return err
+	}
+
+	return nil
 }
