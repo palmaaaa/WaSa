@@ -60,7 +60,19 @@ type AppDatabase interface {
 	CommentPhoto(PhotoId, User, Comment) (int64, error)
 
 	// Deletes a comment from a user from a specified photo in the database. It returns an error
-	UncommentPhoto(User, CommentId) error // PhotoId, User,
+	UncommentPhoto(PhotoId, User, CommentId) error
+
+	// A. It returns an error
+	FollowUser(User, User) error
+
+	//  It returns an error
+	UnfollowUser(User, User) error
+
+	// A. It returns an error
+	BanUser(User, User) error
+
+	//  It returns an error
+	UnbanUser(User, User) error
 
 	// Removes a photo from the database. The removal includes likes and comments.  It returns an error
 	RemovePhoto(PhotoId) error

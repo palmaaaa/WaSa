@@ -19,8 +19,17 @@ func (rt *_router) deleteComment(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
+	// Convert the photo identifier from string to int64
+	photo_id_64, err := strconv.ParseInt(ps.ByName("photo_id"), 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		ctx.Logger.WithError(err).Error("post-comment: failed convert photo_id to int64")
+		return
+	}
+
 	// Function call to db for comment removal (only authors can remove their comments)
 	err = rt.db.UncommentPhoto(
+		PhotoId{IdPhoto: photo_id_64}.ToDatabase(),
 		User{IdUser: ps.ByName("id")}.ToDatabase(),
 		CommentId{IdComment: comment_id_64}.ToDatabase())
 	if err != nil {
