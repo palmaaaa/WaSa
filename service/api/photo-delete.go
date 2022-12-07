@@ -9,7 +9,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-// Function that deletes a photo
+// Function that deletes a photo (this includes comments and likes)
 func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	auth := extractBearer(r.Header.Get("Authorization"))
 	photoToDelete := ps.ByName("photo_id")
@@ -36,5 +36,7 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo-delete: error coming from database")
 	}
+
+	// Respond with 204 http status
 	w.WriteHeader(http.StatusNoContent)
 }

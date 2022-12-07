@@ -9,6 +9,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+// Function that add a like of a user to a photo
 func (rt *_router) putLike(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// Check the user's identity for the operation
@@ -43,5 +44,6 @@ func (rt *_router) putLike(w http.ResponseWriter, r *http.Request, ps httprouter
 		return
 	}
 
+	// Respond with 204 http status
 	w.WriteHeader(http.StatusNoContent)
 }

@@ -8,10 +8,11 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+// Function that adds a user to banned list of another
 func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// Check the user's identity for the operation
-	valid := validateRequestingUser(ps.ByName("id"), extractBearer(r.Header.Get("Authentication")))
+	valid := validateRequestingUser(ps.ByName("id"), extractBearer(r.Header.Get("Authorization")))
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
@@ -36,5 +37,6 @@ func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
+	// Respond with 204 http status
 	w.WriteHeader(http.StatusNoContent)
 }

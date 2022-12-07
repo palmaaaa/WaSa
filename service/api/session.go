@@ -18,13 +18,13 @@ func (rt *_router) sessionHandler(w http.ResponseWriter, r *http.Request, ps htt
 	if err != nil {
 		// The body was not a parseable JSON, reject it
 		w.WriteHeader(http.StatusBadRequest)
-		// ctx.Logger.WithError(err).Error("session: error parsing json (invalid format)")
+		// controllaerrore
 		// _ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INVALID_JSON_ERROR_MSG})
 		return
 	} else if !validIdentifier(user.IdUser) {
-		// Here we validated the user identifier and we discovered that it's not valid.
+		// Here we checked the user identifier and we discovered that it's not valid
 		w.WriteHeader(http.StatusBadRequest)
-		// ctx.Logger.WithError(err).Error("session: invalid identificator lenght")
+		// controllaerrore
 		// _ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INVALID_IDENTIFIER_ERROR_MSG})
 		return
 	}
@@ -39,7 +39,6 @@ func (rt *_router) sessionHandler(w http.ResponseWriter, r *http.Request, ps htt
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			ctx.Logger.WithError(err).Error("session: can't create response json")
-			return
 		}
 		return
 	}
@@ -52,7 +51,7 @@ func (rt *_router) sessionHandler(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	// Send the output to the user.
+	// Send the output to the user
 	w.WriteHeader(http.StatusCreated)
 	err = json.NewEncoder(w).Encode(user)
 	if err != nil {

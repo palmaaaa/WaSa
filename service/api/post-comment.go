@@ -9,6 +9,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+// Function that adds a comment to a photo and sends a response containing the unique id of the created comment
 func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	w.Header().Set("Content-Type", "application/json")
 	identifier := ps.ByName("id")
@@ -48,6 +49,8 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
+
 	// The response body will contain the unique id of the comment
 	err = json.NewEncoder(w).Encode(CommentId{IdComment: commentId})
 	if err != nil {
@@ -55,5 +58,5 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 		ctx.Logger.WithError(err).Error("post-comment: failed convert photo_id to int64")
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
+
 }

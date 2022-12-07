@@ -8,6 +8,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+// Function that updates a user's nickname
 func (rt *_router) putNickname(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// Check the user's identity for the operation
@@ -34,5 +35,6 @@ func (rt *_router) putNickname(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
+	// Respond with 204 http status
 	w.WriteHeader(http.StatusNoContent)
 }

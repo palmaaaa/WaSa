@@ -8,7 +8,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-// This function makes a call to the database to retrive all the users matching the query
+// Function that retrives all the users matching the query parameter and sends the response containing all the matches
 func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// If the user is not logged in then respond with a 403 http status
@@ -27,14 +27,19 @@ func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps http
 		// In this case, there's an error coming from the database. Return an empty json
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("Database has encountered an error")
+		// controllaerrore
 		_ = json.NewEncoder(w).Encode([]User{})
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
+
 	// Send the output to the user. Instead of giving null for no matches return and empty slice of Users
 	if len(res) == 0 {
+		// controllaerrore
 		_ = json.NewEncoder(w).Encode([]User{})
 		return
 	}
+	// controllaerrore
 	_ = json.NewEncoder(w).Encode(res)
 }

@@ -7,9 +7,10 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+// Function that removes a user from the banned list of another
 func (rt *_router) deleteBan(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	bearerToken := extractBearer(r.Header.Get("Authentication"))
+	bearerToken := extractBearer(r.Header.Get("Authorization"))
 
 	// Check the user's identity for the operation
 	valid := validateRequestingUser(ps.ByName("id"), bearerToken)
@@ -28,5 +29,6 @@ func (rt *_router) deleteBan(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
+	// Respond with 204 http status
 	w.WriteHeader(http.StatusNoContent)
 }

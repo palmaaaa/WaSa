@@ -38,3 +38,20 @@ func (db *appdbimpl) UncommentPhoto(p PhotoId, u User, c CommentId) error {
 
 	return nil
 }
+
+// Database function that adds a comment to the comment counter of a photo
+func (db *appdbimpl) CommentCounter(p PhotoId, add bool) error {
+	var cnt = "1"
+	if !add {
+		cnt = "-1"
+	}
+
+	_, err := db.c.Exec("UPDATE comments SET comments = comments + ? WHERE id_photo = ?",
+		cnt, p.IdPhoto)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

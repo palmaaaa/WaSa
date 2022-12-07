@@ -9,6 +9,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+// Function that adds a user to the followers list of another
 func (rt *_router) putFollow(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// Get the new follower id from the request body
@@ -37,5 +38,6 @@ func (rt *_router) putFollow(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
+	// Respond with 204 http status
 	w.WriteHeader(http.StatusNoContent)
 }

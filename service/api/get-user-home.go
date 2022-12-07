@@ -26,14 +26,19 @@ func (rt *_router) getHome(w http.ResponseWriter, r *http.Request, ps httprouter
 		// In this case, there's an error coming from the database. Return an empty json.
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("Database has encountered an error")
+		// controllaerrore
 		_ = json.NewEncoder(w).Encode([]Photo{})
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
+
 	// Send the output to the user. Instead of giving null for no matches return and empty slice of photos.
 	if len(photos) == 0 {
+		// controllaerrore
 		_ = json.NewEncoder(w).Encode([]Photo{})
 		return
 	}
+	// controllaerrore
 	_ = json.NewEncoder(w).Encode(photos)
 }

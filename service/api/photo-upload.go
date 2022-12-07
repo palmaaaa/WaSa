@@ -54,6 +54,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	if formatErr != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		ctx.Logger.WithError(formatErr).Error("photo-upload: body contains file that is neither jpg or png")
+		// controllaerrore
 		_ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: IMG_FORMAT_ERROR_MSG})
 		return
 	}
@@ -105,14 +106,16 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	}
 
 	// Copy body content to the previously created file
-	_, err = io.Copy(out, r.Body) //r.Body
+	_, err = io.Copy(out, r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("photo-upload: error copying body content into file photo")
+		// controllaerrore
 		// _ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: INTERNAL_ERROR_MSG})
 		return
 	}
 
+	// Close created file
 	out.Close()
 
 	// Switch back to the default path
@@ -124,6 +127,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	}
 
 	w.WriteHeader(http.StatusCreated)
+	// controllaerrore
 	_ = json.NewEncoder(w).Encode(PhotoId{IdPhoto: photoIdInt})
 
 }
