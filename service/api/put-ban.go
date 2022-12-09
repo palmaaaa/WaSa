@@ -11,7 +11,7 @@ import (
 // Function that adds a user to banned list of another
 func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	// Check the user's identity for the operation
+	// Check the user's identity for the operation (only owner of the account can add a banned user to that account list)
 	valid := validateRequestingUser(ps.ByName("id"), extractBearer(r.Header.Get("Authorization")))
 	if valid != 0 {
 		w.WriteHeader(valid)
@@ -28,7 +28,7 @@ func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	// Add the new banned user in the db via db function
-	err = rt.db.FollowUser(
+	err = rt.db.BanUser(
 		User{IdUser: ps.ByName("id")}.ToDatabase(),
 		banned.ToDatabase())
 	if err != nil {

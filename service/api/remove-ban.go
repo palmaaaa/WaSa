@@ -20,7 +20,7 @@ func (rt *_router) deleteBan(w http.ResponseWriter, r *http.Request, ps httprout
 	}
 
 	// Remove the follower in the db via db function
-	err := rt.db.UnfollowUser(
+	err := rt.db.UnbanUser(
 		User{IdUser: ps.ByName("id")}.ToDatabase(),
 		User{IdUser: ps.ByName("banned_id")}.ToDatabase())
 	if err != nil {
