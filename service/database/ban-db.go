@@ -14,7 +14,7 @@ func (db *appdbimpl) BanUser(banner User, banned User) error {
 
 // Database fuction that removes a user (banned) from the banned list of another one (banner)
 func (db *appdbimpl) UnbanUser(banner User, banned User) error {
-	_, err := db.c.Exec("DELETE FROM banned_users WHERE(banner = ? AND banned = ?) VALUES (?, ?)",
+	_, err := db.c.Exec("DELETE FROM banned_users WHERE banner = ? AND banned = ?",
 		banner.IdUser, banned.IdUser)
 
 	if err != nil {
