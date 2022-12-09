@@ -11,8 +11,11 @@ import (
 // Function that retrives all the users matching the query parameter and sends the response containing all the matches
 func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
+	// Get the user identifier (from Bearer)
+	identifier := extractBearer(r.Header.Get("Authorization"))
+
 	// If the user is not logged in then respond with a 403 http status
-	if extractBearer(r.Header.Get("Authorization")) == "" {
+	if identifier == "" {
 		w.WriteHeader(http.StatusForbidden)
 		return
 	}
@@ -22,7 +25,7 @@ func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps http
 	w.Header().Set("Content-Type", "application/json")
 
 	// Search the user in the database (with the query parameter as a filter)
-	res, err := rt.db.SearchUser(User{IdUser: identificator}.ToDatabase())
+	res, err := rt.db.SearchUser(User{IdUser: identifier}.ToDatabase(), User{IdUser: identificator}.ToDatabase())
 	if err != nil {
 		// In this case, there's an error coming from the database. Return an empty json
 		w.WriteHeader(http.StatusInternalServerError)
