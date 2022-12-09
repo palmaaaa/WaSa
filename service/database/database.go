@@ -34,6 +34,10 @@ import (
 	"fmt"
 )
 
+// Errors section
+var ErrPhotoDoesntExist = errors.New("photo doesn't exist")
+var ErrUserBanned = errors.New("user is banned")
+
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 
@@ -131,8 +135,6 @@ func createDatabase(db *sql.DB) error {
 		`CREATE TABLE IF NOT EXISTS photos (
 			id_photo INTEGER PRIMARY KEY AUTOINCREMENT,
 			id_user VARCHAR(16) NOT NULL,
-			comments INT NOT NULL,
-			likes INT NOT NULL,
 			date DATETIME NOT NULL,
 			FOREIGN KEY(id_user) REFERENCES users (id_user) ON DELETE CASCADE
 			);`,

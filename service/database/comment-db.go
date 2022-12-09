@@ -1,10 +1,54 @@
 package database
 
+// Database function that retrieves the list of comments of a photo (minus the comments from users that banned the requesting user)
+func (db *appdbimpl) GetCommentsList(requestinUser User, photo PhotoId) ([]CompleteComment, error) {
+	const query = "SELECT * FROM comments WHERE id_photo = ? AND id_user NOT IN (SELECT banner FROM banned_users WHERE banned = ?)"
+	rows, err := db.c.Query(query, requestinUser.IdUser, photo.IdPhoto)
+	if err != nil {
+		return nil, err
+	}
+
+	// Wait for the function to finish before closing rows
+	defer func() { _ = rows.Close() }()
+
+	// Read all the comments in the resulset (comments of the photo with authors that didn't ban the requesting user).
+	var comments []CompleteComment
+	for rows.Next() {
+		var comment CompleteComment
+		err = rows.Scan(&comment.IdComment, &comment.IdPhoto, &comment.IdUser, &comment.Comment)
+		if err != nil {
+			return nil, err
+		}
+		comments = append(comments, comment)
+	}
+
+	if rows.Err() != nil {
+		return nil, err
+	}
+
+	return comments, nil
+}
+
+// Database function that gets the number of comments of a photo
+func (db *appdbimpl) GetComments(p PhotoId) (int, error) {
+
+	if db.CheckPhotoExistence(p) {
+		return 0, ErrPhotoDoesntExist
+	}
+
+	var comments int
+	err := db.c.QueryRow("SELECT COUNT(*) FROM comments WHERE (id_photo = ?)", p.IdPhoto).Scan(&comments)
+	if err != nil {
+		return 0, err
+	}
+
+	return comments, nil
+}
+
 // Database function that adds a comment of a user to a photo
 func (db *appdbimpl) CommentPhoto(p PhotoId, u User, c Comment) (int64, error) {
 	res, err := db.c.Exec("INSERT INTO comments (id_photo,id_user,comment) VALUES (?, ?, ?)",
 		p.IdPhoto, u.IdUser, c.Comment)
-
 	if err != nil {
 		// Error executing query
 		return -1, err
@@ -31,24 +75,6 @@ is not valid but that comment exists for the given user, it won't be deleted.
 func (db *appdbimpl) UncommentPhoto(p PhotoId, u User, c CommentId) error {
 	_, err := db.c.Exec("DELETE FROM comments WHERE (id_photo = ? AND id_user = ? AND id_comment = ?)",
 		p.IdPhoto, u.IdUser, c.IdComment)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// Database function that adds a comment to the comment counter of a photo
-func (db *appdbimpl) CommentCounter(p PhotoId, add bool) error {
-	var cnt = "1"
-	if !add {
-		cnt = "-1"
-	}
-
-	_, err := db.c.Exec("UPDATE comments SET comments = comments + ? WHERE id_photo = ?",
-		cnt, p.IdPhoto)
-
 	if err != nil {
 		return err
 	}

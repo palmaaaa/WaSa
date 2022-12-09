@@ -1,10 +1,46 @@
 package database
 
+/*
+// Database function that retrieves the list of users that liked a photo
+func (db *appdbimpl) GetLikesList(requestinUser User, photo Photo) ([]User, error) {
+	const query = "SELECT id_user FROM likes WHERE id_user NOT IN (SELECT banner FROM banned_users WHERE banned = ?) AND id_photo = ?"
+	rows, err := db.c.Query(query, requestinUser.IdUser, photo.PhotoId)
+	if err != nil {
+		return nil, err
+	}
+	// Wait for the function to finish before closing rows.
+	defer func() { _ = rows.Close() }()
+
+	// Read all the users in the resulset (users that liked the photo that didn't ban the requesting user).
+	var likes []User
+	for rows.Next() {
+		var user User
+		err = rows.Scan(&user.IdUser)
+		if err != nil {
+			return nil, err
+		}
+		likes = append(likes, user)
+	}
+
+	if rows.Err() != nil {
+		return nil, err
+	}
+
+	return likes, nil
+}
+*/
+
+// Database function that gets the number of likes of a photo
+func (db *appdbimpl) GetLikes(p PhotoId) int {
+	var likes int
+	db.c.QueryRow("SELECT COUNT(*) FROM likes WHERE (id_photo = ?)", p.IdPhoto).Scan(&likes)
+
+	return likes
+}
+
 // Database function that adds a like of a user to a photo
 func (db *appdbimpl) LikePhoto(p PhotoId, u User) error {
-	_, err := db.c.Exec("INSERT INTO likes (id_photo,id_user) VALUES (?, ?)",
-		p.IdPhoto, u.IdUser)
-
+	_, err := db.c.Exec("INSERT INTO likes (id_photo,id_user) VALUES (?, ?)", p.IdPhoto, u.IdUser)
 	if err != nil {
 		return err
 	}
@@ -14,9 +50,7 @@ func (db *appdbimpl) LikePhoto(p PhotoId, u User) error {
 
 // Database function that removes a like of a user from a photo
 func (db *appdbimpl) UnlikePhoto(p PhotoId, u User) error {
-	_, err := db.c.Exec("DELETE FROM likes WHERE (id_photo = ? AND id_user = ?)",
-		p.IdPhoto, u.IdUser)
-
+	_, err := db.c.Exec("DELETE FROM likes WHERE(id_photo = ? AND id_user = ?)", p.IdPhoto, u.IdUser)
 	if err != nil {
 		return err
 	}

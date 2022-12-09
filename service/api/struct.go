@@ -52,6 +52,14 @@ type CommentId struct {
 	IdComment int64 `json:"comment_id"` // Identifier of a comment
 }
 
+// CompleteComment structure for the APIs
+type CompleteComment struct {
+	IdComment int64  // Identifier of a comment
+	IdPhoto   int64  // Photo unique id
+	IdUser    string // User's unique id
+	Comment   string // Comment content
+}
+
 // Converts a User from the api package to a User of the database package
 func (u User) ToDatabase() database.User {
 	return database.User{
@@ -95,5 +103,15 @@ func (c Comment) ToDatabase() database.Comment {
 func (c CommentId) ToDatabase() database.CommentId {
 	return database.CommentId{
 		IdComment: c.IdComment,
+	}
+}
+
+// Converts a CompleteComment from the api package to a CompleteComment of the database package
+func (cc CompleteComment) ToDatabase() database.CompleteComment {
+	return database.CompleteComment{
+		IdComment: cc.IdComment,
+		IdPhoto:   cc.IdPhoto,
+		IdUser:    cc.IdUser,
+		Comment:   cc.Comment,
 	}
 }

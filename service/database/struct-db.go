@@ -37,3 +37,11 @@ type Comment struct {
 type CommentId struct {
 	IdComment int64 // Identifier of a comment
 }
+
+// CompleteComment structure for the database
+type CompleteComment struct {
+	IdComment int64  // Identifier of a comment
+	IdPhoto   int64  // Photo unique id
+	IdUser    string // User's unique id
+	Comment   string // Comment content
+}
