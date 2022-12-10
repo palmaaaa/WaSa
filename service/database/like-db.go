@@ -1,10 +1,10 @@
 package database
 
-/*
 // Database function that retrieves the list of users that liked a photo
 func (db *appdbimpl) GetLikesList(requestinUser User, photo Photo) ([]User, error) {
-	const query = "SELECT id_user FROM likes WHERE id_user NOT IN (SELECT banner FROM banned_users WHERE banned = ?) AND id_photo = ?"
-	rows, err := db.c.Query(query, requestinUser.IdUser, photo.PhotoId)
+
+	rows, err := db.c.Query("SELECT id_user FROM likes WHERE id_user NOT IN (SELECT banner FROM banned_users WHERE banned = ?) AND id_photo = ?",
+		requestinUser.IdUser, photo.PhotoId)
 	if err != nil {
 		return nil, err
 	}
@@ -28,14 +28,16 @@ func (db *appdbimpl) GetLikesList(requestinUser User, photo Photo) ([]User, erro
 
 	return likes, nil
 }
-*/
 
 // Database function that gets the number of likes of a photo
-func (db *appdbimpl) GetLikes(p PhotoId) int {
+func (db *appdbimpl) GetLikesLen(p PhotoId) (int, error) {
 	var likes int
-	db.c.QueryRow("SELECT COUNT(*) FROM likes WHERE (id_photo = ?)", p.IdPhoto).Scan(&likes)
+	err := db.c.QueryRow("SELECT COUNT(*) FROM likes WHERE (id_photo = ?)", p.IdPhoto).Scan(&likes)
+	if err != nil {
+		return -1, err
+	}
 
-	return likes
+	return likes, nil
 }
 
 // Database function that adds a like of a user to a photo

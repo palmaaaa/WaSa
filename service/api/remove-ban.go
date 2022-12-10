@@ -11,9 +11,10 @@ import (
 func (rt *_router) deleteBan(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	bearerToken := extractBearer(r.Header.Get("Authorization"))
+	pathId := ps.ByName("id")
 
 	// Check the user's identity for the operation
-	valid := validateRequestingUser(ps.ByName("id"), bearerToken)
+	valid := validateRequestingUser(pathId, bearerToken)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
@@ -21,7 +22,7 @@ func (rt *_router) deleteBan(w http.ResponseWriter, r *http.Request, ps httprout
 
 	// Remove the follower in the db via db function
 	err := rt.db.UnbanUser(
-		User{IdUser: ps.ByName("id")}.ToDatabase(),
+		User{IdUser: pathId}.ToDatabase(),
 		User{IdUser: ps.ByName("banned_id")}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("remove-ban: error executing delete query")

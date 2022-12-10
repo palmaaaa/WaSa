@@ -19,7 +19,7 @@ func extractBearer(authorization string) string {
 	return ""
 }
 
-// Function that checks if the requesting user has a valid token for the specified endpoint. Returns 0 if it's valid, the error (as a int) otherwise
+// Function that checks if the requesting user has a valid token for the specified endpoint. Returns 0 if it's valid, the error (as a int, representing the http status) otherwise
 func validateRequestingUser(identifier string, auth string) int {
 
 	// If the requesting user has an invalid token then respond with a fobidden status
@@ -32,4 +32,9 @@ func validateRequestingUser(identifier string, auth string) int {
 		return http.StatusUnauthorized
 	}
 	return 0
+}
+
+// Function checks if two identficators are the same
+func checkEquality(a string, b string) bool {
+	return a == b
 }

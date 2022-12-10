@@ -11,8 +11,11 @@ import (
 // Function that adds a user to banned list of another
 func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
+	pathId := ps.ByName("id")
+	requestinUserId := extractBearer(r.Header.Get("Authorization"))
+
 	// Check the user's identity for the operation (only owner of the account can add a banned user to that account list)
-	valid := validateRequestingUser(ps.ByName("id"), extractBearer(r.Header.Get("Authorization")))
+	valid := validateRequestingUser(pathId, requestinUserId)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
@@ -27,12 +30,28 @@ func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
+	// Check if the user is trying to ban himself/herself
+	if checkEquality(requestinUserId, banned.IdUser) {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	// Add the new banned user in the db via db function
 	err = rt.db.BanUser(
-		User{IdUser: ps.ByName("id")}.ToDatabase(),
+		User{IdUser: pathId}.ToDatabase(),
 		banned.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("put-ban: error executing insert query")
+
+		/*
+			// If the user is trying to ban himself then respond with bad request
+			if errors.Is(err, database.ErrUserAutoBan) {
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+		*/
+
+		// Something  didn't work internally
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

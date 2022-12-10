@@ -11,8 +11,10 @@ import (
 // Function that updates a user's nickname
 func (rt *_router) putNickname(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
+	pathId := ps.ByName("id")
+
 	// Check the user's identity for the operation
-	valid := validateRequestingUser(ps.ByName("id"), extractBearer(r.Header.Get("Authorization")))
+	valid := validateRequestingUser(pathId, extractBearer(r.Header.Get("Authorization")))
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
@@ -28,7 +30,9 @@ func (rt *_router) putNickname(w http.ResponseWriter, r *http.Request, ps httpro
 	}
 
 	// Modify the username with the db function
-	err = rt.db.ModifyNickname(User{IdUser: ps.ByName("id")}.ToDatabase(), nick.ToDatabase())
+	err = rt.db.ModifyNickname(
+		User{IdUser: pathId}.ToDatabase(),
+		nick.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("update-nickname: error executing update query")
 		w.WriteHeader(http.StatusInternalServerError)

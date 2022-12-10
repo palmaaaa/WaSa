@@ -1,16 +1,17 @@
 package database
 
-import "errors"
-
 // Database function that retrieves the list of photos of a user (only if the requesting user is not banned by that user)
 func (db *appdbimpl) GetPhotosList(requestinUser User, targetUser User) ([]Photo, error) {
-	banned, err := db.BannedUserCheck(requestinUser, targetUser)
-	if err != nil {
-		return nil, err
-	}
-	if banned {
-		return nil, errors.New("can't get stream, the requesting user is blocked")
-	}
+
+	/*
+		banned, err := db.BannedUserCheck(requestinUser, targetUser)
+		if err != nil {
+			return nil, err
+		}
+		if banned {
+			return nil, ErrUserBanned
+		}
+	*/
 
 	rows, err := db.c.Query("SELECT * FROM photos WHERE id_user = ?", targetUser.IdUser)
 	if err != nil {
@@ -37,28 +38,15 @@ func (db *appdbimpl) GetPhotosList(requestinUser User, targetUser User) ([]Photo
 	return photos, nil
 }
 
-// Database function that checks if a photo exists
-func (db *appdbimpl) CheckPhotoExistence(targetPhoto PhotoId) bool {
-	var rows int
-	err := db.c.QueryRow("SELECT COUNT(*) FROM photos WHERE (id_photo = ?)", targetPhoto.IdPhoto).Scan(&rows)
-	if err != nil {
-		return false
-	}
-
-	if rows == 0 {
-		return false
-	}
-	return true
-
-}
-
 // Database function that retrieves a specific photo (only if the requesting user is not banned by that owner of that photo).
 // If the requesting user is blocked by the
 func (db *appdbimpl) GetPhoto(requestinUser User, targetPhoto PhotoId) (Photo, error) {
 
-	if !db.CheckPhotoExistence(targetPhoto) {
-		return Photo{}, ErrPhotoDoesntExist
-	}
+	/*
+		if !db.CheckPhotoExistence(targetPhoto) {
+			return Photo{}, ErrPhotoDoesntExist
+		}
+	*/
 
 	var photo Photo
 	err := db.c.QueryRow("SELECT * FROM photos WHERE (id_photo = ?) AND id_user NOT IN (SELECT banner FROM banned_user WHERE banned = ?)",
@@ -74,8 +62,9 @@ func (db *appdbimpl) GetPhoto(requestinUser User, targetPhoto PhotoId) (Photo, e
 
 // Database function that creates a photo on the database and returns the unique photo id
 func (db *appdbimpl) CreatePhoto(p Photo) (int64, error) {
-	res, err := db.c.Exec("INSERT INTO photos (id_user,comments,likes,date) VALUES (?,?,?,?)",
-		p.Owner, p.Comments, p.Likes, p.Date)
+
+	res, err := db.c.Exec("INSERT INTO photos (id_user,date) VALUES (?,?)",
+		p.Owner, p.Date)
 
 	if err != nil {
 		// Error executing query
@@ -93,6 +82,7 @@ func (db *appdbimpl) CreatePhoto(p Photo) (int64, error) {
 
 // Database function that removes a photo from the database
 func (db *appdbimpl) RemovePhoto(p PhotoId) error {
+
 	_, err := db.c.Exec("DELETE FROM photos WHERE id_photo=?",
 		p.IdPhoto)
 	if err != nil {
@@ -101,4 +91,20 @@ func (db *appdbimpl) RemovePhoto(p PhotoId) error {
 	}
 
 	return nil
+}
+
+// [Util] Database function that checks if a photo exists
+func (db *appdbimpl) CheckPhotoExistence(targetPhoto PhotoId) (bool, error) {
+
+	var rows int
+	err := db.c.QueryRow("SELECT COUNT(*) FROM photos WHERE (id_photo = ?)", targetPhoto.IdPhoto).Scan(&rows)
+	if err != nil {
+		return false, err
+	}
+
+	if rows == 0 {
+		return false, nil
+	}
+	return true, nil
+
 }

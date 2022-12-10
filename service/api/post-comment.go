@@ -5,18 +5,43 @@ import (
 	"net/http"
 	"strconv"
 	"wasaphoto-1849661/service/api/reqcontext"
+	"wasaphoto-1849661/service/database"
 
 	"github.com/julienschmidt/httprouter"
 )
 
 // Function that adds a comment to a photo and sends a response containing the unique id of the created comment
 func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+
 	w.Header().Set("Content-Type", "application/json")
-	identifier := ps.ByName("id")
+	photoOwnerId := ps.ByName("id")
+	requestingUserId := r.Header.Get("Authorization")
+
+	// Check if the user is logged and not trying to steal anyone's identity
+	valid := validateRequestingUser(photoOwnerId, requestingUserId)
+	if valid != 0 {
+		w.WriteHeader(valid)
+		return
+	}
+
+	// Check if the requesting user wasn't banned by the photo owner
+	banned, err := rt.db.BannedUserCheck(
+		database.User{IdUser: requestingUserId},
+		database.User{IdUser: photoOwnerId})
+	if err != nil {
+		ctx.Logger.WithError(err).Error("post-comment/rt.db.BannedUserCheck: error executing query")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if banned {
+		// User was banned by owner, can't post the comment
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
 
 	// Copy body content (comment sent by user) into comment (struct)
 	var comment Comment
-	err := json.NewDecoder(r.Body).Decode(&comment)
+	err = json.NewDecoder(r.Body).Decode(&comment)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		ctx.Logger.WithError(err).Error("post-comment: failed to decode request body json")
@@ -41,7 +66,7 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 	// Function call to db for comment creation
 	commentId, err := rt.db.CommentPhoto(
 		PhotoId{IdPhoto: photo_id_64}.ToDatabase(),
-		User{IdUser: identifier}.ToDatabase(),
+		User{IdUser: requestingUserId}.ToDatabase(),
 		comment.ToDatabase())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -58,5 +83,4 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 		ctx.Logger.WithError(err).Error("post-comment: failed convert photo_id to int64")
 		return
 	}
-
 }

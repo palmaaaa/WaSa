@@ -32,10 +32,8 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 	// Initialize photo struct
 	photo := Photo{
-		Comments: 0,
-		Likes:    0,
-		Owner:    auth,
-		Date:     time.Now().UTC(),
+		Owner: auth,
+		Date:  time.Now().UTC(),
 	}
 
 	// Create a copy of the body
@@ -50,10 +48,10 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	r.Body = io.NopCloser(bytes.NewBuffer(data))
 
 	// Check if the body content is either a png or a jpeg image
-	extension, formatErr := checkFormatPhoto(r.Body, io.NopCloser(bytes.NewBuffer(data)), ctx)
-	if formatErr != nil {
+	err = checkFormatPhoto(r.Body, io.NopCloser(bytes.NewBuffer(data)), ctx)
+	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		ctx.Logger.WithError(formatErr).Error("photo-upload: body contains file that is neither jpg or png")
+		ctx.Logger.WithError(err).Error("photo-upload: body contains file that is neither jpg or png")
 		// controllaerrore
 		_ = json.NewEncoder(w).Encode(JSONErrorMsg{Message: IMG_FORMAT_ERROR_MSG})
 		return
@@ -70,18 +68,20 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	// Save the default path before switching to the photo path
-	originalPath, err := os.Getwd()
-	if err != nil {
-		ctx.Logger.WithError(err).Error("photo-upload: error getting current working directory")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	/*
+		// Save the default path before switching to the photo path
+		originalPath, err := os.Getwd()
+		if err != nil {
+			ctx.Logger.WithError(err).Error("photo-upload: error getting current working directory")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	*/
 
 	photoId := strconv.FormatInt(photoIdInt, 10)
 
 	// Create the user's folder locally to save his/her images
-	newPhotoPath, err := getUserPhotoFolder(auth, ctx)
+	originalPath, newPhotoPath, err := getUserPhotoFolder(auth)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo-upload: error getting user's photo folder")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -97,7 +97,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	}
 
 	// Create an empty file for storing the body content (image)
-	out, err := os.Create(photoId + extension)
+	out, err := os.Create(photoId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("photo-upload: error creating local photo file")
@@ -133,7 +133,7 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 }
 
 // Function checks if the format of the photo is png or jpeg. Returns the format extension and an error
-func checkFormatPhoto(body io.ReadCloser, newReader io.ReadCloser, ctx reqcontext.RequestContext) (string, error) {
+func checkFormatPhoto(body io.ReadCloser, newReader io.ReadCloser, ctx reqcontext.RequestContext) error {
 
 	_, errJpg := jpeg.Decode(body)
 	if errJpg != nil {
@@ -141,19 +141,18 @@ func checkFormatPhoto(body io.ReadCloser, newReader io.ReadCloser, ctx reqcontex
 		body = newReader
 		_, errPng := png.Decode(body)
 		if errPng != nil {
-			return "", errors.New(IMG_FORMAT_ERROR_MSG)
+			return errors.New(IMG_FORMAT_ERROR_MSG)
 		}
-		return ".png", nil
+		return nil
 	}
-	return ".jpg", nil
+	return nil
 }
 
 // Function that returns the path of the photo folder for a certain user
-func getUserPhotoFolder(user_id string, ctx reqcontext.RequestContext) (string, error) {
+func getUserPhotoFolder(user_id string) (OriginalPath string, UserPhotoPath string, err error) {
 	curPath, err := os.Getwd()
 	if err != nil {
-		ctx.Logger.WithError(err).Error("photo-upload/getUserPhotoFolder: error getting current working directory")
-		return "", err
+		return curPath, "", err
 	}
 
 	// Path of the photo dir
@@ -161,9 +160,8 @@ func getUserPhotoFolder(user_id string, ctx reqcontext.RequestContext) (string, 
 	// Change path to ./media/user_id/photos/
 	err = os.Chdir(photoPath)
 	if err != nil {
-		ctx.Logger.WithError(err).Error("photo-upload/getUserPhotoFolder: error changing directory")
-		return "", err
+		return curPath, "", err
 	}
 
-	return photoPath, nil
+	return curPath, photoPath, nil
 }

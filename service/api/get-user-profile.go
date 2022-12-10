@@ -11,6 +11,8 @@ import (
 // Function that retrives all the users matching the query parameter and sends the response containing all the matches
 func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
+	w.Header().Set("Content-Type", "application/json")
+
 	// Get the user identifier (from Bearer)
 	identifier := extractBearer(r.Header.Get("Authorization"))
 
@@ -22,7 +24,6 @@ func (rt *_router) getUsersQuery(w http.ResponseWriter, r *http.Request, ps http
 
 	// Extract the query parameter from the URL
 	identificator := r.URL.Query().Get("id")
-	w.Header().Set("Content-Type", "application/json")
 
 	// Search the user in the database (with the query parameter as a filter)
 	res, err := rt.db.SearchUser(User{IdUser: identifier}.ToDatabase(), User{IdUser: identificator}.ToDatabase())

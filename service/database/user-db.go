@@ -2,8 +2,9 @@ package database
 
 // Database function that gets the stream of a user (photos of people that are followed by the latter)
 func (db *appdbimpl) GetStream(user User) ([]Photo, error) {
-	const query = `SELECT * FROM photos WHERE id_user IN (SELECT followed FROM followers WHERE follower = ?) ORDER BY date ASC`
-	rows, err := db.c.Query(query, user.IdUser)
+
+	rows, err := db.c.Query(`SELECT * FROM photos WHERE id_user IN (SELECT followed FROM followers WHERE follower = ?) ORDER BY date ASC`,
+		user.IdUser)
 	if err != nil {
 		return nil, err
 	}
@@ -30,6 +31,7 @@ func (db *appdbimpl) GetStream(user User) ([]Photo, error) {
 
 // Database function that adds a new user in the database upon registration
 func (db *appdbimpl) CreateUser(u User) error {
+
 	_, err := db.c.Exec("INSERT INTO users (id_user,nickname) VALUES (?, ?)",
 		u.IdUser, u.IdUser)
 

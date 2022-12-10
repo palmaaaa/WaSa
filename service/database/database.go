@@ -38,6 +38,11 @@ import (
 var ErrPhotoDoesntExist = errors.New("photo doesn't exist")
 var ErrUserBanned = errors.New("user is banned")
 
+/*
+var ErrUserAutoLike = errors.New("users can't like their own photos")
+var ErrUserAutoFollow = errors.New("users can't follow themselfes")
+*/
+
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 
@@ -82,6 +87,14 @@ type AppDatabase interface {
 
 	// Removes a photo from the database. The removal includes likes and comments.  It returns an error
 	RemovePhoto(PhotoId) error
+
+	// _________ Util Methods _________
+
+	// Checks if a user (a) is banned by another (b). Returns a boolean
+	BannedUserCheck(a User, b User) (bool, error)
+
+	// Checks if a photo exists. Returns an error
+	CheckPhotoExistence(p PhotoId) (bool, error)
 
 	// Ping checks whether the database is available or not (in that case, an error will be returned)
 	Ping() error

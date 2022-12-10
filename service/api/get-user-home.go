@@ -14,9 +14,18 @@ func (rt *_router) getHome(w http.ResponseWriter, r *http.Request, ps httprouter
 	w.Header().Set("Content-Type", "application/json")
 	identifier := extractBearer(r.Header.Get("Authorization"))
 
-	// If the user is not logged in then respond with a 403 http status
-	if identifier == "" {
-		w.WriteHeader(http.StatusForbidden)
+	/*
+		// If the user is not logged in then respond with a 403 http status
+		if identifier == "" {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+	*/
+
+	// A user can only see his/her home
+	valid := validateRequestingUser(ps.ByName("id"), identifier)
+	if valid != 0 {
+		w.WriteHeader(valid)
 		return
 	}
 
