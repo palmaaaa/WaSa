@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 	"wasaphoto-1849661/service/api/reqcontext"
-	"wasaphoto-1849661/service/database"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -26,10 +25,10 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 
 	// Check if the requesting user wasn't banned by the photo owner
 	banned, err := rt.db.BannedUserCheck(
-		database.User{IdUser: requestingUserId},
-		database.User{IdUser: photoOwnerId})
+		User{IdUser: requestingUserId}.ToDatabase(),
+		User{IdUser: photoOwnerId}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("post-comment/rt.db.BannedUserCheck: error executing query")
+		ctx.Logger.WithError(err).Error("post-comment/db.BannedUserCheck: error executing query")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -44,7 +43,7 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 	err = json.NewDecoder(r.Body).Decode(&comment)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		ctx.Logger.WithError(err).Error("post-comment: failed to decode request body json")
+		ctx.Logger.WithError(err).Error("post-comment/Decode: failed to decode request body json")
 		return
 	}
 
@@ -59,7 +58,7 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 	photo_id_64, err := strconv.ParseInt(ps.ByName("photo_id"), 10, 64)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		ctx.Logger.WithError(err).Error("post-comment: failed convert photo_id to int64")
+		ctx.Logger.WithError(err).Error("post-comment/ParseInt: failed convert photo_id to int64")
 		return
 	}
 
@@ -70,7 +69,7 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 		comment.ToDatabase())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("post-comment: failed to execute query for insertion")
+		ctx.Logger.WithError(err).Error("post-comment/db.CommentPhoto: failed to execute query for insertion")
 		return
 	}
 
@@ -80,7 +79,7 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 	err = json.NewEncoder(w).Encode(CommentId{IdComment: commentId})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("post-comment: failed convert photo_id to int64")
+		ctx.Logger.WithError(err).Error("post-comment/Encode: failed convert photo_id to int64")
 		return
 	}
 }

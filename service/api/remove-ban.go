@@ -12,6 +12,7 @@ func (rt *_router) deleteBan(w http.ResponseWriter, r *http.Request, ps httprout
 
 	bearerToken := extractBearer(r.Header.Get("Authorization"))
 	pathId := ps.ByName("id")
+	userToUnban := ps.ByName("banned_id")
 
 	// Check the user's identity for the operation
 	valid := validateRequestingUser(pathId, bearerToken)
@@ -20,10 +21,17 @@ func (rt *_router) deleteBan(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
+	// Users can't ban themselfes so this action shouldn't be possible. In order to avoid
+	// making any useless operation terminate here the execution of the function
+	if userToUnban == bearerToken {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
 	// Remove the follower in the db via db function
 	err := rt.db.UnbanUser(
 		User{IdUser: pathId}.ToDatabase(),
-		User{IdUser: ps.ByName("banned_id")}.ToDatabase())
+		User{IdUser: userToUnban}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("remove-ban: error executing delete query")
 		w.WriteHeader(http.StatusInternalServerError)

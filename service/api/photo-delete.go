@@ -12,56 +12,48 @@ import (
 
 // Function that deletes a photo (this includes comments and likes)
 func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
-	auth := extractBearer(r.Header.Get("Authorization"))
+
+	bearerAuth := extractBearer(r.Header.Get("Authorization"))
 	photoIdStr := ps.ByName("photo_id")
 
 	// Check the user's identity for the operation
-	valid := validateRequestingUser(ps.ByName("id"), auth)
+	valid := validateRequestingUser(ps.ByName("id"), bearerAuth)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
 	}
 
-	// Parse the photo in the url by removing anything after the dot (including the dot itself)
+	// Convert the photo id from string to int64
 	photoInt, err := strconv.ParseInt(photoIdStr, 10, 64)
 	if err != nil {
-		ctx.Logger.WithError(err).Error("photo-delete: error converting photoId to int")
+		ctx.Logger.WithError(err).Error("photo-delete/ParseInt: error converting photoId to int")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	// Initialize the photo
-	photo := PhotoId{IdPhoto: photoInt}
-
 	// Call to the db function to remove the photo
-	err = rt.db.RemovePhoto(photo.ToDatabase())
+	err = rt.db.RemovePhoto(
+		User{IdUser: bearerAuth}.ToDatabase(),
+		PhotoId{IdPhoto: photoInt}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("photo-delete: error coming from database")
+		ctx.Logger.WithError(err).Error("photo-delete/RemovePhoto: error coming from database")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	// Get the folder of the file that has to be eliminated
-	curPath, pathPhoto, err := getUserPhotoFolder(auth)
+	pathPhoto, err := getUserPhotoFolder(bearerAuth)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo-delete/getUserPhotoFolder: error with directories")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	// Remove the file from the users' photos folder
+	// Remove the file from the user's photos folder
 	err = os.Remove(filepath.Join(pathPhoto, photoIdStr))
 	if err != nil {
 		// Error occurs if the file doesn't exist, but for idempotency an error won't be raised
 		ctx.Logger.WithError(err).Error("photo-delete/os.Remove: photo to be removed is missing")
-	}
-
-	// Change the directory back to the previous path
-	err = os.Chdir(curPath)
-	if err != nil {
-		ctx.Logger.WithError(err).Error("photo-delete/os.Chdir: error changing directory")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
 	}
 
 	// Respond with 204 http status

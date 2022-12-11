@@ -39,21 +39,21 @@ func (db *appdbimpl) GetFollowing(requestinUser User) ([]User, error) {
 	defer func() { _ = rows.Close() }()
 
 	// Read all the users in the resulset (users followed by the requesting user)
-	var followers []User
+	var following []User
 	for rows.Next() {
-		var folower User
-		err = rows.Scan(&folower.IdUser)
+		var folowed User
+		err = rows.Scan(&folowed.IdUser)
 		if err != nil {
 			return nil, err
 		}
-		followers = append(followers, folower)
+		following = append(following, folowed)
 	}
 
 	if rows.Err() != nil {
 		return nil, err
 	}
 
-	return followers, nil
+	return following, nil
 }
 
 // Database function that adds a follower to a user

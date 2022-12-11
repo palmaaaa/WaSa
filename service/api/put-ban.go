@@ -31,7 +31,7 @@ func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 	}
 
 	// Check if the user is trying to ban himself/herself
-	if checkEquality(requestinUserId, banned.IdUser) {
+	if requestinUserId == banned.IdUser {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

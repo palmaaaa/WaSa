@@ -39,7 +39,6 @@ func (db *appdbimpl) GetPhotosList(requestinUser User, targetUser User) ([]Photo
 }
 
 // Database function that retrieves a specific photo (only if the requesting user is not banned by that owner of that photo).
-// If the requesting user is blocked by the
 func (db *appdbimpl) GetPhoto(requestinUser User, targetPhoto PhotoId) (Photo, error) {
 
 	/*
@@ -80,11 +79,16 @@ func (db *appdbimpl) CreatePhoto(p Photo) (int64, error) {
 	return photoId, nil
 }
 
-// Database function that removes a photo from the database
-func (db *appdbimpl) RemovePhoto(p PhotoId) error {
+/*
+Adding the owner is an additional security measure to delete photos that are actually owned
+by that user
+*/
 
-	_, err := db.c.Exec("DELETE FROM photos WHERE id_photo=?",
-		p.IdPhoto)
+// Database function that removes a photo from the database
+func (db *appdbimpl) RemovePhoto(owner User, p PhotoId) error {
+
+	_, err := db.c.Exec("DELETE FROM photos WHERE id_user = ? AND id_photo = ? ",
+		owner.IdUser, p.IdPhoto)
 	if err != nil {
 		// Error during the execution of the query
 		return err

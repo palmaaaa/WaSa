@@ -11,18 +11,40 @@ import (
 // Function that removes a like from a photo
 func (rt *_router) deleteLike(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	pathId := ps.ByName("id")
+	photoAuthor := ps.ByName("id")
+	requestingUserId := extractBearer(r.Header.Get("Authorization"))
 
-	// Check the user's identity for the operation
-	valid := validateRequestingUser(pathId, extractBearer(r.Header.Get("Authorization")))
-	if valid != 0 {
-		w.WriteHeader(valid)
+	// Check if the user is logged
+	if isNotLogged(requestingUserId) {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
+	// User trying to unlike his/her photo. Since it's not possibile to like it in the first
+	// place it's useless. Return to avoid doing useless operations
+	if photoAuthor == requestingUserId {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	// Check if the requesting user wasn't banned by the photo owner
+	banned, err := rt.db.BannedUserCheck(
+		User{IdUser: requestingUserId}.ToDatabase(),
+		User{IdUser: photoAuthor}.ToDatabase())
+	if err != nil {
+		ctx.Logger.WithError(err).Error("post-comment/db.BannedUserCheck: error executing query")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if banned {
+		// User was banned by owner, can't post the comment
+		w.WriteHeader(http.StatusForbidden)
 		return
 	}
 
 	photoIdInt, err := strconv.ParseInt(ps.ByName("photo_id"), 10, 64)
 	if err != nil {
-		ctx.Logger.WithError(err).Error("remove-like: error converting photo_id to int64")
+		ctx.Logger.WithError(err).Error("remove-like/ParseInt: error converting photo_id to int64")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -30,9 +52,9 @@ func (rt *_router) deleteLike(w http.ResponseWriter, r *http.Request, ps httprou
 	// Insert the like in the db via db function
 	err = rt.db.UnlikePhoto(
 		PhotoId{IdPhoto: photoIdInt}.ToDatabase(),
-		User{IdUser: pathId}.ToDatabase())
+		User{IdUser: requestingUserId}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("remove-like: error executing insert query")
+		ctx.Logger.WithError(err).Error("remove-like/db.UnlikePhoto: error executing insert query")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

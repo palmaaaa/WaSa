@@ -53,7 +53,7 @@ type AppDatabase interface {
 	ModifyNickname(User, Nickname) error
 
 	// Searches all the users that match the given name (both identifier and nickname). Returns the list of matching users and an error
-	SearchUser(User, User) ([]User, error)
+	SearchUser(searcher User, userToSearch User) ([]User, error)
 
 	// Creates a new photo in the database. It returns the photo identifier and an error
 	CreatePhoto(Photo) (int64, error)
@@ -64,29 +64,29 @@ type AppDatabase interface {
 	// Removes a like of a user for a specified photo from the database. It returns an error
 	UnlikePhoto(PhotoId, User) error
 
-	// Adds a comment from a user to a specified photo in the database. It returns an error
+	// Adds a comment from a user to a specified photo in the database. It returns the unique comment id and an error
 	CommentPhoto(PhotoId, User, Comment) (int64, error)
 
 	// Deletes a comment from a user from a specified photo in the database. It returns an error
 	UncommentPhoto(PhotoId, User, CommentId) error
 
-	// Adds a follower to the user that is being followed. It returns an error
-	FollowUser(User, User) error
+	// Adds a follower (a) to the user that is being followed (b). It returns an error
+	FollowUser(a User, b User) error
 
-	//  Removes a follower from the user that is being unfollowed. It returns an error
-	UnfollowUser(User, User) error
+	// Removes a follower (a) from the user that is being unfollowed (b). It returns an error
+	UnfollowUser(a User, b User) error
 
-	// Adds a user to the banned list of another. It returns an error
-	BanUser(User, User) error
+	// Adds a user (b) to the banned list of another (a). It returns an error
+	BanUser(a User, b User) error
 
-	// Removes a user from the banned list of another. It returns an error
-	UnbanUser(User, User) error
+	// Removes a user (b) from the banned list of another (a). It returns an error
+	UnbanUser(a User, b User) error
 
-	// Get the a user's stream (photos of people who are followed by the user in reversed chronological order)
+	// Get the a user's stream (photos of people who are followed by the user in reversed chronological order). It returns the photos and an error
 	GetStream(User) ([]Photo, error)
 
 	// Removes a photo from the database. The removal includes likes and comments.  It returns an error
-	RemovePhoto(PhotoId) error
+	RemovePhoto(User, PhotoId) error
 
 	// _________ Util Methods _________
 

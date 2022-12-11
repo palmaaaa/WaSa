@@ -68,36 +68,18 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	/*
-		// Save the default path before switching to the photo path
-		originalPath, err := os.Getwd()
-		if err != nil {
-			ctx.Logger.WithError(err).Error("photo-upload: error getting current working directory")
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-	*/
-
 	photoId := strconv.FormatInt(photoIdInt, 10)
 
 	// Create the user's folder locally to save his/her images
-	originalPath, newPhotoPath, err := getUserPhotoFolder(auth)
+	PhotoPath, err := getUserPhotoFolder(auth)
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo-upload: error getting user's photo folder")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	// Change path to the photo folder
-	err = os.Chdir(newPhotoPath)
-	if err != nil {
-		ctx.Logger.WithError(err).Error("photo-upload: error changing directory")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
 	// Create an empty file for storing the body content (image)
-	out, err := os.Create(photoId)
+	out, err := os.Create(filepath.Join(PhotoPath, photoId))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("photo-upload: error creating local photo file")
@@ -115,16 +97,8 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	// Close created file
+	// Close the created file
 	out.Close()
-
-	// Switch back to the default path
-	err = os.Chdir(originalPath)
-	if err != nil {
-		ctx.Logger.WithError(err).Error("photo-upload: error changing directory")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
 
 	w.WriteHeader(http.StatusCreated)
 	// controllaerrore
@@ -149,19 +123,16 @@ func checkFormatPhoto(body io.ReadCloser, newReader io.ReadCloser, ctx reqcontex
 }
 
 // Function that returns the path of the photo folder for a certain user
-func getUserPhotoFolder(user_id string) (OriginalPath string, UserPhotoPath string, err error) {
+func getUserPhotoFolder(user_id string) (UserPhotoFoldrPath string, err error) {
 	curPath, err := os.Getwd()
 	if err != nil {
-		return curPath, "", err
+		return "", err
 	}
 
-	// Path of the photo dir
-	photoPath := filepath.Join(filepath.Join(curPath, "media"), filepath.Join(user_id, "photos"))
-	// Change path to ./media/user_id/photos/
-	err = os.Chdir(photoPath)
-	if err != nil {
-		return curPath, "", err
-	}
+	// Path of the photo dir "./media/user_id/photos/"
+	photoPath := filepath.Join(
+		filepath.Join(curPath, "media"),
+		filepath.Join(user_id, "photos"))
 
-	return curPath, photoPath, nil
+	return photoPath, nil
 }

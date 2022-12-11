@@ -20,21 +20,22 @@ func extractBearer(authorization string) string {
 }
 
 // Function that checks if the requesting user has a valid token for the specified endpoint. Returns 0 if it's valid, the error (as a int, representing the http status) otherwise
-func validateRequestingUser(identifier string, auth string) int {
+func validateRequestingUser(identifier string, bearerToken string) int {
 
 	// If the requesting user has an invalid token then respond with a fobidden status
-	if auth == "" {
+	if isNotLogged(bearerToken) {
 		return http.StatusForbidden
 	}
 
 	//  If the requesting user's id is different than the one in the path then respond with a unathorized status.
-	if identifier != auth {
+	if identifier != bearerToken {
 		return http.StatusUnauthorized
 	}
 	return 0
 }
 
-// Function checks if two identficators are the same
-func checkEquality(a string, b string) bool {
-	return a == b
+// Function that checks if a user is logged
+func isNotLogged(auth string) bool {
+
+	return auth == ""
 }

@@ -10,18 +10,41 @@ import (
 
 // Function that removes a comment from a photo
 func (rt *_router) deleteComment(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
-	w.Header().Set("Content-Type", "application/json")
 
-	// Convert the comment identifier from string to int64
-	comment_id_64, err := strconv.ParseInt(ps.ByName("comment_id"), 10, 64)
+	w.Header().Set("Content-Type", "application/json")
+	requestingUserId := extractBearer(r.Header.Get("Authorization"))
+
+	// Check if the user isn't logged
+	if isNotLogged(requestingUserId) {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
+	// Check if the requesting user wasn't banned by the photo owner
+	banned, err := rt.db.BannedUserCheck(
+		User{IdUser: requestingUserId}.ToDatabase(),
+		User{IdUser: ps.ByName("id")}.ToDatabase())
+	if err != nil {
+		ctx.Logger.WithError(err).Error("post-comment/db.BannedUserCheck: error executing query")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if banned {
+		// User was banned by owner, can't post the comment
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
+	// Convert the photo identifier from string to int64
+	photo_id_64, err := strconv.ParseInt(ps.ByName("photo_id"), 10, 64)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		ctx.Logger.WithError(err).Error("post-comment: failed convert photo_id to int64")
 		return
 	}
 
-	// Convert the photo identifier from string to int64
-	photo_id_64, err := strconv.ParseInt(ps.ByName("photo_id"), 10, 64)
+	// Convert the comment identifier from string to int64
+	comment_id_64, err := strconv.ParseInt(ps.ByName("comment_id"), 10, 64)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		ctx.Logger.WithError(err).Error("post-comment: failed convert photo_id to int64")
