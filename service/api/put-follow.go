@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"net/http"
 	"wasaphoto-1849661/service/api/reqcontext"
 	"wasaphoto-1849661/service/database"
@@ -21,17 +20,19 @@ func (rt *_router) putFollow(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	// Get the new follower id from the request body
-	var newFollower User
-	err := json.NewDecoder(r.Body).Decode(&newFollower)
-	if err != nil {
-		ctx.Logger.WithError(err).Error("put-follow: error decoding json")
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	/*
+		// Get the new follower id from the request body
+		var newFollower User
+		err := json.NewDecoder(r.Body).Decode(&newFollower)
+		if err != nil {
+			ctx.Logger.WithError(err).Error("put-follow: error decoding json")
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+	*/
 
 	// Check if the id of the follower in the request is the same of the bearer and the path parameter
-	if newFollower.IdUser != requestingUserId && requestingUserId != ps.ByName("follower_id") {
+	if ps.ByName("follower_id") != requestingUserId {
 		w.WriteHeader(http.StatusBadRequest)
 		// ctx.Logger.WithError(errors.New("id in request and authentication not consistent")).Error("put-follow: users trying to identify as someone else")
 		return

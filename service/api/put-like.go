@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
 	"wasaphoto-1849661/service/api/reqcontext"
@@ -14,6 +13,7 @@ func (rt *_router) putLike(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	photoAuthor := ps.ByName("id")
 	requestingUserId := extractBearer(r.Header.Get("Authorization"))
+	pathLikeId := ps.ByName("like_id")
 
 	// Check if the user is logged
 	if isNotLogged(requestingUserId) {
@@ -42,17 +42,19 @@ func (rt *_router) putLike(w http.ResponseWriter, r *http.Request, ps httprouter
 		return
 	}
 
-	// Get the new nickname from the request body
-	var photo_like User
-	err = json.NewDecoder(r.Body).Decode(&photo_like)
-	if err != nil {
-		ctx.Logger.WithError(err).Error("put-like: error decoding json")
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	/*
+		// Get the new nickname from the request body
+		var photo_like User
+		err = json.NewDecoder(r.Body).Decode(&photo_like)
+		if err != nil {
+			ctx.Logger.WithError(err).Error("put-like: error decoding json")
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+	*/
 
-	// Sent identifier is not consistent with requestin user bearer id
-	if photo_like.IdUser != requestingUserId {
+	// Follower id is not consistent with requesting user bearer token
+	if pathLikeId != requestingUserId {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -68,7 +70,7 @@ func (rt *_router) putLike(w http.ResponseWriter, r *http.Request, ps httprouter
 	// Insert the like in the db via db function
 	err = rt.db.LikePhoto(
 		PhotoId{IdPhoto: photo_id_64}.ToDatabase(),
-		photo_like.ToDatabase())
+		User{IdUser: pathLikeId}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("put-like: error executing insert query")
 		w.WriteHeader(http.StatusInternalServerError)
