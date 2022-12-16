@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="container-fluid mt-5 mb-5 ">
+        <div class="d-flex flex-row justify-content-center">
+
+            <div class="card" style="width: 25%;">
+                <img src="../assets/images/nebula.jpg" class="card-img-top">
+
+                <div class="card-body bruh">
+
+                    <div class="container">
+                        <div class="d-flex flex-row justify-content-start align-items-center ">
+                            <p>From {{owner}}</p>
+                        </div>
+
+                        <div class="d-flex flex-row justify-content-between align-items-center ">
+
+                            <p>Likes {{num_likes}}</p>
+                            <a href="">{{num_likes}}</a>
+                            <p>Comments {{num_comments}}</p>
+                        </div>
+
+                        <div class="d-flex flex-row justify-content-start align-items-center ">
+                            <p> Uploaded on {{upload_date}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--
+    	<div class="container-fluid mt-5 mb-5 ">
+        <div class="d-flex flex-row justify-content-center">
+
+            <div class="card" style="width: 25%;">
+                <img src="../assets/images/nebula.jpg" class="card-img-top">
+
+                <div class="card-body bruh">
+                    <p class="card-text ">Uploaded on {{upload_date}}.</p>
+					<p class="card-text ">Comments.</p>
+                	<p class="card-text ">Likes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+-->
+
+
+</body>
+
+</html>
+
+<!--
+
+<form @submit.prevent="login">
+    <div class="row mt-2 mb-3">
+        <div class="col">
+            <input type="text" class="form-control w-25" v-model="identifier" placeholder="identifier" />
+        </div>
+    </div>
+
+    <div class="row mt-2 mb-5">
+        <div class="col ">
+            <button class="btn btn-dark"> Login </button>
+        </div>
+    </div>
+</form>
+-->

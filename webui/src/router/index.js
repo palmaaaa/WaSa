@@ -10,11 +10,11 @@ const router = createRouter({
         import.meta.env.BASE_URL),
     routes: [{
             path: '/',
-            component: HomeView
+            component: LoginView
         },
         {
-            path: '/login',
-            component: LoginView
+            path: '/home',
+            component: HomeView
         },
         {
             path: '/link2',

@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 export default {
 	data: function() {
 		return {
@@ -18,7 +17,7 @@ export default {
 				
 				localStorage.setItem('token',response.data.identifier);
 				
-				this.$router.replace("/")
+				this.$router.replace("/home")
 			} catch (e) {
 				this.errormsg = e.toString();
 			}
@@ -30,21 +29,50 @@ export default {
 </script>
 
 <template>
-	<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
-	<div v-else>
-		<div class="d-flex justify-content-center align-items-center border-bottom mt-5">
-			<h1 class="h2">Login Page</h1>
+	<div class="container-fluid h-100 m-0 p-0 login">
 
-			<form @submit.prevent="login">
-				<input v-model="identifier" placeholder="identifier" />
-				
-				<button class="btn btn-primary" > Login </button> 
-			</form>
+		<div class="row ">
+			<div class="col">
+				<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+			</div>
 		</div>
 
-		
+		<div class="row h-100 w-100 border-top border-bottom m-0">
+			
+			<form @submit.prevent="login" class="d-flex flex-column align-items-center justify-content-center p-0">
+
+				<div class="row mt-2 mb-3 border-bottom">
+					<div class="col">
+						<h2 class="login-title">WASAPhoto Login</h2>
+					</div>
+				</div>
+
+				<div class="row mt-2 mb-3">
+					<div class="col">
+						<input type="text" class="form-control" v-model="identifier" placeholder="Your identifier" />
+					</div>
+				</div>
+
+				<div class="row mt-2 mb-5 ">
+					<div class="col ">
+						<button class="btn btn-dark"> Register/Login </button>
+					</div>
+				</div>
+			</form>
+		</div>
 	</div>
 </template>
 
 <style>
+.login {
+    background-image: url("../assets/images/people.png");
+    background-color: gainsboro;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+.login-title {
+    color: black;
+}
+
 </style>

@@ -2,15 +2,29 @@
 import { RouterLink, RouterView } from 'vue-router'
 </script>
 <script>
-export default {}
+export default {
+	methods:{
+		mounted(){
+			if (localStorage.getItem('token')){
+
+				this.$router.replace("/login")
+			}else{
+				this.$router.replace("/home")
+			}
+			
+		}
+	}
+}
 </script>
 
 <template>
-	<div v-cloak class="container-fluid">
+	<div class="container-fluid">
 		<div class="row">
-			<main class="col">
-				<RouterView />
-			</main>
+			<div class="col p-0">
+				<main >
+					<RouterView />
+				</main>
+			</div>
 		</div>
 	</div>
 </template>
