@@ -9,6 +9,8 @@ import ErrorMsg from './components/ErrorMsg.vue'
 import LoadingSpinner from './components/LoadingSpinner.vue'
 import Navbar from './components/Navbar.vue'
 import Photo from './components/Photo.vue'
+import UserMiniCard from './components/UserMiniCard.vue'
+import PageNotFound from './components/PageNotFound.vue'
 
 import './assets/dashboard.css'
 import './assets/main.css'
@@ -19,5 +21,7 @@ app.component("ErrorMsg", ErrorMsg);
 app.component("LoadingSpinner", LoadingSpinner);
 app.component("Navbar", Navbar);
 app.component("Photo", Photo);
+app.component("UserMiniCard", UserMiniCard);
+app.component("PageNotFound", PageNotFound);
 app.use(router)
 app.mount('#app')

@@ -2,6 +2,7 @@
 export default {
 	data: function() {
 		return {
+			errormsg: null,
 			date: "01/01/1800"
 		}
 	},
@@ -12,10 +13,8 @@ export default {
 
 <template>
 	<div>
-		<Navbar ></Navbar>
-		
-		<Photo :upload_date="this.date" /> 
-		<Photo/> 
+		<!--<Photo :upload_date="this.date" /> 
+		<Photo/> -->
 		
 		
 		<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>

@@ -4,12 +4,19 @@ import {
 } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
+import SearchView from '../views/SearchView.vue'
+import ProfileView from '../views/ProfileView.vue'
+import PageNotFoundView from '../views/PageNotFoundView.vue'
 
 const router = createRouter({
     history: createWebHashHistory(
         import.meta.env.BASE_URL),
     routes: [{
             path: '/',
+            redirect: '/login'
+        },
+        {
+            path: '/login',
             component: LoginView
         },
         {
@@ -17,12 +24,17 @@ const router = createRouter({
             component: HomeView
         },
         {
-            path: '/link2',
-            component: HomeView
+            path: '/search',
+            component: SearchView
         },
         {
-            path: '/some/:id/link',
-            component: HomeView
+            path: '/users/:id',
+            component: ProfileView
+
+        },
+        {
+            path: "/:catchAll(.*)",
+            component: PageNotFoundView
         },
     ]
 })

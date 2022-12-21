@@ -12,10 +12,10 @@ func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 
 	pathId := ps.ByName("id")
 	pathBannedId := ps.ByName("banned_id")
-	requestinUserId := extractBearer(r.Header.Get("Authorization"))
+	requestingUserId := extractBearer(r.Header.Get("Authorization"))
 
 	// Check the user's identity for the operation (only owner of the account can add a banned user to that account list)
-	valid := validateRequestingUser(pathId, requestinUserId)
+	valid := validateRequestingUser(pathId, requestingUserId)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
@@ -33,7 +33,7 @@ func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 	*/
 
 	// Check if the user is trying to ban himself/herself
-	if requestinUserId == pathBannedId {
+	if requestingUserId == pathBannedId {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -43,7 +43,7 @@ func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 		User{IdUser: pathId}.ToDatabase(),
 		User{IdUser: pathBannedId}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("put-ban: error executing insert query")
+		ctx.Logger.WithError(err).Error("put-ban/db.BanUser: error executing insert query")
 
 		/*
 			// If the user is trying to ban himself then respond with bad request
@@ -54,6 +54,16 @@ func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 		*/
 
 		// Something  didn't work internally
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	// Ban implies removing the follow (if exists)
+	err = rt.db.UnfollowUser(
+		User{IdUser: requestingUserId}.ToDatabase(),
+		User{IdUser: pathBannedId}.ToDatabase())
+	if err != nil {
+		ctx.Logger.WithError(err).Error("put-ban/db.UnfollowUser: error executing insert query")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

@@ -1,44 +1,58 @@
 <script>
 export default {
+  data(){
+    return{
+      textVar: "",
+    }
+  },
+  methods:{
+    logout(){
+      localStorage.removeItem('token')
+      this.$emit('logoutNavbar',false)
+    },
+    goBackHome(){
+      //console.log("anything?")
+      this.$emit('requestUpdateView',"/home")
+    },
+    searchFunc(){
+      //console.log("hit off the search bruv")
+      this.$emit('searchNavbar',this.textVar)
+      this.textVar=""
+    },
+    myProfile(){
+      this.$emit('requestUpdateView',"/users/"+localStorage.getItem('token'))
+    },
+  },
 }
 </script>
 
 <template>
+  <nav class="navbar navbar-expand-lg bg-light d-flex justify-content-between sticky-top mb-3 my-nav bg-transparent">
+    <a class="navbar-brand ms-2 d-flex" @click="goBackHome">
+      <img class="brand-img" src="../assets/images/brand.png">
+      <div class="my-brand-name">WASAPhoto</div>
+    </a>
 
-<nav class="my-nav navbar navbar-expand-lg rounded">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#/home">WASAPhoto</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link navbar-elements" aria-current="page" href="#">Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        
-		<li class="nav-item">
-<form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search users" aria-label="Search">
-        <button class="btn btn-dark btn-outline-success navbar-btn" type="submit">Search</button>
-      </form>
-		</li>
-      </ul>
-      
-    </div>
-  </div>
-</nav>
-
+    <form class="form-inline my-2 my-lg-0 d-flex justify-content-center m-auto">
+      <input class="form-control mr-sm-2" v-model="textVar" type="search" placeholder="Search users" >
+      <button class="btn btn-light btn-outline-success ms-2" type="submit" @click.prevent="searchFunc">Search</button>
+    </form>
+    <button @click="myProfile" class="btn btn-light btn-outline-danger me-2" type="button">Profile</button>
+    <button @click="logout" class="btn btn-light btn-outline-danger me-2" type="button">Logout</button>
+  </nav>
 
 </template>
 
 <style>
+.my-brand-name{
+  color: white;
+}
+
 .my-nav {
-    background-color: rgba(155, 155, 155, 0.911);
+  background: transparent;
+}
+.my-nav:hover{
+  cursor: pointer;
 }
 
 .navbar-btn {
@@ -50,5 +64,10 @@ export default {
 .navbar-elements {
     color: rgb(231, 152, 47);
 
+}
+
+.brand-img{
+  height: 30px;
+  width: 30px;
 }
 </style>

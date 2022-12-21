@@ -61,9 +61,31 @@ fill: none;
 
 
 */
-main,
-body {
+:root {
+    --color-text: gainsboro;
+}
+
+html {
+
+    height: 100%;
+}
+
+main {
     height: 100vh;
-    background-color: gainsboro;
-    background-repeat: no-repeat;
+}
+
+body {
+
+    /*
+    height: 100vh;
+    background-color: gainsboro;*/
+    background-attachment: fixed;
+    background: rgb(72, 95, 219);
+    background: radial-gradient(circle, rgba(72, 95, 219, 1) 18%, rgba(4, 33, 205, 1) 100%, rgba(66, 88, 217, 1) 100%);
+
+}
+
+
+.user {
+    background-color: azure;
 }

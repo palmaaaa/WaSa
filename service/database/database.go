@@ -93,6 +93,9 @@ type AppDatabase interface {
 	// Checks if a user (a) is banned by another (b). Returns a boolean
 	BannedUserCheck(a User, b User) (bool, error)
 
+	// Checks if a user (a) exists
+	CheckUser(a User) (bool, error)
+
 	// Checks if a photo exists. Returns an error
 	CheckPhotoExistence(p PhotoId) (bool, error)
 

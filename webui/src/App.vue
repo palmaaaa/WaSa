@@ -3,16 +3,39 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 <script>
 export default {
-	methods:{
-		mounted(){
-			if (localStorage.getItem('token')){
-
-				this.$router.replace("/login")
-			}else{
-				this.$router.replace("/home")
-			}
-			
+	data(){
+		return{
+			logged: false,
+			searchValue: "",
 		}
+	},
+	methods:{
+		logout(newValue){
+			this.logged = newValue
+			this.$router.replace("/login")
+		},
+		updateLogged(newLogged){
+			this.logged = newLogged
+		},
+		updateView(newRoute){
+			this.$router.replace(newRoute)
+		},
+		search(queryParam){
+			this.searchValue= queryParam
+			this.$router.replace("/search")
+		},
+	},
+	mounted(){
+		console.log("mount main")
+		if (!localStorage.getItem('token')){
+			this.$router.replace("/login")
+		}else{
+			this.logged = true
+		}
+		//this.logged = true
+	},
+	updated(){
+		console.log("update main")
 	}
 }
 </script>
@@ -22,7 +45,15 @@ export default {
 		<div class="row">
 			<div class="col p-0">
 				<main >
-					<RouterView />
+					<Navbar v-if="this.logged" 
+					@logoutNavbar="logout" 
+					@requestUpdateView="updateView"
+					@searchNavbar="search"/>
+
+					<RouterView 
+					@updatedLoggedChild="updateLogged" 
+					@requestUpdateView="updateView"
+					:searchValue="this.searchValue"/>
 				</main>
 			</div>
 		</div>

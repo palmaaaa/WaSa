@@ -41,3 +41,22 @@ func (db *appdbimpl) CreateUser(u User) error {
 
 	return nil
 }
+
+// [EXTRA] Database function that checks if a user exists
+func (db *appdbimpl) CheckUser(targetUser User) (bool, error) {
+
+	var cnt int
+	err := db.c.QueryRow("SELECT COUNT(*) FROM users WHERE id_user = ?",
+		targetUser.IdUser).Scan(&cnt)
+
+	if err != nil {
+		// Count always returns a row thanks to COUNT(*), so this situation should not happen
+		return true, err
+	}
+
+	// If the counter is 1 then the user exists
+	if cnt == 1 {
+		return true, nil
+	}
+	return false, nil
+}

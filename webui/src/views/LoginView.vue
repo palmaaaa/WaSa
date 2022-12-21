@@ -3,7 +3,8 @@ export default {
 	data: function() {
 		return {
 			errormsg: null,
-			identifier: ""
+			identifier: "",
+			disabled: true,
 		}
 	},
 	methods: {
@@ -16,13 +17,21 @@ export default {
 				});
 				
 				localStorage.setItem('token',response.data.identifier);
-				
 				this.$router.replace("/home")
+				this.$emit('updatedLoggedChild',true)
+				
 			} catch (e) {
 				this.errormsg = e.toString();
 			}
 			// this.loading = false;
 		},
+	},
+	mounted(){
+		console.log("identifier",this.identifier)
+		console.log(localStorage.getItem('token'))
+		if (localStorage.getItem('token')){
+			this.$router.replace("/home")
+		}
 	},
 	
 }
@@ -37,7 +46,7 @@ export default {
 			</div>
 		</div>
 
-		<div class="row h-100 w-100 border-top border-bottom m-0">
+		<div class="row h-100 w-100 m-0">
 			
 			<form @submit.prevent="login" class="d-flex flex-column align-items-center justify-content-center p-0">
 
@@ -55,7 +64,9 @@ export default {
 
 				<div class="row mt-2 mb-5 ">
 					<div class="col ">
-						<button class="btn btn-dark"> Register/Login </button>
+						<button class="btn btn-dark" :disabled="this.identifier == null || this.identifier.length >16 || this.identifier.length <3"> 
+						Register/Login 
+						</button>
 					</div>
 				</div>
 			</form>
@@ -66,8 +77,8 @@ export default {
 <style>
 .login {
     background-image: url("../assets/images/people.png");
-    background-color: gainsboro;
-    background-repeat: no-repeat;
+    /*background-color: gainsboro;
+    background-repeat: no-repeat;*/
     height: 100vh;
 }
 

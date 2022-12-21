@@ -15,6 +15,7 @@ func (rt *_router) Handler() http.Handler {
 
 	// Update nickname endpoint
 	rt.router.PUT("/users/:id", rt.wrap(rt.putNickname))
+	rt.router.GET("/users/:id", rt.wrap(rt.getUser)) // EXTRA
 
 	// Ban endpoint
 	rt.router.PUT("/users/:id/banned_users/:banned_id", rt.wrap(rt.putBan))
@@ -30,6 +31,7 @@ func (rt *_router) Handler() http.Handler {
 	// Photo Endpoint
 	rt.router.POST("/users/:id/photos", rt.wrap(rt.postPhoto))
 	rt.router.DELETE("/users/:id/photos/:photo_id", rt.wrap(rt.deletePhoto))
+	rt.router.GET("/users/:id/photos/:photo_id", rt.wrap(rt.getPhoto)) // EXTRA
 
 	// Comments endpoint
 	rt.router.POST("/users/:id/photos/:photo_id/comments", rt.wrap(rt.postComment))
@@ -41,6 +43,9 @@ func (rt *_router) Handler() http.Handler {
 
 	// Special routes
 	rt.router.GET("/liveness", rt.liveness)
+
+	// Extra endpoints
+	rt.router.GET("/users/:id/banned_users", rt.wrap(rt.checkBan)) // Through the auth of the user we can check if it's banned by the user in the path id
 
 	return rt.router
 }
