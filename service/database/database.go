@@ -90,6 +90,10 @@ type AppDatabase interface {
 
 	// _________ Util Methods _________
 
+	GetFollowers(User) ([]User, error)
+	GetFollowing(User) ([]User, error)
+	GetPhotosList(User) ([]Photo, error)
+
 	// Checks if a user (a) is banned by another (b). Returns a boolean
 	BannedUserCheck(a User, b User) (bool, error)
 

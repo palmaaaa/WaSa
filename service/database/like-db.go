@@ -29,6 +29,7 @@ func (db *appdbimpl) GetLikesList(requestinUser User, photo Photo) ([]User, erro
 	return likes, nil
 }
 
+/*
 // Database function that gets the number of likes of a photo
 func (db *appdbimpl) GetLikesLen(p PhotoId) (int, error) {
 
@@ -40,6 +41,7 @@ func (db *appdbimpl) GetLikesLen(p PhotoId) (int, error) {
 
 	return likes, nil
 }
+*/
 
 // Database function that adds a like of a user to a photo
 func (db *appdbimpl) LikePhoto(p PhotoId, u User) error {

@@ -15,7 +15,7 @@ func (rt *_router) Handler() http.Handler {
 
 	// Update nickname endpoint
 	rt.router.PUT("/users/:id", rt.wrap(rt.putNickname))
-	rt.router.GET("/users/:id", rt.wrap(rt.getUser)) // EXTRA
+	rt.router.GET("/users/:id", rt.wrap(rt.getUserProfile)) // EXTRA
 
 	// Ban endpoint
 	rt.router.PUT("/users/:id/banned_users/:banned_id", rt.wrap(rt.putBan))

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"wasaphoto-1849661/service/api/reqcontext"
+	"wasaphoto-1849661/service/database"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -83,5 +84,51 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 		}
 	*/
 	w.WriteHeader(http.StatusOK)
+
+}
+
+type ProfileZ struct {
+	Name      string
+	Followers []database.User
+	Following []database.User
+	Posts     []database.Photo
+}
+
+func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+
+	requestedUser := ps.ByName("id")
+
+	var followers []database.User
+	var following []database.User
+	var photos []database.Photo
+
+	followers, err := rt.db.GetFollowers(User{IdUser: requestedUser}.ToDatabase())
+	if err != nil {
+		// ctx
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	following, err = rt.db.GetFollowing(User{IdUser: requestedUser}.ToDatabase())
+	if err != nil {
+		// ctx
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	photos, err = rt.db.GetPhotosList(User{IdUser: requestedUser}.ToDatabase())
+	if err != nil {
+		// ctx
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	_ = json.NewEncoder(w).Encode(ProfileZ{
+		Name:      requestedUser,
+		Followers: followers,
+		Following: following,
+		Posts:     photos,
+	})
 
 }

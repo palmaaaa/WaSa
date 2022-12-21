@@ -7,11 +7,12 @@ export default {
 			followStatus: false,
 			banStatus: false,
 			currentIsBanned: false,
+
 			followerCnt: 0,
 			followingCnt:0,
 			postCnt:0,
 
-			photURL: "",
+			photos: [],
 		}
 	},
 
@@ -39,19 +40,22 @@ export default {
 		},
 
 		async userExistsCheck(){
-			try {
+			/*try {
 				let response = await this.$axios.get("/users/"+this.$route.params.id);
 				return response.data.UserExists
 
 			} catch (e) {
 				this.errormsg = e.toString();
-			}
+			}*/
+			return true
 		},
 
 		async followClick(){
 			if (this.followStatus){ 
+				
 				await this.$axios.delete("/users/"+this.$route.params.id+"/followers/"+ localStorage.getItem('token'));
 			}else{
+				
 				await this.$axios.put("/users/"+this.$route.params.id+"/followers/"+ localStorage.getItem('token'));
 			}
 			this.followStatus = !this.followStatus
@@ -67,19 +71,30 @@ export default {
 			this.banStatus = !this.banStatus
 		},
 
-		async test(){
-			let response = await this.$axios.get("/users/"+localStorage.getItem('token')+"/photos/brand.png");
+		async loadPhotos(){
+			let response =  ['1','2']//await this.$axios.get("/users/"+localStorage.getItem('token')+"/photos/brand.png");
 			//console.log(response)
-			this.photURL = response.request.responseURL // 'http://localhost:3000/users/...../photos/.....'
-
-
+			//this.photURL = response.request.responseURL // 'http://localhost:3000/users/...../photos/.....'
+			//this.photos = response //.data
+			//this.postCnt = this.photos.length
 		},
+
+		async loadInfo(){
+			let response = await this.$axios.get("/users/"+this.$route.params.id);
+			console.log(response)
+			this.followerCnt = response.data.Followers!=null ? response.data.Followers.length : 0
+			this.followingCnt = response.data.Following!=null? response.data.Following.length : 0
+			this.postCnt = response.data.Posts!=null ? response.data.Posts.length : 0
+			this.followStatus = response.data.Followers!=null ? response.data.Followers.find(obj => obj.IdUser === localStorage.getItem('token')) : false
+		}
 	},
 
 	async mounted(){
 		this.currentIsBanned = await this.currentCheckBan()
 		this.userExists = await this.userExistsCheck()
-		await this.test()
+		//this.loadPhotos()
+		this.loadInfo()
+		// await this.test()
 
 		
 		//console.log(this.userExists,!this.banStatus)
@@ -88,7 +103,9 @@ export default {
 		//console.log("update profile")
 		this.currentIsBanned = await this.currentCheckBan()
 		this.userExists = await this.userExistsCheck()
-		await this.test()
+		//this.loadPhotos()
+		//this.loadInfo()
+		// await this.test()
 	}
 }
 // To add likes and comments put modal scrollable from bootstrap
@@ -127,19 +144,19 @@ export default {
                                 <div class="container-fluid d-flex justify-content-between align-items-center">
                                     <div class="row">
                                         <div class="col">
-                                            <h6 class=" p-0 ">Posts: 1</h6>
+                                            <h6 class=" p-0 ">Posts: {{this.postCnt}}</h6>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col">
-                                            <h6 class=" p-0 ">Followers: 1</h6>
+                                            <h6 class=" p-0 ">Followers: {{this.followerCnt}}</h6>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col">
-                                            <h6 class=" p-0 ">Following: 1</h6>
+                                            <h6 class=" p-0 ">Following: {{this.followingCnt}}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -154,6 +171,7 @@ export default {
 
 
         <div class="row">
+			<input type="file" class="btn btn-primary" placeholder="bruh">  Carica sta photo bruh 
         	<div v-if="!banStatus">
         		<Photo :path="this.photURL" />
         	</div>

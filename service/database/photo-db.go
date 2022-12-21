@@ -1,7 +1,7 @@
 package database
 
 // Database function that retrieves the list of photos of a user (only if the requesting user is not banned by that user)
-func (db *appdbimpl) GetPhotosList(requestinUser User, targetUser User) ([]Photo, error) {
+func (db *appdbimpl) GetPhotosList(targetUser User) ([]Photo, error) { // requestinUser User,
 
 	/*
 		banned, err := db.BannedUserCheck(requestinUser, targetUser)
