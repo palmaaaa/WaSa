@@ -1,7 +1,7 @@
 package database
 
 // Database function that retrieves the list of photos of a user (only if the requesting user is not banned by that user)
-func (db *appdbimpl) GetPhotosList(targetUser User) ([]Photo, error) { // requestinUser User,
+func (db *appdbimpl) GetPhotosList(requestingUser User, targetUser User) ([]Photo, error) { // requestinUser User,
 
 	/*
 		banned, err := db.BannedUserCheck(requestinUser, targetUser)
@@ -13,7 +13,7 @@ func (db *appdbimpl) GetPhotosList(targetUser User) ([]Photo, error) { // reques
 		}
 	*/
 
-	rows, err := db.c.Query("SELECT * FROM photos WHERE id_user = ?", targetUser.IdUser)
+	rows, err := db.c.Query("SELECT * FROM photos WHERE id_user = ? ORDER BY date DESC", targetUser.IdUser)
 	if err != nil {
 		return nil, err
 	}
@@ -24,10 +24,23 @@ func (db *appdbimpl) GetPhotosList(targetUser User) ([]Photo, error) { // reques
 	var photos []Photo
 	for rows.Next() {
 		var photo Photo
-		err = rows.Scan(&photo.PhotoId, &photo.Owner, &photo.Comments, &photo.Likes, &photo.Date)
+		err = rows.Scan(&photo.PhotoId, &photo.Owner, &photo.Date)
 		if err != nil {
 			return nil, err
 		}
+
+		comments, err := db.GetCompleteCommentsList(requestingUser, targetUser, PhotoId{IdPhoto: int64(photo.PhotoId)}) // Old: GetCommentsLen
+		if err != nil {
+			return nil, err
+		}
+		photo.Comments = comments
+
+		likes, err := db.GetLikesList(requestingUser, targetUser, PhotoId{IdPhoto: int64(photo.PhotoId)}) // Old: GetLikesLen
+		if err != nil {
+			return nil, err
+		}
+		photo.Likes = likes
+
 		photos = append(photos, photo)
 	}
 

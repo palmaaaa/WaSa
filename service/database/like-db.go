@@ -1,10 +1,11 @@
 package database
 
 // Database function that retrieves the list of users that liked a photo
-func (db *appdbimpl) GetLikesList(requestinUser User, photo Photo) ([]User, error) {
+func (db *appdbimpl) GetLikesList(requestingUser User, requestedUser User, photo PhotoId) ([]User, error) {
 
-	rows, err := db.c.Query("SELECT id_user FROM likes WHERE id_user NOT IN (SELECT banner FROM banned_users WHERE banned = ?) AND id_photo = ?",
-		requestinUser.IdUser, photo.PhotoId)
+	rows, err := db.c.Query("SELECT id_user FROM likes WHERE id_photo = ? AND id_user NOT IN (SELECT banned FROM banned_users WHERE banner = ? OR banner = ?) "+
+		"AND id_user NOT IN (SELECT banner FROM banned_users WHERE banned = ?)",
+		photo.IdPhoto, requestingUser.IdUser, requestedUser.IdUser, requestingUser.IdUser)
 	if err != nil {
 		return nil, err
 	}

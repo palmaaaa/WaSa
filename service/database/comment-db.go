@@ -1,10 +1,11 @@
 package database
 
 // Database function that retrieves the list of comments of a photo (minus the comments from users that banned the requesting user)
-func (db *appdbimpl) GetCompleteCommentsList(requestinUser User, photo PhotoId) ([]CompleteComment, error) {
+func (db *appdbimpl) GetCompleteCommentsList(requestingUser User, requestedUser User, photo PhotoId) ([]CompleteComment, error) {
 
-	rows, err := db.c.Query("SELECT * FROM comments WHERE id_photo = ? AND id_user NOT IN (SELECT banner FROM banned_users WHERE banned = ?)",
-		requestinUser.IdUser, photo.IdPhoto)
+	rows, err := db.c.Query("SELECT * FROM comments WHERE id_photo = ? AND id_user NOT IN (SELECT banned FROM banned_users WHERE banner = ? OR banner = ?) "+
+		"AND id_user NOT IN (SELECT banner FROM banned_users WHERE banned = ?)",
+		photo.IdPhoto, requestingUser.IdUser, requestedUser.IdUser, requestingUser.IdUser)
 	if err != nil {
 		return nil, err
 	}
@@ -30,15 +31,9 @@ func (db *appdbimpl) GetCompleteCommentsList(requestinUser User, photo PhotoId) 
 	return comments, nil
 }
 
+/*
 // Database function that gets the number of comments of a photo
 func (db *appdbimpl) GetCommentsLen(p PhotoId) (int, error) {
-
-	/*
-		// If the photo doesn't exist return an error
-		if db.CheckPhotoExistence(p) {
-			return 0, ErrPhotoDoesntExist
-		}
-	*/
 
 	var comments int
 	err := db.c.QueryRow("SELECT COUNT(*) FROM comments WHERE (id_photo = ?)",
@@ -49,6 +44,7 @@ func (db *appdbimpl) GetCommentsLen(p PhotoId) (int, error) {
 
 	return comments, nil
 }
+*/
 
 // Database function that adds a comment of a user to a photo
 func (db *appdbimpl) CommentPhoto(p PhotoId, u User, c Comment) (int64, error) {

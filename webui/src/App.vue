@@ -25,17 +25,17 @@ export default {
 			this.$router.replace("/search")
 		},
 	},
+
 	mounted(){
-		console.log("mount main")
+		// console.log("mount main")
 		if (!localStorage.getItem('token')){
 			this.$router.replace("/login")
 		}else{
 			this.logged = true
 		}
-		//this.logged = true
 	},
 	updated(){
-		console.log("update main")
+		// console.log("update main")
 	}
 }
 </script>

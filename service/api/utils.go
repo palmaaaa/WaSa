@@ -29,6 +29,7 @@ func validateRequestingUser(identifier string, bearerToken string) int {
 	}
 
 	//  If the requesting user's id is different than the one in the path then respond with a unathorized status.
+
 	if identifier != bearerToken {
 		return http.StatusUnauthorized
 	}

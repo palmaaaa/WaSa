@@ -9,40 +9,28 @@
 </head>
 
 <body>
-    <div class="h-100">
-        <div class="card w-75">
-            <div class="card-body">
-                <h5 class="card-title">{{this.$route.params.id}}</h5>
-                <p class="card-text">Followers:3 Bruh:2</p>
-                <a href="#" class="btn btn-primary">Button</a>
+
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-10">
+                {{author}}
             </div>
+
+            <div class="col-2">
+                <i class="fas fa-times"> Remove </i>
+            </div>
+
         </div>
 
-        profilePage
-
-
-
-        <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
-    </div>
-
-
-
-    <!--
-    	<div class="container-fluid mt-5 mb-5 ">
-        <div class="d-flex flex-row justify-content-center">
-
-            <div class="card" style="width: 25%;">
-                <img src="../assets/images/nebula.jpg" class="card-img-top">
-
-                <div class="card-body bruh">
-                    <p class="card-text ">Uploaded on {{upload_date}}.</p>
-					<p class="card-text ">Comments.</p>
-                	<p class="card-text ">Likes.</p>
-                </div>
+        <div class="row">
+            <div class="col">
+                {{content}}
             </div>
+
         </div>
     </div>
--->
 
 
 </body>

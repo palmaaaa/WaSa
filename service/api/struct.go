@@ -18,6 +18,7 @@ type JSONErrorMsg struct {
 	Message string `json:"message"` // Error messages
 }
 
+/*
 // Photo structure for the APIs
 type Photo struct {
 	Comments int       `json:"comments"` // Number of comments of a photo
@@ -25,6 +26,16 @@ type Photo struct {
 	Owner    string    `json:"owner"`    // Unique id of the owner
 	PhotoId  int       `json:"photo_id"` // Unique id of the photo
 	Date     time.Time `json:"date"`     // Date in which the photo was uploaded
+}
+*/
+
+// Photo structure for the APIs
+type Photo struct {
+	Comments []database.CompleteComment `json:"comments"` // Number of comments of a photo
+	Likes    []database.User            `json:"likes"`    // Number of likes of a photo
+	Owner    string                     `json:"owner"`    // Unique id of the owner
+	PhotoId  int                        `json:"photo_id"` // Unique id of the photo
+	Date     time.Time                  `json:"date"`     // Date in which the photo was uploaded
 }
 
 // User structure for the APIs
@@ -58,6 +69,14 @@ type CompleteComment struct {
 	IdPhoto   int64  // Photo unique id
 	IdUser    string // User's unique id
 	Comment   string // Comment content
+}
+
+// CompleteProfile structure for the APIs
+type CompleteProfile struct {
+	Name      string
+	Followers []database.User
+	Following []database.User
+	Posts     []database.Photo
 }
 
 // Converts a User from the api package to a User of the database package

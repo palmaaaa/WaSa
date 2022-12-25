@@ -1,9 +1,8 @@
 package database
 
-import (
-	"time"
-)
+import "time"
 
+/*
 // Photo structure for the database
 type Photo struct {
 	Comments int       // Number of comments of a photo
@@ -11,6 +10,16 @@ type Photo struct {
 	Owner    string    // Unique id of the owner
 	PhotoId  int       // Unique id of the photo
 	Date     time.Time // Date in which the photo was uploaded
+}
+*/
+
+// Photo structure for the database
+type Photo struct {
+	Comments []CompleteComment // Array of comments of the photo
+	Likes    []User            // Array of useres that liked the photo
+	Owner    string            // Unique id of the owner
+	PhotoId  int               // Unique id of the photo
+	Date     time.Time         // Date in which the photo was uploaded
 }
 
 // User structure for the database

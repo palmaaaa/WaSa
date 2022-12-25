@@ -3,7 +3,6 @@ export default {
 	data: function() {
 		return {
 			errormsg: null,
-			date: "01/01/1800"
 		}
 	},
 	
