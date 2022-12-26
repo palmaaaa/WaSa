@@ -1,6 +1,6 @@
 <script>
 export default {
-	props: ['identifier'],
+	props: ['identifier','nickname'],
     methods:{
         clickedUser(){
             console.log(this.identifier)
@@ -18,10 +18,7 @@ export default {
         <div class="col d-flex justify-content-center">
             <div class="user-mini-card card bg-transparent border-start">
                 <div class="card-body">
-                    <h5 @click="clickedUser" class="user-mini-card-title d-flex justify-content-center">{{ identifier }}</h5>
-                    <!--
-                        user-mini-card-title
-                        <a href="#" class="btn btn-primary">Button</a>-->
+                    <h5 @click="clickedUser" class="user-mini-card-title d-flex justify-content-center">{{nickname }} @{{identifier }}</h5>
                 </div>
             </div>
         </div>

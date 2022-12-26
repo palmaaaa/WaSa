@@ -27,6 +27,12 @@ type User struct {
 	IdUser string // User's unique id
 }
 
+// User structure for the database
+type CompleteUser struct {
+	IdUser   string // User's unique id
+	Nickname string // Nickname of a user
+}
+
 // PhotoId structure for the database
 type PhotoId struct {
 	IdPhoto int64 // Photo unique id

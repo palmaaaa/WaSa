@@ -11,7 +11,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.POST("/session", rt.wrap(rt.sessionHandler)) // fatto
 
 	// Search endpoint
-	rt.router.GET("/users", rt.wrap(rt.getUsersQuery)) // fatto
+	rt.router.GET("/users", rt.wrap(rt.getUsersQuery)) // Fatto
 
 	// User Endpoint
 	rt.router.PUT("/users/:id", rt.wrap(rt.putNickname))    // fatto

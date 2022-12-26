@@ -6,7 +6,15 @@ export default {
 			errormsg: null,
 		}
 	},
+
 	props:['searchValue'],
+
+	watch:{
+		searchValue: function(){
+			this.loadSearchedUsers()
+		},
+	},
+
 	methods:{
 		async loadSearchedUsers(){
 			this.errormsg = null;
@@ -14,7 +22,8 @@ export default {
 				this.searchValue === "" || 
 				this.searchValue.includes("?") ||
 			 	this.searchValue.includes("_")){
-				return
+				this.users = []
+				return 
 			}
 			try {
 				// Search user (PUT):  "/users"
@@ -24,6 +33,8 @@ export default {
 					},
 				});
 				this.users = response.data
+
+				console.log("search",response)
 
 			} catch (e) {
 				this.errormsg = e.toString();
@@ -43,16 +54,12 @@ export default {
 		await this.loadSearchedUsers()
 		
 	},
-	async updated(){
-		await this.loadSearchedUsers()
-	},
-
 }
 </script>
 
 <template>
 	<div class="container-fluid h-100 ">
-		<UserMiniCard v-for="(user,index) in users" :identifier="user.IdUser" @clickedUser="goToProfile"/>
+		<UserMiniCard v-for="(user,index) in users" :identifier="user.IdUser" :nickname="user.Nickname" @clickedUser="goToProfile"/>
 		<p v-if="this.users.length == 0" class="no-result-text d-flex justify-content-center"> No users found.</p>
 		<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
 	</div>

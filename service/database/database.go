@@ -56,7 +56,7 @@ type AppDatabase interface {
 	ModifyNickname(User, Nickname) error
 
 	// Searches all the users that match the given name (both identifier and nickname). Returns the list of matching users and an error
-	SearchUser(searcher User, userToSearch User) ([]User, error)
+	SearchUser(searcher User, userToSearch User) ([]CompleteUser, error)
 
 	// Creates a new photo in the database. It returns the photo identifier and an error
 	CreatePhoto(Photo) (int64, error)
