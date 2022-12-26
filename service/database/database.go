@@ -43,6 +43,9 @@ var ErrUserAutoLike = errors.New("users can't like their own photos")
 var ErrUserAutoFollow = errors.New("users can't follow themselfes")
 */
 
+// Constants
+const PhotosPerUserHome = 3
+
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 

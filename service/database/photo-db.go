@@ -4,7 +4,7 @@ package database
 func (db *appdbimpl) GetPhotosList(requestingUser User, targetUser User) ([]Photo, error) { // requestinUser User,
 
 	/*
-		banned, err := db.BannedUserCheck(requestinUser, targetUser)
+		banned, err := db.BannedUserCheck(requestingUser, targetUser)
 		if err != nil {
 			return nil, err
 		}

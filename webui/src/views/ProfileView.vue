@@ -126,7 +126,12 @@ export default {
 				this.currentIsBanned = true
 				//console.log(e.toString())
 			}
-		}
+		},
+
+        goToSettings(){
+            //this.$emit('requestUpdateView','settings')
+            this.$router.push(this.$route.params.id+'/settings')
+        },
 	},
 
 	async mounted(){
@@ -156,7 +161,7 @@ export default {
                                         {{this.banStatus ? "Unban" : "Ban"}}
                                     </button>
 
-                                    <button v-else class="btn btn-primary ms-2">
+                                    <button v-else class="btn btn-primary ms-2" @click="goToSettings">
                                         Settings
                                     </button>
                                 </div>

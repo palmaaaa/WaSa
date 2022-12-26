@@ -12,6 +12,7 @@ export default {
 			// this.loading = true;
 			this.errormsg = null;
 			try {
+				// Login (POST): "/session"
 				let response = await this.$axios.post("/session",{
 					identifier: this.identifier
 				});

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"wasaphoto-1849661/service/api/reqcontext"
+	"wasaphoto-1849661/service/database"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -21,25 +22,55 @@ func (rt *_router) getHome(w http.ResponseWriter, r *http.Request, ps httprouter
 		return
 	}
 
-	// Get all the photos from from people followed by the requesting user
-	photos, err := rt.db.GetStream(User{IdUser: identifier}.ToDatabase())
+	/*
+		// Get all the photos from from people followed by the requesting user
+		photos, err := rt.db.GetStream(User{IdUser: identifier}.ToDatabase())
+		if err != nil {
+			// In this case, there's an error coming from the database. Return an empty json.
+			w.WriteHeader(http.StatusInternalServerError)
+			ctx.Logger.WithError(err).Error("Database has encountered an error")
+			// controllaerrore
+			_ = json.NewEncoder(w).Encode([]Photo{})
+			return
+		}
+	*/
+
+	followers, err := rt.db.GetFollowing(User{IdUser: identifier}.ToDatabase())
 	if err != nil {
-		// In this case, there's an error coming from the database. Return an empty json.
 		w.WriteHeader(http.StatusInternalServerError)
-		ctx.Logger.WithError(err).Error("Database has encountered an error")
-		// controllaerrore
-		_ = json.NewEncoder(w).Encode([]Photo{})
 		return
+	}
+
+	var photos []database.Photo
+	for _, follower := range followers {
+
+		followerPhoto, err := rt.db.GetPhotosList(
+			User{IdUser: identifier}.ToDatabase(),
+			User{IdUser: follower.IdUser}.ToDatabase())
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		for i, photo := range followerPhoto {
+			if i >= database.PhotosPerUserHome {
+				break
+			}
+			photos = append(photos, photo)
+		}
+
 	}
 
 	w.WriteHeader(http.StatusOK)
 
 	// Send the output to the user. Instead of giving null for no matches return and empty slice of photos.
-	if len(photos) == 0 {
-		// controllaerrore
-		_ = json.NewEncoder(w).Encode([]Photo{})
-		return
-	}
+	/*
+		if len(photos) == 0 {
+			// controllaerrore
+			_ = json.NewEncoder(w).Encode([]Photo{})
+			return
+		}
+	*/
 	// controllaerrore
 	_ = json.NewEncoder(w).Encode(photos)
 }

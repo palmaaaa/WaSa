@@ -8,13 +8,13 @@ import (
 func (rt *_router) Handler() http.Handler {
 
 	// Login enpoint
-	rt.router.POST("/session", rt.wrap(rt.sessionHandler))
+	rt.router.POST("/session", rt.wrap(rt.sessionHandler)) // fatto
 
 	// Search endpoint
-	rt.router.GET("/users", rt.wrap(rt.getUsersQuery))
+	rt.router.GET("/users", rt.wrap(rt.getUsersQuery)) // fatto
 
 	// User Endpoint
-	rt.router.PUT("/users/:id", rt.wrap(rt.putNickname))
+	rt.router.PUT("/users/:id", rt.wrap(rt.putNickname))    // fatto
 	rt.router.GET("/users/:id", rt.wrap(rt.getUserProfile)) // fatto [EXTRA]
 
 	// Ban endpoint
@@ -26,7 +26,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.DELETE("/users/:id/followers/:follower_id", rt.wrap(rt.deleteFollow)) // fatto
 
 	// Stream endpoint
-	rt.router.GET("/users/:id/home", rt.wrap(rt.getHome))
+	rt.router.GET("/users/:id/home", rt.wrap(rt.getHome)) // fatto
 
 	// Photo Endpoint
 	rt.router.POST("/users/:id/photos", rt.wrap(rt.postPhoto))               // fatto

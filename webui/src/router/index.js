@@ -7,6 +7,7 @@ import LoginView from '../views/LoginView.vue'
 import SearchView from '../views/SearchView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import PageNotFoundView from '../views/PageNotFoundView.vue'
+import SettingsView from '../views/SettingsView.vue'
 
 const router = createRouter({
     history: createWebHashHistory(
@@ -30,6 +31,11 @@ const router = createRouter({
         {
             path: '/users/:id',
             component: ProfileView
+
+        },
+        {
+            path: '/users/:id/settings',
+            component: SettingsView
 
         },
         {

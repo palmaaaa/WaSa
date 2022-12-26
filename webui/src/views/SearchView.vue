@@ -17,6 +17,7 @@ export default {
 				return
 			}
 			try {
+				// Search user (PUT):  "/users"
 				let response = await this.$axios.get("/users",{
 						params: {
 						id: this.searchValue,
