@@ -84,7 +84,11 @@ export default {
                         </div>
 
                         <div class="col-2 d-flex align-items-center">
-                            <button type="button" class="btn btn-primary" @click.prevent="this.addComment">Send</button>
+                            <button type="button" class="btn btn-primary" 
+							@click.prevent="this.addComment" 
+							:disabled="this.commentValue.length < 1 || this.commentValue.length > 30">
+							Send
+							</button>
                         </div>
                     </div>
                 </div>
