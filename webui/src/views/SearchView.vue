@@ -34,8 +34,6 @@ export default {
 				});
 				this.users = response.data
 
-				//console.log("search",response)
-
 			} catch (e) {
 				this.errormsg = e.toString();
 			}
@@ -59,7 +57,11 @@ export default {
 
 <template>
 	<div class="container-fluid h-100 ">
-		<UserMiniCard v-for="(user,index) in users" :identifier="user.IdUser" :nickname="user.Nickname" @clickedUser="goToProfile"/>
+		<UserMiniCard v-for="(user,index) in users" 
+		:identifier="user.user_id" 
+		:nickname="user.nickname" 
+		@clickedUser="goToProfile"/>
+
 		<p v-if="this.users.length == 0" class="no-result-text d-flex justify-content-center"> No users found.</p>
 		<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
 	</div>

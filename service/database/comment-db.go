@@ -21,6 +21,14 @@ func (db *appdbimpl) GetCompleteCommentsList(requestingUser User, requestedUser 
 		if err != nil {
 			return nil, err
 		}
+
+		// Get the nickname of the user that commented
+		nickname, err := db.GetNickname(User{IdUser: comment.IdUser})
+		if err != nil {
+			return nil, err
+		}
+		comment.Nickname = nickname
+
 		comments = append(comments, comment)
 	}
 

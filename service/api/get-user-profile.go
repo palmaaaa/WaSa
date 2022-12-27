@@ -77,9 +77,17 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
+	nickname, err := rt.db.GetNickname(User{IdUser: requestedUser}.ToDatabase())
+	if err != nil {
+		ctx.Logger.WithError(err).Error("getUserProfile/db.GetNickname: error executing query")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(CompleteProfile{
 		Name:      requestedUser,
+		Nickname:  nickname,
 		Followers: followers,
 		Following: following,
 		Posts:     photos,

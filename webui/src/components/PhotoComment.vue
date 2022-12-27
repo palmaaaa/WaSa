@@ -5,7 +5,7 @@ export default {
             user: "",
         }
     },
-	props: ['content','author','photo_owner','comment_id','photo_id'],
+	props: ['content','author','photo_owner','comment_id','photo_id','nickname'],
 
     methods:{
         async deleteComment(){
@@ -34,11 +34,11 @@ export default {
         <hr>
         <div class="row">
             <div class="col-10">
-                {{author}}
+                <h5>{{nickname}} @{{author}}</h5>
             </div>
 
             <div class="col-2">
-                <button v-if="this.user === this.author || this.user === photo_owner" class="btn my-btn-comm" @click="deleteComment">
+                <button v-if="this.user === this.author || this.user === this.photo_owner" class="btn my-btn-comm" @click="deleteComment">
                     <i class="fa-regular fa-trash-can my-trash-icon"></i>
                 </button>
             </div>

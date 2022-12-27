@@ -21,10 +21,10 @@ export default {
 				})
 
 				this.comments_list.push({
-					IdComment: response.data.comment_id, 
-					IdPhoto: this.photo_id, 
-					IdUser: localStorage.getItem('token'), 
-					Comment: this.commentValue}
+					comment_id: response.data.comment_id, 
+					photo_id: this.photo_id, 
+					user_id: localStorage.getItem('token'), 
+					comment: this.commentValue}
 				)
 
 				this.commentValue = ""
@@ -37,6 +37,12 @@ export default {
 			this.$emit('eliminateComment',value)
 		}
 	},
+
+	/*
+	mounted(){
+		console.log("commentmodal", this.comments_list)
+	},
+	*/
 }
 </script>
 
@@ -50,15 +56,18 @@ export default {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
+
+				<!-- :comments_list="this.comments_list" -->
                 <div class="modal-body">
                     <PhotoComment v-for="(comm,index) in comments_list" 
 					:key="index" 
-					:author="comm.IdUser" 
-					:comment_id="comm.IdComment"
-					:photo_id="comm.IdPhoto"
-					:content="comm.Comment"
+					:author="comm.user_id" 
+					:nickname="comm.nickname"
+					:comment_id="comm.comment_id"
+					:photo_id="comm.photo_id"
+					:content="comm.comment"
 					:photo_owner="this.photo_owner"
-					:comments_list="this.comments_list"
+					
 
 					@eliminateComment="this.eliminateCommentToParent"
 					/>

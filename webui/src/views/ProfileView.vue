@@ -7,6 +7,8 @@ export default {
 			userExists: false,
 			banStatus: false,
 
+            nickname: "",
+
 
 			followStatus: false,
 			currentIsBanned: false,
@@ -98,7 +100,7 @@ export default {
                 // Get user profile: /users/:id
 				let response = await this.$axios.get("/users/"+this.$route.params.id);
 
-                //console.log(response)
+                //console.log("profileview, ",response)
 
                 this.banStatus = false
                 this.userExists = true
@@ -113,14 +115,15 @@ export default {
 					this.userExists = false
 				}
 				
-				this.followerCnt = response.data.Followers != null ? response.data.Followers.length : 0
-				this.followingCnt = response.data.Following != null? response.data.Following.length : 0
-				this.postCnt = response.data.Posts != null ? response.data.Posts.length : 0
-				this.followStatus = response.data.Followers != null ? response.data.Followers.find(obj => obj.IdUser === localStorage.getItem('token')) : false
+                this.nickname = response.data.nickname
+				this.followerCnt = response.data.followers != null ? response.data.followers.length : 0
+				this.followingCnt = response.data.following != null? response.data.following.length : 0
+				this.postCnt = response.data.posts != null ? response.data.posts.length : 0
+				this.followStatus = response.data.followers != null ? response.data.followers.find(obj => obj.user_id === localStorage.getItem('token')) : false
                 
-                this.photos = response.data.Posts
-                this.followers = response.data.Followers
-                this.following = response.data.Following
+                this.photos = response.data.posts
+                this.followers = response.data.followers
+                this.following = response.data.following
 
 			}catch(e){
 				this.currentIsBanned = true
@@ -142,58 +145,59 @@ export default {
 </script>
 
 <template>
+
     <div class="container-fluid" v-if="!this.currentIsBanned && this.userExists">
 
         <div class="row">
             <div class="col-12 d-flex justify-content-center">
-                    <div class="card w-50 container-fluid">
+                <div class="card w-50 container-fluid">
 
-                        <div class="row">
-                            <div class="col">
-                                <div class="card-body d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title p-0 me-auto mt-auto">{{this.$route.params.id}}</h5>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <h5 class="card-title p-0 me-auto mt-auto">{{this.nickname}} @{{this.$route.params.id}}</h5>
 
-                                    <button v-if="!sameUser && !banStatus" @click="followClick" class="btn btn-primary ms-2">
-                                        {{this.followStatus ? "Unfollow" : "Follow"}}
-                                    </button>
+                                <button v-if="!sameUser && !banStatus" @click="followClick" class="btn btn-primary ms-2">
+                                    {{this.followStatus ? "Unfollow" : "Follow"}}
+                                </button>
 
-                                    <button v-if="!sameUser" @click="banClick" class="btn btn-primary ms-2">
-                                        {{this.banStatus ? "Unban" : "Ban"}}
-                                    </button>
+                                <button v-if="!sameUser" @click="banClick" class="btn btn-primary ms-2">
+                                    {{this.banStatus ? "Unban" : "Ban"}}
+                                </button>
 
-                                    <button v-else class="btn btn-primary ms-2" @click="goToSettings">
-                                        Settings
-                                    </button>
-                                </div>
+                                <button v-else class="btn btn-primary ms-2" @click="goToSettings">
+                                    Settings
+                                </button>
                             </div>
-                        </div>
-
-                        <div v-if="!banStatus" class="row mt-1 mb-1">
-                            <div class="col">
-                                <div class="container-fluid d-flex justify-content-between align-items-center">
-                                    <div class="row">
-                                        <div class="col">
-                                            <h6 class=" p-0 ">Posts: {{this.postCnt}}</h6>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <h6 class=" p-0 ">Followers: {{this.followerCnt}}</h6>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col">
-                                            <h6 class=" p-0 ">Following: {{this.followingCnt}}</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <input  id="fileUploader" type="file" class="profile-file-upload"  @change="this.uploadFile" accept=".jpg, .png">
-                            <label v-if="this.sameUser" class="btn btn-primary m-0 p-0" for="fileUploader"> Upload a new photo! </label>
                         </div>
                     </div>
+
+                    <div v-if="!banStatus" class="row mt-1 mb-1">
+                        <div class="col">
+                            <div class="container-fluid d-flex justify-content-between align-items-center">
+                                <div class="row">
+                                    <div class="col">
+                                        <h6 class=" p-0 ">Posts: {{this.postCnt}}</h6>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <h6 class=" p-0 ">Followers: {{this.followerCnt}}</h6>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <h6 class=" p-0 ">Following: {{this.followingCnt}}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input id="fileUploader" type="file" class="profile-file-upload" @change="this.uploadFile" accept=".jpg, .png">
+                        <label v-if="this.sameUser" class="btn btn-primary m-0 p-0" for="fileUploader"> Upload a new photo! </label>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -204,39 +208,41 @@ export default {
                 <div class="row">
                     <div class="col">
                         <h3 style="color:black;">Posts</h3>
-                        <hr class="w-100" style="color:black;"/>
+                        <hr class="w-100" style="color:black;" />
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col">
-                
-                    <div v-if="!banStatus">
-                        <Photo v-for="(photo,index) in photos" 
-                        :key="index" 
-                        :owner="this.$route.params.id"
-                        :photo_id="photo.PhotoId"
-                        :comments="photo.Comments"
-                        :likes="photo.Likes"
-                        :upload_date="photo.Date"
-                        :isOwner="this.sameUser"
-                        />
-                    </div>
-                    <div v-else class="mt-5 d-flex justify-content-center">
-                        No posts yet
-                    </div>
-
-                </div>
-            </div>
-
         </div>
+
+        <div class="row">
+            <div class="col-12">
+
+                <div v-if="!banStatus && postCnt>0">
+                    <Photo v-for="(photo,index) in photos" 
+                    :key="index" 
+                    :owner="this.$route.params.id" 
+                    :photo_id="photo.photo_id" 
+                    :comments="photo.comments" 
+                    :likes="photo.likes" 
+                    :upload_date="photo.date" 
+                    :isOwner="this.sameUser" />
+
+                </div>
+                
+                <div v-else class="mt-5 ">
+                    <h2 class="d-flex justify-content-center" style="color: white;">No posts yet</h2>
+                </div>
+
+            </div>
+        </div>
+
+    
 
     </div>
     <div v-else class="h-25 ">
         <PageNotFound />
     </div>
-     <!--<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>-->
+    <!--<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>-->
 
 </template>
 

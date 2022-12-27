@@ -3,7 +3,7 @@ export default {
 	props: ['identifier','nickname'],
     methods:{
         clickedUser(){
-            console.log(this.identifier)
+            //console.log(this.identifier)
             this.$emit('clickedUser',this.identifier)
         }
     }
@@ -14,11 +14,11 @@ export default {
     
     
 
-   <div class="row mb-2 mt-2">
+    <div class="row mb-2 mt-2">
         <div class="col d-flex justify-content-center">
             <div class="user-mini-card card bg-transparent border-start">
                 <div class="card-body">
-                    <h5 @click="clickedUser" class="user-mini-card-title d-flex justify-content-center">{{nickname }} @{{identifier }}</h5>
+                    <h5 @click="clickedUser" class="user-mini-card-title d-flex justify-content-center ">{{nickname }} @{{identifier }}</h5>
                 </div>
             </div>
         </div>
@@ -32,7 +32,8 @@ export default {
 }
 
 .user-mini-card{
-    color: var(--color-text);
+    /*color: var(--color-text);*/
+    color: black;
     width: 25%;
     border: none;
     border-color: black;

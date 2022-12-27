@@ -97,6 +97,7 @@ type AppDatabase interface {
 	GetFollowing(User) ([]User, error)
 	GetPhotosList(User, User) ([]Photo, error)
 	UncommentPhotoAuthor(PhotoId, CommentId) error
+	GetNickname(User) (string, error)
 
 	// Checks if a user (a) is banned by another (b). Returns a boolean
 	BannedUserCheck(a User, b User) (bool, error)

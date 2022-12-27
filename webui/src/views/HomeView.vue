@@ -4,8 +4,6 @@ export default {
 		return {
 			// errormsg: null,
 			photos: [],
-			// id: ""
-
 		}
 	},
 
@@ -15,35 +13,44 @@ export default {
 				// Home get: "/users/:id/home"
 				let response = await this.$axios.get("/users/" + localStorage.getItem('token') + "/home")
 
-				//console.log(response)
-				this.photos = response.data
+				//console.log("homevie",response)
+				if (response.data != null){
+					this.photos = response.data
+				}
+				
 			} catch (e) {
 
 			}
 		}
 	},
 
-	mounted() {
+	async mounted() {
 		// this.id = 
-		this.loadStream()
+		await this.loadStream()
+
+		//console.log("prova home", this.photos)
 	}
 
 }
-// To add likes and comments put modal scrollable from bootstrap
 </script>
 
 <template>
-	<div>
-		<Photo
-			v-for="(photo,index) in photos"
-			:key="index"
-			:owner="photo.Owner"
-			:photo_id="photo.PhotoId"
-			:comments="photo.Comments"
-			:likes="photo.Likes"
-			:upload_date="photo.Date"
-		/>
+	<div class="container-fluid">
+		<div class="row">
+			<Photo
+				v-for="(photo,index) in photos"
+				:key="index"
+				:owner="photo.owner"
+				:photo_id="photo.photo_id"
+				:comments="photo.comments"
+				:likes="photo.likes"
+				:upload_date="photo.date"
+			/>
+		</div>
 
+		<div v-if="this.photos.length === 0" class="row ">
+			<h1 class="d-flex justify-content-center mt-5" style="color: white;">There's no content yet, follow somebody!</h1>
+		</div>
 		<!--<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>-->
 	</div>
 </template>

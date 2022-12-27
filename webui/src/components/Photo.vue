@@ -13,7 +13,7 @@ export default {
 	methods:{
 		loadPhoto(){
 			// Get photo : "/users/:id/photos/:photo_id"
-			this.photoURL = __API_URL__+  "/users/"+this.owner+"/photos/"+this.photo_id 
+			this.photoURL = __API_URL__+ "/users/"+this.owner+"/photos/"+this.photo_id 
 		},
 
 		async deletePhoto(){
@@ -57,19 +57,25 @@ export default {
     	},
 
 		removeCommentFromList(value){
-			this.allComments = this.allComments.filter(item=> item.IdComment !== value)
+			//console.log("pre ", this.allComments)
+			this.allComments = this.allComments.filter(item=> item.comment_id !== value)
+			//console.log("post ", this.allComments)
 		}
 	},
 	
 	async mounted(){
 		this.loadPhoto()
+
+		//console.log("commenti", this.comments)
+
 		if (this.likes != null){
-			this.liked = this.likes.some(obj => obj.IdUser === localStorage.getItem('token'))
+			this.liked = this.likes.some(obj => obj.user_id === localStorage.getItem('token'))
 		}
 		if (this.comments != null){
 			this.allComments = this.comments
 			return
 		}
+		
 		
 	},
 
@@ -79,7 +85,8 @@ export default {
 <template>
 	<div class="container-fluid mt-3 mb-5 ">
 
-        <LikeModal :modal_id="'like_modal'+this.photo_id" :likes="this.likes" />
+        <LikeModal :modal_id="'like_modal'+this.photo_id" 
+		:likes="this.likes" />
 
         <CommentModal :modal_id="'comment_modal'+this.photo_id" 
 		:comments_list="this.allComments" 

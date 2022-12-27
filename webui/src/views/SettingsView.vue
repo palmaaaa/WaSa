@@ -9,7 +9,7 @@ export default {
 
 	methods:{
 		async modifyNickname(){
-			console.log("aooo")
+			//console.log("aooo")
 			try{
 				// Nickname put: /users/:id
 				let resp = await this.$axios.put("/users/"+this.$route.params.id,{
@@ -31,7 +31,7 @@ export default {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col d-flex justify-content-center">
-				<h1>Impostazioni di {{ this.$route.params.id }}</h1>
+				<h1>{{ this.$route.params.id }}'s Settings</h1>
 			</div>
 		</div>
 

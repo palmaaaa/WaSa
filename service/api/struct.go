@@ -32,7 +32,7 @@ type Photo struct {
 // Photo structure for the APIs
 type Photo struct {
 	Comments []database.CompleteComment `json:"comments"` // Number of comments of a photo
-	Likes    []database.User            `json:"likes"`    // Number of likes of a photo
+	Likes    []database.CompleteUser    `json:"likes"`    // Number of likes of a photo
 	Owner    string                     `json:"owner"`    // Unique id of the owner
 	PhotoId  int                        `json:"photo_id"` // Unique id of the photo
 	Date     time.Time                  `json:"date"`     // Date in which the photo was uploaded
@@ -40,7 +40,7 @@ type Photo struct {
 
 // User structure for the APIs
 type User struct {
-	IdUser string `json:"identifier"` // User's unique id
+	IdUser string `json:"user_id"` // User's unique id
 }
 
 // PhotoId structure for the APIs
@@ -65,18 +65,20 @@ type CommentId struct {
 
 // CompleteComment structure for the APIs
 type CompleteComment struct {
-	IdComment int64  // Identifier of a comment
-	IdPhoto   int64  // Photo unique id
-	IdUser    string // User's unique id
-	Comment   string // Comment content
+	IdComment int64  `json:"comment_id"` // Identifier of a comment
+	IdPhoto   int64  `json:"photo_id"`   // Photo unique id
+	IdUser    string `json:"user_id"`    // User's unique id
+	Nickname  string `json:"nickname"`   // Nickname of a user
+	Comment   string `json:"comment"`    // Comment content
 }
 
 // CompleteProfile structure for the APIs
 type CompleteProfile struct {
-	Name      string
-	Followers []database.User
-	Following []database.User
-	Posts     []database.Photo
+	Name      string           `json:"user_id"`
+	Nickname  string           `json:"nickname"`
+	Followers []database.User  `json:"followers"`
+	Following []database.User  `json:"following"`
+	Posts     []database.Photo `json:"posts"`
 }
 
 // Converts a User from the api package to a User of the database package
