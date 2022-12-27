@@ -34,9 +34,6 @@ export default {
 			this.logged = true
 		}
 	},
-	updated(){
-		// console.log("update main")
-	}
 }
 </script>
 

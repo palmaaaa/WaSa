@@ -26,7 +26,7 @@ export default {
             if (newid !== oldid){
                 this.loadInfo()
             }
-        }
+        },
     },
 
 	computed:{
@@ -98,7 +98,7 @@ export default {
                 // Get user profile: /users/:id
 				let response = await this.$axios.get("/users/"+this.$route.params.id);
 
-                console.log(response)
+                //console.log(response)
 
                 this.banStatus = false
                 this.userExists = true

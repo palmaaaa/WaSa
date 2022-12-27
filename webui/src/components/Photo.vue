@@ -4,22 +4,16 @@ export default {
 		return{
 			photoURL: "",
 			liked: false,
-			comment: "",
+			allComments: [],
 		}
 	},
 
 	props: ['owner','likes','comments',"upload_date","photo_id","isOwner"], 
 
 	methods:{
-		async loadPhoto(){
-			/*
-			//console.log("aoooo, ",this.photo_id)
-			let response = await this.$axios.get("/users/"+this.owner+"/photos/"+this.photo_id)
-			this.photoURL = response.config.baseURL+response.config.url // +"/"+
-			//console.log("aeeeeee, ",this.photoURL)
-			*/
-			//console.log(this.ret.__API_URL__)
-			this.photoURL = "http://localhost:3000"+"/users/"+this.owner+"/photos/"+this.photo_id // +"/"+this.owner+"/photos/"+this.photo_id 
+		loadPhoto(){
+			// Get photo : "/users/:id/photos/:photo_id"
+			this.photoURL = __API_URL__+  "/users/"+this.owner+"/photos/"+this.photo_id 
 		},
 
 		async deletePhoto(){
@@ -32,24 +26,12 @@ export default {
 			}
 		},
 
-		likeClick: function(){
-			console.log("clicked on likes")
-		},
-
-		commentClick: function(){
-			console.log("clicked on comments")
-		},
-
 		photoOwnerClick: function(){
-			console.log("clicked on photo owner")
 			this.$router.replace("/users/"+this.owner)
 		},
 
-		refreshComments(){
-			this.$forceUpdate()
-		},
+		async toggleLike() {
 
-		toggleLike() {
 			if(this.isOwner){ 
 				return
 			}
@@ -59,11 +41,11 @@ export default {
 			try{
 				if (!this.liked){
 					// Put like: /users/:id/photos/:photo_id/likes/:like_id"
-					this.$axios.put("/users/"+ this.owner +"/photos/"+this.photo_id+"/likes/"+ bearer)
+					await this.$axios.put("/users/"+ this.owner +"/photos/"+this.photo_id+"/likes/"+ bearer)
 					this.likes.push('temp')
 				}else{
 					// Delete like: /users/:id/photos/:photo_id/likes/:like_id"
-					this.$axios.delete("/users/"+ this.owner  +"/photos/"+this.photo_id+"/likes/"+ bearer)
+					await this.$axios.delete("/users/"+ this.owner  +"/photos/"+this.photo_id+"/likes/"+ bearer)
 					this.likes.pop()
 				}
 
@@ -73,14 +55,22 @@ export default {
 			}
       		
     	},
+
+		removeCommentFromList(value){
+			this.allComments = this.allComments.filter(item=> item.IdComment !== value)
+		}
 	},
 	
-
 	async mounted(){
 		this.loadPhoto()
 		if (this.likes != null){
 			this.liked = this.likes.some(obj => obj.IdUser === localStorage.getItem('token'))
 		}
+		if (this.comments != null){
+			this.allComments = this.comments
+			return
+		}
+		
 	},
 
 }
@@ -89,12 +79,14 @@ export default {
 <template>
 	<div class="container-fluid mt-3 mb-5 ">
 
-        <LikeModal :modal_id="'like_modal'+this.photo_id" />
+        <LikeModal :modal_id="'like_modal'+this.photo_id" :likes="this.likes" />
 
         <CommentModal :modal_id="'comment_modal'+this.photo_id" 
-		:comments_list="this.comments" 
+		:comments_list="this.allComments" 
 		:photo_owner="this.owner" 
 		:photo_id="this.photo_id"
+
+		@eliminateComment="this.removeCommentFromList"
 		/>
 
         <div class="d-flex flex-row justify-content-center">
@@ -130,7 +122,7 @@ export default {
 							data-bs-toggle="modal" :data-bs-target="'#comment_modal'+this.photo_id">
 
                                 <i class="my-comment-color fa-regular fa-comment me-1" @click="this.commentClick"></i>
-                                <i class="my-comment-color-2"> {{comments != null ? comments.length : 0}}</i>
+                                <i class="my-comment-color-2"> {{allComments != null ? allComments.length : 0}}</i>
 
                             </button>
                         </div>

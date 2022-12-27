@@ -28,8 +28,8 @@ export default {
 		},
 	},
 	mounted(){
-		console.log("identifier",this.identifier)
-		console.log(localStorage.getItem('token'))
+		//console.log("identifier",this.identifier)
+		//console.log(localStorage.getItem('token'))
 		if (localStorage.getItem('token')){
 			this.$router.replace("/home")
 		}

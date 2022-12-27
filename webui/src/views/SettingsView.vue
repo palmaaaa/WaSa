@@ -15,7 +15,7 @@ export default {
 				let resp = await this.$axios.put("/users/"+this.$route.params.id,{
 					nickname: this.nickname,
 				})
-				console.log(resp)
+				//console.log(resp)
 				this.nickname=""
 			}catch (e){
 				//console.log(e.toString())

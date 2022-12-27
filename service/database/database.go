@@ -96,6 +96,7 @@ type AppDatabase interface {
 	GetFollowers(User) ([]User, error)
 	GetFollowing(User) ([]User, error)
 	GetPhotosList(User, User) ([]Photo, error)
+	UncommentPhotoAuthor(PhotoId, CommentId) error
 
 	// Checks if a user (a) is banned by another (b). Returns a boolean
 	BannedUserCheck(a User, b User) (bool, error)
@@ -122,12 +123,11 @@ func New(db *sql.DB) (AppDatabase, error) {
 	}
 
 	// Activate foreign keys for db
-	/*
-		_, errPramga := db.Exec(`PRAGMA foreign_keys= ON`)
-		if errPramga != nil {
-			return nil, fmt.Errorf("error setting pragmas: %w", errPramga)
-		}
-	*/
+
+	_, errPramga := db.Exec(`PRAGMA foreign_keys= ON`)
+	if errPramga != nil {
+		return nil, fmt.Errorf("error setting pragmas: %w", errPramga)
+	}
 
 	// Check if table exists. If not, the database is empty, and we need to create the structure
 	var tableName string

@@ -34,7 +34,7 @@ export default {
 				});
 				this.users = response.data
 
-				console.log("search",response)
+				//console.log("search",response)
 
 			} catch (e) {
 				this.errormsg = e.toString();

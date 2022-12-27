@@ -5,7 +5,21 @@ export default {
             user: "",
         }
     },
-	props: ['content','author','photo_owner'],
+	props: ['content','author','photo_owner','comment_id','photo_id'],
+
+    methods:{
+        async deleteComment(){
+            try{
+                // Delete comment: "/users/:id/photos/:photo_id/comments/:comment_id"
+                await this.$axios.delete("/users/"+this.photo_owner+"/photos/"+this.photo_id+"/comments/"+this.comment_id)
+
+                this.$emit('eliminateComment',this.comment_id)
+
+            }catch (e){
+                console.log(e.toString())
+            }
+        },
+    },
 
     mounted(){
         this.user = localStorage.getItem('token')
@@ -24,7 +38,7 @@ export default {
             </div>
 
             <div class="col-2">
-                <button v-if="this.user === this.author || this.user === photo_owner" class="btn my-btn-comm">
+                <button v-if="this.user === this.author || this.user === photo_owner" class="btn my-btn-comm" @click="deleteComment">
                     <i class="fa-regular fa-trash-can my-trash-icon"></i>
                 </button>
             </div>

@@ -15,7 +15,7 @@ export default {
 				// Home get: "/users/:id/home"
 				let response = await this.$axios.get("/users/" + localStorage.getItem('token') + "/home")
 
-				console.log(response)
+				//console.log(response)
 				this.photos = response.data
 			} catch (e) {
 

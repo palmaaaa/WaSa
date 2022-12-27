@@ -84,3 +84,15 @@ func (db *appdbimpl) UncommentPhoto(p PhotoId, u User, c CommentId) error {
 
 	return nil
 }
+
+// Database function that removes a comment of a user from a photo ( by post author)
+func (db *appdbimpl) UncommentPhotoAuthor(p PhotoId, c CommentId) error {
+
+	_, err := db.c.Exec("DELETE FROM comments WHERE (id_photo = ? AND id_comment = ?)",
+		p.IdPhoto, c.IdComment)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

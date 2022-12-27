@@ -51,10 +51,26 @@ func (rt *_router) deleteComment(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
+	// The comment of a user x is being removed by the author of the post
+	if ps.ByName("id") == requestingUserId {
+
+		err = rt.db.UncommentPhotoAuthor(
+			PhotoId{IdPhoto: photo_id_64}.ToDatabase(),
+			CommentId{IdComment: comment_id_64}.ToDatabase())
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			ctx.Logger.WithError(err).Error("post-comment: failed to execute query for insertion")
+			return
+		}
+
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
 	// Function call to db for comment removal (only authors can remove their comments)
 	err = rt.db.UncommentPhoto(
 		PhotoId{IdPhoto: photo_id_64}.ToDatabase(),
-		User{IdUser: ps.ByName("id")}.ToDatabase(),
+		User{IdUser: requestingUserId}.ToDatabase(),
 		CommentId{IdComment: comment_id_64}.ToDatabase())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

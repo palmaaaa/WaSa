@@ -15,12 +15,12 @@ import LikeModal from './components/LikeModal.vue'
 import CommentModal from './components/CommentModal.vue'
 import PhotoComment from './components/PhotoComment.vue'
 
-
 import './assets/dashboard.css'
 import './assets/main.css'
 
 const app = createApp(App)
 app.config.globalProperties.$axios = axios;
+
 app.component("ErrorMsg", ErrorMsg);
 app.component("LoadingSpinner", LoadingSpinner);
 app.component("Navbar", Navbar);
