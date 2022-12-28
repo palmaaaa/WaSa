@@ -124,15 +124,17 @@ func checkFormatPhoto(body io.ReadCloser, newReader io.ReadCloser, ctx reqcontex
 
 // Function that returns the path of the photo folder for a certain user
 func getUserPhotoFolder(user_id string) (UserPhotoFoldrPath string, err error) {
-	curPath, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
+
+	/*
+		curPath, err := os.Getwd()
+		if err != nil {
+			return "", err
+		}
+	*/
 
 	// Path of the photo dir "./media/user_id/photos/"
 	photoPath := filepath.Join(
-		filepath.Join(curPath, "media"),
-		filepath.Join(user_id, "photos"))
+		filepath.Join("/usr", "local", "backend", "media", user_id, "photos"))
 
 	return photoPath, nil
 }
