@@ -44,13 +44,13 @@ export default {
 					await this.$axios.put("/users/"+ this.owner +"/photos/"+this.photo_id+"/likes/"+ bearer)
 					this.likes.push('temp')
 
-					console.log("ma ci arrivo qui?? BUG_ push")
+					//console.log("ma ci arrivo qui?? BUG_ push")
 				}else{
 					// Delete like: /users/:id/photos/:photo_id/likes/:like_id"
 					await this.$axios.delete("/users/"+ this.owner  +"/photos/"+this.photo_id+"/likes/"+ bearer)
 					this.likes.pop()
 
-					console.log("ma ci arrivo qui?? BUG_ pop")
+					//console.log("ma ci arrivo qui?? BUG_ pop")
 				}
 
 				this.liked = !this.liked;
