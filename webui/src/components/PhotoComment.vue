@@ -38,7 +38,7 @@ export default {
             </div>
 
             <div class="col-2">
-                <button v-if="this.user === this.author || this.user === this.photo_owner" class="btn my-btn-comm" @click="deleteComment">
+                <button v-if="user === author || user === photo_owner" class="btn my-btn-comm" @click="deleteComment">
                     <i class="fa-regular fa-trash-can my-trash-icon"></i>
                 </button>
             </div>

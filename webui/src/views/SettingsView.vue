@@ -9,13 +9,12 @@ export default {
 
 	methods:{
 		async modifyNickname(){
-			//console.log("aooo")
 			try{
 				// Nickname put: /users/:id
 				let resp = await this.$axios.put("/users/"+this.$route.params.id,{
 					nickname: this.nickname,
 				})
-				//console.log(resp)
+
 				this.nickname=""
 			}catch (e){
 				//console.log(e.toString())
@@ -24,7 +23,6 @@ export default {
 	},
 
 }
-// To add likes and comments put modal scrollable from bootstrap
 </script>
 
 <template>
@@ -44,12 +42,12 @@ export default {
 						placeholder="Your new nickname..."
 						maxlength="16"
 						minlength="3"
-						v-model="this.nickname"
+						v-model="nickname"
 					/>
 					<div class="input-group-append">
 						<button class="btn btn-outline-secondary" 
-						@click="this.modifyNickname"
-						:disabled="this.nickname == null || this.nickname.length >16 || this.nickname.length <3">
+						@click="modifyNickname"
+						:disabled="nickname == null || nickname.length >16 || nickname.length <3">
 						Modify</button>
 					</div>
 				</div>

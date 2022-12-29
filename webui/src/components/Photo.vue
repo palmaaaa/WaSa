@@ -43,10 +43,14 @@ export default {
 					// Put like: /users/:id/photos/:photo_id/likes/:like_id"
 					await this.$axios.put("/users/"+ this.owner +"/photos/"+this.photo_id+"/likes/"+ bearer)
 					this.likes.push('temp')
+
+					console.log("ma ci arrivo qui?? BUG_ push")
 				}else{
 					// Delete like: /users/:id/photos/:photo_id/likes/:like_id"
 					await this.$axios.delete("/users/"+ this.owner  +"/photos/"+this.photo_id+"/likes/"+ bearer)
 					this.likes.pop()
+
+					console.log("ma ci arrivo qui?? BUG_ pop")
 				}
 
 				this.liked = !this.liked;
@@ -57,16 +61,12 @@ export default {
     	},
 
 		removeCommentFromList(value){
-			//console.log("pre ", this.allComments)
 			this.allComments = this.allComments.filter(item=> item.comment_id !== value)
-			//console.log("post ", this.allComments)
 		}
 	},
 	
 	async mounted(){
-		this.loadPhoto()
-
-		//console.log("commenti", this.comments)
+		await this.loadPhoto()
 
 		if (this.likes != null){
 			this.liked = this.likes.some(obj => obj.user_id === localStorage.getItem('token'))
@@ -85,15 +85,15 @@ export default {
 <template>
 	<div class="container-fluid mt-3 mb-5 ">
 
-        <LikeModal :modal_id="'like_modal'+this.photo_id" 
-		:likes="this.likes" />
+        <LikeModal :modal_id="'like_modal'+photo_id" 
+		:likes="likes" />
 
-        <CommentModal :modal_id="'comment_modal'+this.photo_id" 
-		:comments_list="this.allComments" 
-		:photo_owner="this.owner" 
-		:photo_id="this.photo_id"
+        <CommentModal :modal_id="'comment_modal'+photo_id" 
+		:comments_list="allComments" 
+		:photo_owner="owner" 
+		:photo_id="photo_id"
 
-		@eliminateComment="this.removeCommentFromList"
+		@eliminateComment="removeCommentFromList"
 		/>
 
         <div class="d-flex flex-row justify-content-center">
@@ -101,11 +101,11 @@ export default {
             <div class="card my-card">
                 <div class="d-flex justify-content-end">
 
-                    <button v-if="this.isOwner" class="btn btn-primary" @click="this.deletePhoto">Delete</button>
+                    <button v-if="isOwner" class="btn btn-primary" @click="deletePhoto">Delete</button>
 
                 </div>
                 <div class="d-flex justify-content-center photo-background-color">
-                    <img :src="this.photoURL" class="card-img-top img-fluid">
+                    <img :src="photoURL" class="card-img-top img-fluid">
                 </div>
 
                 <div class="card-body">
@@ -114,21 +114,21 @@ export default {
 
                         <div class="d-flex flex-row justify-content-end align-items-center mb-2">
 
-							<button class="btn my-trnsp-btn m-0 p-1 me-auto" @click="this.photoOwnerClick">
+							<button class="btn my-trnsp-btn m-0 p-1 me-auto" @click="photoOwnerClick">
                             	<i> From {{owner}}</i>
 							</button>
 
                             <button class="btn my-trnsp-btn m-0 p-1 d-flex justify-content-center align-items-center">
-                                <i @click="toggleLike" :class="'me-1 my-heart-color w-100 h-100 fa '+(this.liked ? 'fa-heart' : 'fa-heart-o') "></i>
-                                <i data-bs-toggle="modal" :data-bs-target="'#like_modal'+this.photo_id" class="my-comment-color ">
+                                <i @click="toggleLike" :class="'me-1 my-heart-color w-100 h-100 fa '+(liked ? 'fa-heart' : 'fa-heart-o') "></i>
+                                <i data-bs-toggle="modal" :data-bs-target="'#like_modal'+photo_id" class="my-comment-color ">
                                     {{likes != null ? likes.length : 0}}
                                 </i>
                             </button>
 
                             <button class="btn my-trnsp-btn m-0 p-1  d-flex justify-content-center align-items-center" 
-							data-bs-toggle="modal" :data-bs-target="'#comment_modal'+this.photo_id">
+							data-bs-toggle="modal" :data-bs-target="'#comment_modal'+photo_id">
 
-                                <i class="my-comment-color fa-regular fa-comment me-1" @click="this.commentClick"></i>
+                                <i class="my-comment-color fa-regular fa-comment me-1" @click="commentClick"></i>
                                 <i class="my-comment-color-2"> {{allComments != null ? allComments.length : 0}}</i>
 
                             </button>

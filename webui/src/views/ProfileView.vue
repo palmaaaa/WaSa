@@ -2,7 +2,7 @@
 export default {
 	data: function() {
 		return {
-			errormsg: null,
+			// errormsg: null,
 
 			userExists: false,
 			banStatus: false,
@@ -33,9 +33,11 @@ export default {
 
 	computed:{
 
+        
         currentPath(){
             return this.$route.params.id
         },
+        
 
 		sameUser(){
 			return this.$route.params.id === localStorage.getItem('token')
@@ -100,8 +102,6 @@ export default {
                 // Get user profile: /users/:id
 				let response = await this.$axios.get("/users/"+this.$route.params.id);
 
-                //console.log("profileview, ",response)
-
                 this.banStatus = false
                 this.userExists = true
                 this.currentIsBanned = false
@@ -127,18 +127,16 @@ export default {
 
 			}catch(e){
 				this.currentIsBanned = true
-				//console.log(e.toString())
 			}
 		},
 
         goToSettings(){
-            //this.$emit('requestUpdateView','settings')
             this.$router.push(this.$route.params.id+'/settings')
         },
 	},
 
 	async mounted(){
-		this.loadInfo()
+		await this.loadInfo()
 	},
 
 }
@@ -146,7 +144,7 @@ export default {
 
 <template>
 
-    <div class="container-fluid" v-if="!this.currentIsBanned && this.userExists">
+    <div class="container-fluid" v-if="!currentIsBanned && userExists">
 
         <div class="row">
             <div class="col-12 d-flex justify-content-center">
@@ -155,14 +153,14 @@ export default {
                     <div class="row">
                         <div class="col">
                             <div class="card-body d-flex justify-content-between align-items-center">
-                                <h5 class="card-title p-0 me-auto mt-auto">{{this.nickname}} @{{this.$route.params.id}}</h5>
+                                <h5 class="card-title p-0 me-auto mt-auto">{{nickname}} @{{this.$route.params.id}}</h5>
 
                                 <button v-if="!sameUser && !banStatus" @click="followClick" class="btn btn-primary ms-2">
-                                    {{this.followStatus ? "Unfollow" : "Follow"}}
+                                    {{followStatus ? "Unfollow" : "Follow"}}
                                 </button>
 
                                 <button v-if="!sameUser" @click="banClick" class="btn btn-primary ms-2">
-                                    {{this.banStatus ? "Unban" : "Ban"}}
+                                    {{banStatus ? "Unban" : "Ban"}}
                                 </button>
 
                                 <button v-else class="btn btn-primary ms-2" @click="goToSettings">
@@ -177,25 +175,25 @@ export default {
                             <div class="container-fluid d-flex justify-content-between align-items-center">
                                 <div class="row">
                                     <div class="col">
-                                        <h6 class=" p-0 ">Posts: {{this.postCnt}}</h6>
+                                        <h6 class=" p-0 ">Posts: {{postCnt}}</h6>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col">
-                                        <h6 class=" p-0 ">Followers: {{this.followerCnt}}</h6>
+                                        <h6 class=" p-0 ">Followers: {{followerCnt}}</h6>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col">
-                                        <h6 class=" p-0 ">Following: {{this.followingCnt}}</h6>
+                                        <h6 class=" p-0 ">Following: {{followingCnt}}</h6>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <input id="fileUploader" type="file" class="profile-file-upload" @change="this.uploadFile" accept=".jpg, .png">
-                        <label v-if="this.sameUser" class="btn btn-primary m-0 p-0" for="fileUploader"> Upload a new photo! </label>
+                        <input id="fileUploader" type="file" class="profile-file-upload" @change="uploadFile" accept=".jpg, .png">
+                        <label v-if="sameUser" class="btn btn-primary m-0 p-0" for="fileUploader"> Upload a new photo! </label>
                     </div>
                 </div>
             </div>
@@ -225,7 +223,7 @@ export default {
                     :comments="photo.comments" 
                     :likes="photo.likes" 
                     :upload_date="photo.date" 
-                    :isOwner="this.sameUser" />
+                    :isOwner="sameUser" />
 
                 </div>
                 

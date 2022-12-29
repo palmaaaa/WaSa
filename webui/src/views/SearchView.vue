@@ -62,7 +62,8 @@ export default {
 		:nickname="user.nickname" 
 		@clickedUser="goToProfile"/>
 
-		<p v-if="this.users.length == 0" class="no-result-text d-flex justify-content-center"> No users found.</p>
+		<p v-if="users.length == 0" class="no-result-text d-flex justify-content-center"> No users found.</p>
+
 		<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
 	</div>
 </template>
@@ -73,5 +74,4 @@ export default {
 	color: white;
 	font-style: italic;
 }
-
 </style>

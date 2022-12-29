@@ -1,19 +1,18 @@
 <script>
 export default {
 	props: ['identifier','nickname'],
+
     methods:{
+
         clickedUser(){
-            //console.log(this.identifier)
             this.$emit('clickedUser',this.identifier)
         }
-    }
+    },
 }
 </script>
 
 <template>
     
-    
-
     <div class="row mb-2 mt-2">
         <div class="col d-flex justify-content-center">
             <div class="user-mini-card card bg-transparent border-start">
@@ -32,7 +31,6 @@ export default {
 }
 
 .user-mini-card{
-    /*color: var(--color-text);*/
     color: black;
     width: 25%;
     border: none;

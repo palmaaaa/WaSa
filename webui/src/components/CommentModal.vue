@@ -37,27 +37,19 @@ export default {
 			this.$emit('eliminateComment',value)
 		}
 	},
-
-	/*
-	mounted(){
-		console.log("commentmodal", this.comments_list)
-	},
-	*/
 }
 </script>
 
 <template>
-    <div class="modal fade my-modal-disp-none" :id="this.modal_id" tabindex="-1" aria-hidden="true">
+    <div class="modal fade my-modal-disp-none" :id="modal_id" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog modal-dialog-scrollable ">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" :id="this.modal_id">Comments</h1>
+                    <h1 class="modal-title fs-5" :id="modal_id">Comments</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-
-				<!-- :comments_list="this.comments_list" -->
                 <div class="modal-body">
                     <PhotoComment v-for="(comm,index) in comments_list" 
 					:key="index" 
@@ -66,10 +58,10 @@ export default {
 					:comment_id="comm.comment_id"
 					:photo_id="comm.photo_id"
 					:content="comm.comment"
-					:photo_owner="this.photo_owner"
+					:photo_owner="photo_owner"
 					
 
-					@eliminateComment="this.eliminateCommentToParent"
+					@eliminateComment="eliminateCommentToParent"
 					/>
 
                 </div>
@@ -79,14 +71,14 @@ export default {
                             <div class="mb-3 me-auto">
                                 
                                 <textarea class="form-control" id="exampleFormControlTextarea1" 
-								placeholder="Add a comment..." rows="1" maxLength="30" v-model="this.commentValue"></textarea>
+								placeholder="Add a comment..." rows="1" maxLength="30" v-model="commentValue"></textarea>
                             </div>
                         </div>
 
                         <div class="col-2 d-flex align-items-center">
                             <button type="button" class="btn btn-primary" 
-							@click.prevent="this.addComment" 
-							:disabled="this.commentValue.length < 1 || this.commentValue.length > 30">
+							@click.prevent="addComment" 
+							:disabled="commentValue.length < 1 || commentValue.length > 30">
 							Send
 							</button>
                         </div>

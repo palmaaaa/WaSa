@@ -42,7 +42,7 @@ export default {
 		<div class="row">
 			<div class="col p-0">
 				<main >
-					<Navbar v-if="this.logged" 
+					<Navbar v-if="logged" 
 					@logoutNavbar="logout" 
 					@requestUpdateView="updateView"
 					@searchNavbar="search"/>
@@ -50,7 +50,7 @@ export default {
 					<RouterView 
 					@updatedLoggedChild="updateLogged" 
 					@requestUpdateView="updateView"
-					:searchValue="this.searchValue"/>
+					:searchValue="searchValue"/>
 				</main>
 			</div>
 		</div>

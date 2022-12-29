@@ -28,8 +28,6 @@ export default {
 		},
 	},
 	mounted(){
-		//console.log("identifier",this.identifier)
-		//console.log(localStorage.getItem('token'))
 		if (localStorage.getItem('token')){
 			this.$router.replace("/home")
 		}
@@ -65,7 +63,7 @@ export default {
 
 				<div class="row mt-2 mb-5 ">
 					<div class="col ">
-						<button class="btn btn-dark" :disabled="this.identifier == null || this.identifier.length >16 || this.identifier.length <3"> 
+						<button class="btn btn-dark" :disabled="identifier == null || identifier.length >16 || identifier.length <3"> 
 						Register/Login 
 						</button>
 					</div>
@@ -84,5 +82,4 @@ export default {
 .login-title {
     color: black;
 }
-
 </style>

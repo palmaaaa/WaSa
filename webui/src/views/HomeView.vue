@@ -2,33 +2,31 @@
 export default {
 	data: function () {
 		return {
-			// errormsg: null,
+			errormsg: null,
 			photos: [],
 		}
 	},
 
 	methods: {
+		
 		async loadStream() {
 			try {
+				this.errormsg = null
 				// Home get: "/users/:id/home"
 				let response = await this.$axios.get("/users/" + localStorage.getItem('token') + "/home")
 
-				//console.log("homevie",response)
 				if (response.data != null){
 					this.photos = response.data
 				}
 				
 			} catch (e) {
-
+				this.errormsg = e.toString()
 			}
 		}
 	},
 
 	async mounted() {
-		// this.id = 
 		await this.loadStream()
-
-		//console.log("prova home", this.photos)
 	}
 
 }
@@ -36,6 +34,8 @@ export default {
 
 <template>
 	<div class="container-fluid">
+		<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+
 		<div class="row">
 			<Photo
 				v-for="(photo,index) in photos"
@@ -48,10 +48,9 @@ export default {
 			/>
 		</div>
 
-		<div v-if="this.photos.length === 0" class="row ">
+		<div v-if="photos.length === 0" class="row ">
 			<h1 class="d-flex justify-content-center mt-5" style="color: white;">There's no content yet, follow somebody!</h1>
 		</div>
-		<!--<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>-->
 	</div>
 </template>
 
