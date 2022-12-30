@@ -5,6 +5,7 @@ export default {
 			photoURL: "",
 			liked: false,
 			allComments: [],
+			allLikes: [],
 		}
 	},
 
@@ -41,11 +42,9 @@ export default {
 			try{
 				if (!this.liked){
 
-					console.log("likes", this.likes)
-
 					// Put like: /users/:id/photos/:photo_id/likes/:like_id"
 					await this.$axios.put("/users/"+ this.owner +"/photos/"+this.photo_id+"/likes/"+ bearer)
-					this.likes.push({
+					this.allLikes.push({
 						user_id: bearer,
 						nickname: bearer
 					})
@@ -53,7 +52,7 @@ export default {
 				}else{
 					// Delete like: /users/:id/photos/:photo_id/likes/:like_id"
 					await this.$axios.delete("/users/"+ this.owner  +"/photos/"+this.photo_id+"/likes/"+ bearer)
-					this.likes.pop()
+					this.allLikes.pop()
 				}
 
 				this.liked = !this.liked;
@@ -65,18 +64,25 @@ export default {
 
 		removeCommentFromList(value){
 			this.allComments = this.allComments.filter(item=> item.comment_id !== value)
-		}
+		},
+
+		addCommentToList(comment){
+			this.allComments.push(comment)
+		},
 	},
 	
 	async mounted(){
 		await this.loadPhoto()
 
 		if (this.likes != null){
-			this.liked = this.likes.some(obj => obj.user_id === localStorage.getItem('token'))
+			this.allLikes = this.likes
+		}
+
+		if (this.likes != null){
+			this.liked = this.allLikes.some(obj => obj.user_id === localStorage.getItem('token'))
 		}
 		if (this.comments != null){
 			this.allComments = this.comments
-			return
 		}
 		
 		
@@ -89,7 +95,7 @@ export default {
 	<div class="container-fluid mt-3 mb-5 ">
 
         <LikeModal :modal_id="'like_modal'+photo_id" 
-		:likes="likes" />
+		:likes="allLikes" />
 
         <CommentModal :modal_id="'comment_modal'+photo_id" 
 		:comments_list="allComments" 
@@ -97,6 +103,7 @@ export default {
 		:photo_id="photo_id"
 
 		@eliminateComment="removeCommentFromList"
+		@addComment="addCommentToList"
 		/>
 
         <div class="d-flex flex-row justify-content-center">
@@ -124,7 +131,7 @@ export default {
                             <button class="btn my-trnsp-btn m-0 p-1 d-flex justify-content-center align-items-center">
                                 <i @click="toggleLike" :class="'me-1 my-heart-color w-100 h-100 fa '+(liked ? 'fa-heart' : 'fa-heart-o') "></i>
                                 <i data-bs-toggle="modal" :data-bs-target="'#like_modal'+photo_id" class="my-comment-color ">
-                                    {{likes != null ? likes.length : 0}}
+                                    {{allLikes.length}}
                                 </i>
                             </button>
 

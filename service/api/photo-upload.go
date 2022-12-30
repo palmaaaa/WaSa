@@ -133,8 +133,7 @@ func getUserPhotoFolder(user_id string) (UserPhotoFoldrPath string, err error) {
 	*/
 
 	// Path of the photo dir "./media/user_id/photos/"
-	photoPath := filepath.Join(
-		filepath.Join("/usr", "local", "backend", "media", user_id, "photos"))
+	photoPath := filepath.Join(photoFolder, user_id, "photos") // "/usr", "local", "/backend", "media"
 
 	return photoPath, nil
 }

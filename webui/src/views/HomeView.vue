@@ -42,8 +42,8 @@ export default {
 				:key="index"
 				:owner="photo.owner"
 				:photo_id="photo.photo_id"
-				:comments="photo.comments"
-				:likes="photo.likes"
+				:comments="photo.comments != nil ? photo.comments : []"
+				:likes="photo.likes != nil ? photo.likes : []"
 				:upload_date="photo.date"
 			/>
 		</div>

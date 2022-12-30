@@ -2,17 +2,16 @@
 # docker build -t wasaphoto-backend:latest -f Dockerfile.backend .
 #
 # Execute the Dockerfile.backend using ->
-# docker run -it -v /usr/local/backend/:/usr/local/backend -p 3000:3000 --rm wasaphoto-backend:latest
+# docker run -it -v /home/wasa/Desktop/WASAPhoto/:/backend/ -p 3000:3000 --rm wasaphoto-backend:latest
 
 FROM golang:1.19.4 as backend_compiler
-WORKDIR /src/wasaphoto_backend/
-COPY . /src/
-RUN go build -o /src/wasaphoto_backend/ /src/cmd/webapi 
+WORKDIR /home/Desktop/GoFiles/
+COPY . .
+RUN go build -o /home/Desktop/Executable/ ./cmd/webapi
 
 FROM debian:stable
-WORKDIR /bin/backend/
-RUN mkdir /usr/local/backend/ && mkdir /usr/local/backend/media/
-COPY --from=backend_compiler /src/wasaphoto_backend/ /bin/backend/
-VOLUME ["/usr/local/backend/"]
+WORKDIR /executable/
+COPY --from=backend_compiler /home/Desktop/Executable/ .
 EXPOSE 3000
+VOLUME ["/backend/"]
 CMD ["./webapi"]

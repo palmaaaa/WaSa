@@ -58,6 +58,7 @@ export default {
 <template>
 	<div class="container-fluid h-100 ">
 		<UserMiniCard v-for="(user,index) in users" 
+		:key="index"
 		:identifier="user.user_id" 
 		:nickname="user.nickname" 
 		@clickedUser="goToProfile"/>
