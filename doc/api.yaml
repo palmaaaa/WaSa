@@ -479,7 +479,7 @@ components:
       description: A comment unique identifier
       required: true
       schema: 
-        $ref: "#/components/parameters/photo_id/schema"
+        $ref: "#/components/schemas/photo_identifier/properties/photo_id"
       example: 118
         #description: Comment unique id
         #type: integer
@@ -495,7 +495,7 @@ components:
       description: A follower's unique identifier. It's exactly his *identifier*
       required: true
       schema: 
-        $ref: "#/components/parameters/identifier/schema"
+        $ref: "#/components/schemas/user_nickname/properties/nickname"
       example: "Piccioni"
         #description: Follower unique id
         #type: string
@@ -511,7 +511,7 @@ components:
       description: A like unique identifier. It's exactly the *identifier* of the user that liked the photo
       required: true
       schema: 
-        $ref: "#/components/parameters/identifier/schema"
+        $ref: "#/components/schemas/user_nickname/properties/nickname"
       example: "LauraZ"
         #description: Like unique id
         #type: string
@@ -527,7 +527,7 @@ components:
       description: A banned user unique identifier. It's exactly the *identifier* of the user
       required: true
       schema:
-        $ref: "#/components/parameters/identifier/schema"
+        $ref: "#/components/schemas/user_nickname/properties/nickname"
       example: "Akille"
         #description: Banned user unique id
         #type: string
@@ -888,6 +888,10 @@ components:
 #''''''''''''''''''''''''''''''''''''''''''''''''''''''''     
     partial_content:
       description: Response associated to the 206 http status (The requested resource has partial info)
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/complete_profile" 
 #''''''''''''''''''''''''''''''''''''''''''''''''''''''''      
     unauthorized:
       description:  Response associated to the 401 http status (Access token is missing. User is not logged in)
