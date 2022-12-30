@@ -225,7 +225,7 @@ paths:
           $ref: "#/components/responses/internal_server_error"      
           
       security:
-       - bearerAuth: [] 
+        - bearerAuth: [] 
 #=====================================================================================
   /users/{id}/home:
     parameters: 
@@ -267,7 +267,8 @@ paths:
           image/*:
             schema:
               $ref: "#/components/schemas/raw_photo"
-            example: "010110010"
+            example:
+              photo_data: "010110010"
         required: true
 
       responses:
