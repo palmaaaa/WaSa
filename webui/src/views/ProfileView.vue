@@ -33,7 +33,6 @@ export default {
 
 	computed:{
 
-        
         currentPath(){
             return this.$route.params.id
         },
@@ -54,15 +53,15 @@ export default {
 
             reader.readAsArrayBuffer(file);
 
-            reader.onload = () => {
+            reader.onload = async () => {
                 // Post photo: /users/:id/photos
-                this.$axios.post("/users/"+this.$route.params.id+"/photos", reader.result, {
+                await this.$axios.post("/users/"+this.$route.params.id+"/photos", reader.result, {
                     headers: {
                     'Content-Type': file.type
                     },
                 })
             };
-            location.reload()
+            // location.reload()
 
         },
 
@@ -133,6 +132,10 @@ export default {
         goToSettings(){
             this.$router.push(this.$route.params.id+'/settings')
         },
+
+        removePhotoFromList(photo_id){
+			this.photos = this.photos.filter(item => item.photo_id !== photo_id)
+		},
 	},
 
 	async mounted(){
@@ -238,7 +241,10 @@ export default {
                     :comments="photo.comments" 
                     :likes="photo.likes" 
                     :upload_date="photo.date" 
-                    :isOwner="sameUser" />
+                    :isOwner="sameUser" 
+                    
+                    @removePhoto="removePhotoFromList"
+                    />
 
                 </div>
                 
