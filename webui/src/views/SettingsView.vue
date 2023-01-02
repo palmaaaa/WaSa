@@ -33,6 +33,15 @@ export default {
 			</div>
 		</div>
 
+		<div class="row ">
+			<div class="col-12 d-flex justify-content-center">
+				<p class="me-1" style="color: var(--color-red-danger);">[Disclaimer] </p> <p> A user has this structure: nickname @identifier. </p>
+			</div>
+			<div class="col-12 d-flex justify-content-center">
+				<p>Username has been intepreted as a nickname (they're the same thing).  </p>
+			</div>
+		</div>
+
 		<div class="row mt-2">
 			<div class="col d-flex justify-content-center">
 				<div class="input-group mb-3 w-25">

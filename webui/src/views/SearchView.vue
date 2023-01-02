@@ -19,6 +19,7 @@ export default {
 		async loadSearchedUsers(){
 			this.errormsg = null;
 			if (
+				this.searchValue === undefined ||
 				this.searchValue === "" || 
 				this.searchValue.includes("?") ||
 			 	this.searchValue.includes("_")){

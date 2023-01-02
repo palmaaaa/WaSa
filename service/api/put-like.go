@@ -72,8 +72,8 @@ func (rt *_router) putLike(w http.ResponseWriter, r *http.Request, ps httprouter
 		PhotoId{IdPhoto: photo_id_64}.ToDatabase(),
 		User{IdUser: pathLikeId}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("put-like: error executing insert query")
-		w.WriteHeader(http.StatusInternalServerError)
+		// ctx.Logger.WithError(err).Error("put-like: error executing insert query")
+		w.WriteHeader(http.StatusNoContent)
 		return
 	}
 

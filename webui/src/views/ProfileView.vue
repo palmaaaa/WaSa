@@ -55,14 +55,23 @@ export default {
 
             reader.onload = async () => {
                 // Post photo: /users/:id/photos
-                await this.$axios.post("/users/"+this.$route.params.id+"/photos", reader.result, {
+                let response = await this.$axios.post("/users/"+this.$route.params.id+"/photos", reader.result, {
                     headers: {
                     'Content-Type': file.type
                     },
                 })
+                //console.log(response)
+                /*
+                this.photos.unshift({
+                    owner: response.data.owner,
+                    date: response.data.date,
+                    photo_id: response.data.photo_id,
+                    likes: response.data.likes,
+                    comments: response.data.comments,
+                })
+                */
+                this.photos.unshift(response.data)
             };
-            // location.reload()
-
         },
 
 		async followClick(){
@@ -119,10 +128,9 @@ export default {
 				this.followingCnt = response.data.following != null? response.data.following.length : 0
 				this.postCnt = response.data.posts != null ? response.data.posts.length : 0
 				this.followStatus = response.data.followers != null ? response.data.followers.find(obj => obj.user_id === localStorage.getItem('token')) : false
-                
-                this.photos = response.data.posts
-                this.followers = response.data.followers
-                this.following = response.data.following
+                this.photos = response.data.posts != null ? response.data.posts : []
+                this.followers = response.data.followers != null ? response.data.followers : []
+                this.following = response.data.following != null ? response.data.following : []
 
 			}catch(e){
 				this.currentIsBanned = true
@@ -187,22 +195,6 @@ export default {
                             <h6 class=" p-0 me-3">Following: {{followingCnt}}</h6>
                         </div>
                     </div>
-
-                    <!--
-                    <div class="row mt-2 mb-2">
-                        <div class="col-4"></div>
-
-                        
-                        <div class="col-4">
-                            <input id="fileUploader" type="file" class="profile-file-upload" @change="uploadFile" accept=".jpg, .png">
-                            <label v-if="sameUser" class="btn btn-primary m-0 p-0 w-100" for="fileUploader"> Upload a new photo! </label>
-                        </div>
-                        
-
-                        <div class="col-4"></div>
-                    </div>
-                    -->
-
                 </div>
             </div>
         </div>

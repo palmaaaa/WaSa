@@ -102,7 +102,14 @@ func (rt *_router) postPhoto(w http.ResponseWriter, r *http.Request, ps httprout
 
 	w.WriteHeader(http.StatusCreated)
 	// controllaerrore
-	_ = json.NewEncoder(w).Encode(PhotoId{IdPhoto: photoIdInt})
+	// _ = json.NewEncoder(w).Encode(PhotoId{IdPhoto: photoIdInt})
+	_ = json.NewEncoder(w).Encode(Photo{
+		Comments: nil,
+		Likes:    nil,
+		Owner:    photo.Owner,
+		Date:     photo.Date,
+		PhotoId:  int(photoIdInt),
+	})
 
 }
 
@@ -125,15 +132,8 @@ func checkFormatPhoto(body io.ReadCloser, newReader io.ReadCloser, ctx reqcontex
 // Function that returns the path of the photo folder for a certain user
 func getUserPhotoFolder(user_id string) (UserPhotoFoldrPath string, err error) {
 
-	/*
-		curPath, err := os.Getwd()
-		if err != nil {
-			return "", err
-		}
-	*/
-
 	// Path of the photo dir "./media/user_id/photos/"
-	photoPath := filepath.Join(photoFolder, user_id, "photos") // "/usr", "local", "/backend", "media"
+	photoPath := filepath.Join(photoFolder, user_id, "photos")
 
 	return photoPath, nil
 }

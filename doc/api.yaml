@@ -41,7 +41,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/user_login"
-             
+
         required: true
       responses:
         '201':
@@ -49,7 +49,7 @@ paths:
           content:
             application/json:
               schema:
-               $ref: "#/components/schemas/login_return"
+                $ref: "#/components/schemas/login_return"
 #=====================================================================================
   /users:
     get:
@@ -482,13 +482,6 @@ components:
       schema: 
         $ref: "#/components/schemas/photo_identifier/properties/photo_id"
       example: 118
-        #description: Comment unique id
-        #type: integer
-        #format: int64
-        #minimum: 0
-        #maximum: 9999
-        #example: 122
-        #readOnly: true
 #........................................................        
     follower_id:
       name: follower_id
@@ -498,13 +491,6 @@ components:
       schema: 
         $ref: "#/components/schemas/user_nickname/properties/nickname"
       example: "Piccioni"
-        #description: Follower unique id
-        #type: string
-        #pattern: '^.*?$'
-        #example: Z9z212l
-        #minLength: 3
-        #maxLength: 16
-        #readOnly: true
 #........................................................       
     like_id:
       name: like_id
@@ -514,13 +500,6 @@ components:
       schema: 
         $ref: "#/components/schemas/user_nickname/properties/nickname"
       example: "LauraZ"
-        #description: Like unique id
-        #type: string
-        #pattern: '^.*?$'
-        #example: Nxjsn12
-        #minLength: 3
-        #maxLength: 16
-        #readOnly: true
 #........................................................       
     banned_user_id:
       name: banned_user_id
@@ -530,13 +509,6 @@ components:
       schema:
         $ref: "#/components/schemas/user_nickname/properties/nickname"
       example: "Akille"
-        #description: Banned user unique id
-        #type: string
-        #pattern: '^.*?$'
-        #example: Nxjsn12
-        #minLength: 3
-        #maxLength: 16
-        #readOnly: true
 #........................................................      
     query_id:
       name: id
@@ -601,12 +573,6 @@ components:
       properties:
         comment_id:
           $ref: "#/components/schemas/photo_identifier/properties/photo_id"
-          #description: Comment id
-          #type: integer
-          #format: int64
-          #minimum: 0
-          #maximum: 9999
-          #example: 965
       example:
         comment_id: 965
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||        
@@ -682,21 +648,8 @@ components:
           readOnly: true
         photo_id:
           $ref: "#/components/schemas/photo_identifier/properties/photo_id"
-          #description: The photo unique identifier
-          #type: integer
-          #format: int64
-          #minimum: 0
-          #maximum: 9999
-          #example: 3
-          #readOnly: true
         owner:
           $ref: "#/components/schemas/user_nickname/properties/nickname"
-          #description: Unique identifier of the photo author
-          #type: string
-          #minLength: 3
-          #maxLength: 16
-          #pattern: '^.*?$'
-          #example: "Mariucc"
       example: 
         comments:
           - user_id: "miky"
@@ -777,7 +730,7 @@ components:
           minItems: 0
           maxItems: 10
           items:
-             $ref: "#/components/schemas/complete_user"
+            $ref: "#/components/schemas/complete_user"
           example:
             - user_id: Wario21
               nickname: marietto21
@@ -813,7 +766,7 @@ components:
                   nickname: "warietto21"
                 - user_id: "giulio"
                   nickname: "Milioo"
-                 
+
             following:
               description: Array of followed users
               type: array
@@ -851,21 +804,12 @@ components:
                   date: 2022-11-22T13:10:14Z
                   photo_id: 7836
                   owner: "PulpFiction"
-             
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||            
     user_login:
       description: Identifier sent by user during the login
       type: object
       properties:
         identifier:
-          #description: Identifier of a user
-          # change here if you decide to use an integer
-          # or any other type of identifier
-          #type: string
-          #minLength: 3
-          #maxLength: 16
-          #pattern: '^.*?$'
-          #example: "abcdef012345"
           $ref: "#/components/schemas/user_nickname/properties/nickname"
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||          
     login_return:
@@ -873,12 +817,6 @@ components:
       type: object
       properties:
         name:
-          #description: Identifier of a user
-          #type: string
-          #minLength: 3
-          #maxLength: 16
-          #pattern: '^.*?$'
-          #example: "Maria"
           $ref: "#/components/schemas/user_nickname/properties/nickname"
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 #_____________________________________________________________________________________________________  
@@ -932,7 +870,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/photo_identifier"
+            $ref: "#/components/schemas/photo"
 #''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     profile:
       description: All the info of a profile

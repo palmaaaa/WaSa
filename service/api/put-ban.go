@@ -63,7 +63,17 @@ func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 		User{IdUser: requestingUserId}.ToDatabase(),
 		User{IdUser: pathBannedId}.ToDatabase())
 	if err != nil {
-		ctx.Logger.WithError(err).Error("put-ban/db.UnfollowUser: error executing insert query")
+		ctx.Logger.WithError(err).Error("put-ban/db.UnfollowUser1: error executing insert query")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	// The banned user will not follow the user anymore or else will have the banner in his home
+	err = rt.db.UnfollowUser(
+		User{IdUser: pathBannedId}.ToDatabase(),
+		User{IdUser: requestingUserId}.ToDatabase())
+	if err != nil {
+		ctx.Logger.WithError(err).Error("put-ban/db.UnfollowUser2: error executing insert query")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
