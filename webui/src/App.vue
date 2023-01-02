@@ -27,7 +27,7 @@ export default {
 	},
 
 	mounted(){
-		console.log("Devo modificare ancora lo stile!")
+		// console.log("Devo modificare ancora lo stile!")
 		if (!localStorage.getItem('token')){
 			this.$router.replace("/login")
 		}else{

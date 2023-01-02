@@ -61,7 +61,8 @@ export default {
 }
 .my-btn-comm:hover{
     border: none;
-    transform: scale(1.1)
+    color: var(--color-red-danger);
+    transform: scale(1.1);
 }
 
 </style>

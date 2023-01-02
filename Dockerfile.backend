@@ -2,7 +2,8 @@
 # docker build -t wasaphoto-backend:latest -f Dockerfile.backend .
 #
 # Execute the Dockerfile.backend using ->
-# docker run -it -v /home/:/home/ -p 3000:3000 --rm wasaphoto-backend:latest
+# docker run -it -p 3000:3000 --rm wasaphoto-backend:latest (*)
+# (*) Since we don't care about having persistent data we don't need a volume (-v)
 
 FROM golang:1.19.4 as backend_compiler
 RUN mkdir /Executable/
@@ -14,5 +15,4 @@ FROM debian:stable
 WORKDIR /executable_backend/
 COPY --from=backend_compiler /Executable/ .
 EXPOSE 3000
-VOLUME ["/home/"]
 CMD ["./webapi"]

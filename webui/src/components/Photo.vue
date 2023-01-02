@@ -111,7 +111,10 @@ export default {
             <div class="card my-card">
                 <div class="d-flex justify-content-end">
 
-                    <button v-if="isOwner" class="btn btn-primary" @click="deletePhoto">Delete</button>
+                    <button v-if="isOwner" class="my-trnsp-btn my-dlt-btn me-2" @click="deletePhoto">
+						<!--Delete-->
+						<i class="fa-solid fa-trash w-100 h-100"></i>
+					</button>
 
                 </div>
                 <div class="d-flex justify-content-center photo-background-color">
@@ -124,18 +127,18 @@ export default {
 
                         <div class="d-flex flex-row justify-content-end align-items-center mb-2">
 
-							<button class="btn my-trnsp-btn m-0 p-1 me-auto" @click="photoOwnerClick">
+							<button class="my-trnsp-btn m-0 p-1 me-auto" @click="photoOwnerClick">
                             	<i> From {{owner}}</i>
 							</button>
 
-                            <button class="btn my-trnsp-btn m-0 p-1 d-flex justify-content-center align-items-center">
+                            <button class="my-trnsp-btn m-0 p-1 d-flex justify-content-center align-items-center">
                                 <i @click="toggleLike" :class="'me-1 my-heart-color w-100 h-100 fa '+(liked ? 'fa-heart' : 'fa-heart-o') "></i>
                                 <i data-bs-toggle="modal" :data-bs-target="'#like_modal'+photo_id" class="my-comment-color ">
                                     {{allLikes.length}}
                                 </i>
                             </button>
 
-                            <button class="btn my-trnsp-btn m-0 p-1  d-flex justify-content-center align-items-center" 
+                            <button class="my-trnsp-btn m-0 p-1  d-flex justify-content-center align-items-center" 
 							data-bs-toggle="modal" :data-bs-target="'#comment_modal'+photo_id">
 
                                 <i class="my-comment-color fa-regular fa-comment me-1" @click="commentClick"></i>
@@ -165,13 +168,6 @@ export default {
 	border-width: thin;
 }
 
-.my-trnsp-btn{
-	border: none;
-}
-.my-trnsp-btn:hover{
-	border: none;
-}
-
 .my-heart-color{
 	color: grey;
 }
@@ -188,5 +184,13 @@ export default {
 
 .my-comment-color-2{
 	color:grey
+}
+
+.my-dlt-btn{
+	font-size: 19px;
+}
+.my-dlt-btn:hover{
+	font-size: 19px;
+	color: var(--color-red-danger);
 }
 </style>

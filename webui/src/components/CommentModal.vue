@@ -20,15 +20,14 @@ export default {
 					}
 				})
 
-				//this.comments_list.push({
 				this.$emit('addComment',{
 					comment_id: response.data.comment_id, 
 					photo_id: this.photo_id, 
 					user_id: localStorage.getItem('token'), 
 					comment: this.commentValue}
 				)
-
 				this.commentValue = ""
+				
 			}catch(e){
 				console.log(e.toString())
 			}

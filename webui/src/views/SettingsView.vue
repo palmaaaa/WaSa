@@ -28,7 +28,7 @@ export default {
 <template>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col d-flex justify-content-center">
+			<div class="col d-flex justify-content-center mb-2">
 				<h1>{{ this.$route.params.id }}'s Settings</h1>
 			</div>
 		</div>
@@ -51,6 +51,12 @@ export default {
 						Modify</button>
 					</div>
 				</div>
+			</div>
+		</div>
+
+		<div class="row" >
+			<div v-if="nickname.length>0" class="col d-flex justify-content-center">
+				Preview: {{nickname}} @{{ this.$route.params.id }}
 			</div>
 		</div>
 

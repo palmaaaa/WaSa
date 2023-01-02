@@ -155,65 +155,80 @@ export default {
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <h5 class="card-title p-0 me-auto mt-auto">{{nickname}} @{{this.$route.params.id}}</h5>
 
-                                <button v-if="!sameUser && !banStatus" @click="followClick" class="btn btn-primary ms-2">
+                                <button v-if="!sameUser && !banStatus" @click="followClick" class="btn btn-success ms-2">
                                     {{followStatus ? "Unfollow" : "Follow"}}
                                 </button>
 
-                                <button v-if="!sameUser" @click="banClick" class="btn btn-primary ms-2">
+                                <button v-if="!sameUser" @click="banClick" class="btn btn-danger ms-2">
                                     {{banStatus ? "Unban" : "Ban"}}
                                 </button>
 
-                                <button v-else class="btn btn-primary ms-2" @click="goToSettings">
-                                    Settings
+                                <button v-else class="my-trnsp-btn ms-2" @click="goToSettings">
+                                    <!--Settings  <font-awesome-icon icon="fa-solid fa-gear" />-->
+                                    <i class="my-nav-icon-gear fa-solid fa-gear"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
 
                     <div v-if="!banStatus" class="row mt-1 mb-1">
-                        <div class="col">
-                            <div class="container-fluid d-flex justify-content-between align-items-center">
-                                <div class="row">
-                                    <div class="col">
-                                        <h6 class=" p-0 ">Posts: {{postCnt}}</h6>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col">
-                                        <h6 class=" p-0 ">Followers: {{followerCnt}}</h6>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col">
-                                        <h6 class=" p-0 ">Following: {{followingCnt}}</h6>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-4 d-flex justify-content-start">
+                            <h6 class="ms-3 p-0 ">Posts: {{postCnt}}</h6>
                         </div>
+                    
+                        <div class="col-4 d-flex justify-content-center">
+                            <h6 class=" p-0 ">Followers: {{followerCnt}}</h6>
+                        </div>
+                    
+                        <div class="col-4 d-flex justify-content-end">
+                            <h6 class=" p-0 me-3">Following: {{followingCnt}}</h6>
+                        </div>
+                    </div>
+
+                    <!--
+                    <div class="row mt-2 mb-2">
+                        <div class="col-4"></div>
+
+                        
+                        <div class="col-4">
+                            <input id="fileUploader" type="file" class="profile-file-upload" @change="uploadFile" accept=".jpg, .png">
+                            <label v-if="sameUser" class="btn btn-primary m-0 p-0 w-100" for="fileUploader"> Upload a new photo! </label>
+                        </div>
+                        
+
+                        <div class="col-4"></div>
+                    </div>
+                    -->
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="container-fluid mt-3">
+
+                <div class="row ">
+                    <div class="col-12 d-flex justify-content-center">
+                        <h2>Posts</h2>
                         <input id="fileUploader" type="file" class="profile-file-upload" @change="uploadFile" accept=".jpg, .png">
-                        <label v-if="sameUser" class="btn btn-primary m-0 p-0" for="fileUploader"> Upload a new photo! </label>
+                        <label v-if="sameUser" class="btn my-btn-add-photo ms-2 d-flex align-items-center" for="fileUploader"> Add </label>
                     </div>
                 </div>
-            </div>
-        </div>
 
-
-        <div class="row">
-
-            <div class="container-fluid w-100 d-flex justify-content-center mt-5">
-                <div class="row">
-                    <div class="col">
-                        <h3 style="color:black;">Posts</h3>
-                        <hr class="w-100" style="color:black;" />
+                <div class="row ">
+                    <div class="col-3"></div>
+                    <div class="col-6">
+                        <hr class="border border-dark">
                     </div>
+                    <div class="col-3"></div>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-12">
+            <div class="col">
 
                 <div v-if="!banStatus && postCnt>0">
                     <Photo v-for="(photo,index) in photos" 
@@ -248,4 +263,22 @@ export default {
 .profile-file-upload{
     display: none;
 }
+
+.my-nav-icon-gear{
+    color: grey;
+}
+.my-nav-icon-gear:hover{
+    transform: scale(1.3);
+}
+
+.my-btn-add-photo{
+    background-color: green;
+    border-color: grey;
+}
+.my-btn-add-photo:hover{
+    color: white;
+    background-color: green;
+    border-color: grey;
+}
+
 </style>

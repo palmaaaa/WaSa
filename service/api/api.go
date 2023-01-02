@@ -47,7 +47,7 @@ import (
 )
 
 // Photo media folder
-var photoFolder = filepath.Join("/home", "media") //  "wasa", "WASAPhoto",
+var photoFolder = filepath.Join("/tmp", "media")
 
 // Config is used to provide dependencies and configuration to the New function.
 type Config struct {
