@@ -479,8 +479,8 @@ components:
       in: path
       description: A comment unique identifier
       required: true
-      schema: 
-        $ref: "#/components/schemas/photo_identifier/properties/photo_id"
+      schema:
+        $ref: "#/components/schemas/comment_identifier/properties/comment_id"
       example: 118
 #........................................................        
     follower_id:
@@ -539,21 +539,6 @@ components:
           example: "PulpFiction"
       example:
         nickname: "PolpoFizione"
-#||||||||||||||||||||||||||||||||||||||||||||||||||||||||        
-    photo_identifier:
-      description: It's a photo *unique* id
-      type: object
-      properties:
-        photo_id:
-          description: Any number between 0-9999
-          type: integer
-          format: int64
-          minimum: 0
-          maximum: 9999
-          readOnly: true
-          example: 273
-      example:
-        photo_id: 2832
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||   
     complete_user:
       description: Contains both *unique identifier and nickname of a user
@@ -572,7 +557,13 @@ components:
       type: object
       properties:
         comment_id:
-          $ref: "#/components/schemas/photo_identifier/properties/photo_id"
+          description: Any number between 0-9999
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 9999
+          readOnly: true
+          example: 965
       example:
         comment_id: 965
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||        
@@ -591,11 +582,14 @@ components:
           pattern: '^.*?$'
           example: OK my bruh
           description: String value of the comment
+        comment_id:
+          $ref: "#/components/schemas/comment_identifier/properties/comment_id"
       example:
         user_id: "PannaBoy22"
         nickname: "22creammm"
         photo_id: 873
         comment: "Wow che foto spectacularesss"    
+        comment_id: 16
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||
     raw_photo:
       description: Image content
@@ -628,6 +622,7 @@ components:
                 nickname: "ErMike"
                 photo_id: 3821
                 comment: "bella foto!"
+                comment_id: 23
         likes:
           description:  Array of users that liked a photo
           type: array
@@ -647,7 +642,7 @@ components:
           example: 2017-07-21T17:32:28Z
           readOnly: true
         photo_id:
-          $ref: "#/components/schemas/photo_identifier/properties/photo_id"
+          $ref: "#/components/schemas/comment_identifier/properties/comment_id"
         owner:
           $ref: "#/components/schemas/user_nickname/properties/nickname"
       example: 
@@ -656,14 +651,12 @@ components:
             nickname: "ErMike"
             photo_id: 3821
             comment: "bella foto!"
+            comment_id: 99
         likes:
           - user_id: "miky"
             nickname: "ErMike"
-            
         date: 2017-07-21T17:32:28Z
-        
         photo_id: 3821
-        
         owner: "Mariucc"
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||      
     photos:
@@ -683,18 +676,17 @@ components:
                   nickname: "donatello99"
                   photo_id: 8321
                   comment: "wow, nice"
-                  
+                  comment_id: 7
                 - user_id: "raffaello"
                   nickname: "raffaello99"
                   photo_id: 8321
                   comment: "impossible!"
-                  
+                  comment_id: 76
             - likes:
               - user_id: "donatello"
                 nickname: "donatello99"
               - user_id: "raffaello"
                 nickname: "raffaello99"
-                  
               date: 2017-07-21T17:32:28Z
               photo_id: 8321
               owner: "Sapienzagram"
@@ -704,10 +696,12 @@ components:
                   nickname: "noNo"
                   photo_id: 7836
                   comment: "bella li"
+                  comment_id: 44
                 - user_id: "tiziano"
                   nickname: "ferroZ68"
                   photo_id: 7836
                   comment: "spaccaaa"
+                  comment_id: 912
             - likes:
               - user_id: "sfera"
                 nickname: "ebbasta"
@@ -715,7 +709,6 @@ components:
                 nickname: "ferro"
               - user_id: "raffaello"
                 nickname: "raffaello99"
-                  
               date: 2022-11-22T13:10:14Z
               photo_id: 7836
               owner: "Nerd99"
@@ -740,8 +733,6 @@ components:
               nickname: ondaBro
             - user_id: WantedMan66
               nickname: uomoRicercato
-#||||||||||||||||||||||||||||||||||||||||||||||||||||||||  
-    
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||  
     complete_profile:
           description: Object containing all the profile info
@@ -790,9 +781,11 @@ components:
                   - user_id: "sfera"
                     nickname: "noNo"
                     comment: "bella li"
+                    comment_id: 104
                   - user_id: "tiziano"
                     nickname: "ferroZ68"
                     comment: "spaccaaa"
+                    comment_id: 99
                 - likes:
                   - user_id: "sfera"
                     nickname: "noNo"
@@ -816,7 +809,7 @@ components:
       description: Identifier returned after the login
       type: object
       properties:
-        name:
+        identifier:
           $ref: "#/components/schemas/user_nickname/properties/nickname"
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 #_____________________________________________________________________________________________________  
