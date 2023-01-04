@@ -71,6 +71,7 @@ export default {
                 })
                 */
                 this.photos.unshift(response.data)
+                this.postCnt += 1
             };
         },
 

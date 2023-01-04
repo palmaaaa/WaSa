@@ -35,7 +35,10 @@ export default {
 
 		<div class="row ">
 			<div class="col-12 d-flex justify-content-center">
-				<p class="me-1" style="color: var(--color-red-danger);">[Disclaimer] </p> <p> A user has this structure: nickname @identifier. </p>
+				<p class="me-1" style="color: var(--color-red-danger);">[Disclaimer] </p> <p> A user has this structure: <p class="ms-1 me-1" style="color: green;">nickname</p> @identifier. </p>
+			</div>
+			<div class="col-12 d-flex justify-content-center">
+				<p>It's only possible to modify the part before the @ (the <p class="ms-1 me-1" style="color: green;">nickname</p>) and not the one after (the identifier of the user)  </p>
 			</div>
 			<div class="col-12 d-flex justify-content-center">
 				<p>Username has been intepreted as a nickname (they're the same thing).  </p>
@@ -56,7 +59,7 @@ export default {
 					<div class="input-group-append">
 						<button class="btn btn-outline-secondary" 
 						@click="modifyNickname"
-						:disabled="nickname == null || nickname.length >16 || nickname.length <3">
+						:disabled="nickname === null || nickname.length >16 || nickname.length <3">
 						Modify</button>
 					</div>
 				</div>

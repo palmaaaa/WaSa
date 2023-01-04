@@ -26,7 +26,19 @@ export default {
 		},
 	},
 
+	
+	created(){
+		if (!localStorage.getItem('notFirstStart')){
+			localStorage.clear()
+			localStorage.setItem('notFirstStart',true)
+			// console.log("first start")
+		}
+		
+	},
+	
+
 	mounted(){
+
 		// console.log("Devo modificare ancora lo stile!")
 		if (!localStorage.getItem('token')){
 			this.$router.replace("/login")

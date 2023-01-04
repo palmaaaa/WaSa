@@ -22,7 +22,7 @@ export default {
 				this.searchValue === undefined ||
 				this.searchValue === "" || 
 				this.searchValue.includes("?") ||
-			 	this.searchValue.includes("_")){
+				this.searchValue.includes("_")){
 				this.users = []
 				return 
 			}
