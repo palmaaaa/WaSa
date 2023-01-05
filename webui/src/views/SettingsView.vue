@@ -35,10 +35,10 @@ export default {
 
 		<div class="row ">
 			<div class="col-12 d-flex justify-content-center">
-				<p class="me-1" style="color: var(--color-red-danger);">[Disclaimer] </p> <p> A user has this structure: <p class="ms-1 me-1" style="color: green;">nickname</p> @identifier. </p>
+				<p class="me-1" style="color: var(--color-red-danger);">[Disclaimer] </p> <p> A user has this structure: </p> <p> class="ms-1 me-1" style="color: green;">nickname</p> <p> @identifier. </p>
 			</div>
 			<div class="col-12 d-flex justify-content-center">
-				<p>It's only possible to modify the part before the @ (the <p class="ms-1 me-1" style="color: green;">nickname</p>) and not the one after (the identifier of the user)  </p>
+				<p>It's only possible to modify the part before the @</p> (the <p> class="ms-1 me-1" style="color: green;">nickname</p>) <p>and not the one after (the identifier of the user) </p>
 			</div>
 			<div class="col-12 d-flex justify-content-center">
 				<p>Username has been intepreted as a nickname (they're the same thing).  </p>
