@@ -107,6 +107,10 @@ export default {
 		},
 
 		async loadInfo(){
+            if (this.$route.params.id === undefined){
+                return
+            }
+
 			try{
                 // Get user profile: /users/:id
 				let response = await this.$axios.get("/users/"+this.$route.params.id);
