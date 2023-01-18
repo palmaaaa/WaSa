@@ -3,16 +3,6 @@ package database
 // Database function that retrieves the list of photos of a user (only if the requesting user is not banned by that user)
 func (db *appdbimpl) GetPhotosList(requestingUser User, targetUser User) ([]Photo, error) { // requestinUser User,
 
-	/*
-		banned, err := db.BannedUserCheck(requestingUser, targetUser)
-		if err != nil {
-			return nil, err
-		}
-		if banned {
-			return nil, ErrUserBanned
-		}
-	*/
-
 	rows, err := db.c.Query("SELECT * FROM photos WHERE id_user = ? ORDER BY date DESC", targetUser.IdUser)
 	if err != nil {
 		return nil, err
@@ -53,12 +43,6 @@ func (db *appdbimpl) GetPhotosList(requestingUser User, targetUser User) ([]Phot
 
 // Database function that retrieves a specific photo (only if the requesting user is not banned by that owner of that photo).
 func (db *appdbimpl) GetPhoto(requestinUser User, targetPhoto PhotoId) (Photo, error) {
-
-	/*
-		if !db.CheckPhotoExistence(targetPhoto) {
-			return Photo{}, ErrPhotoDoesntExist
-		}
-	*/
 
 	var photo Photo
 	err := db.c.QueryRow("SELECT * FROM photos WHERE (id_photo = ?) AND id_user NOT IN (SELECT banner FROM banned_user WHERE banned = ?)",

@@ -64,14 +64,6 @@ func (rt *_router) sessionHandler(w http.ResponseWriter, r *http.Request, ps htt
 // Function that creates a new subdir for the specified user
 func createUserFolder(identifier string, ctx reqcontext.RequestContext) error {
 
-	/*
-		dir, err := os.Getwd()
-		if err != nil {
-			ctx.Logger.WithError(err).Error("session/createUserFolder: error getting current wd for user dir creating")
-			return err
-		}
-	*/
-
 	// Create the path media/useridentifier/ inside the project dir
 	path := filepath.Join(photoFolder, identifier)
 

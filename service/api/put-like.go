@@ -42,17 +42,6 @@ func (rt *_router) putLike(w http.ResponseWriter, r *http.Request, ps httprouter
 		return
 	}
 
-	/*
-		// Get the new nickname from the request body
-		var photo_like User
-		err = json.NewDecoder(r.Body).Decode(&photo_like)
-		if err != nil {
-			ctx.Logger.WithError(err).Error("put-like: error decoding json")
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-	*/
-
 	// Follower id is not consistent with requesting user bearer token
 	if pathLikeId != requestingUserId {
 		w.WriteHeader(http.StatusBadRequest)

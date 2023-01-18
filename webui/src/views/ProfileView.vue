@@ -2,7 +2,7 @@
 export default {
 	data: function() {
 		return {
-			// errormsg: null,
+			errormsg: null,
 
 			userExists: false,
 			banStatus: false,
@@ -87,7 +87,9 @@ export default {
                     this.followerCnt +=1
                 }
                 this.followStatus = !this.followStatus
-            }catch (e){}
+            }catch (e){
+                this.errormsg = e.toString();
+            }
             
 		},
 
@@ -103,7 +105,9 @@ export default {
                     this.followStatus = false
                 }
                 this.banStatus = !this.banStatus
-            }catch(e){}
+            }catch(e){
+                this.errormsg = e.toString();
+            }
 		},
 
 		async loadInfo(){
@@ -253,12 +257,12 @@ export default {
         </div>
 
     
-
+    <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
     </div>
     <div v-else class="h-25 ">
         <PageNotFound />
     </div>
-    <!--<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>-->
+    
 
 </template>
 

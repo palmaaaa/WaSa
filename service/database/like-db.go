@@ -38,20 +38,6 @@ func (db *appdbimpl) GetLikesList(requestingUser User, requestedUser User, photo
 	return likes, nil
 }
 
-/*
-// Database function that gets the number of likes of a photo
-func (db *appdbimpl) GetLikesLen(p PhotoId) (int, error) {
-
-	var likes int
-	err := db.c.QueryRow("SELECT COUNT(*) FROM likes WHERE (id_photo = ?)", p.IdPhoto).Scan(&likes)
-	if err != nil {
-		return -1, err
-	}
-
-	return likes, nil
-}
-*/
-
 // Database function that adds a like of a user to a photo
 func (db *appdbimpl) LikePhoto(p PhotoId, u User) error {
 

@@ -21,17 +21,6 @@ func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 		return
 	}
 
-	/*
-		// Get the banned user id from the request body
-		var banned User
-		err := json.NewDecoder(r.Body).Decode(&banned)
-		if err != nil {
-			ctx.Logger.WithError(err).Error("put-ban: error decoding json")
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-	*/
-
 	// Check if the user is trying to ban himself/herself
 	if requestingUserId == pathBannedId {
 		w.WriteHeader(http.StatusBadRequest)
@@ -44,14 +33,6 @@ func (rt *_router) putBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 		User{IdUser: pathBannedId}.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("put-ban/db.BanUser: error executing insert query")
-
-		/*
-			// If the user is trying to ban himself then respond with bad request
-			if errors.Is(err, database.ErrUserAutoBan) {
-				w.WriteHeader(http.StatusBadRequest)
-				return
-			}
-		*/
 
 		// Something  didn't work internally
 		w.WriteHeader(http.StatusInternalServerError)

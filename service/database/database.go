@@ -91,12 +91,21 @@ type AppDatabase interface {
 	// Removes a photo from the database. The removal includes likes and comments.  It returns an error
 	RemovePhoto(User, PhotoId) error
 
-	// _________ Util Methods _________
+	// ____________________________________  Util Methods ____________________________________
 
+	// Gets the followers list for the specified user. Returns the followers list and an error
 	GetFollowers(User) ([]User, error)
+
+	// Gets the following list for the specified user. Returns the following list and an error
 	GetFollowing(User) ([]User, error)
-	GetPhotosList(User, User) ([]Photo, error)
+
+	// Gets the photos list of user b for the user a. Returns the photo list and an error
+	GetPhotosList(a User, b User) ([]Photo, error)
+
+	// Allows the author of a photo to remove a comment from another user on his/her photo. Returns an error
 	UncommentPhotoAuthor(PhotoId, CommentId) error
+
+	// Gets the nickname of a user. Returns the nickname and an error
 	GetNickname(User) (string, error)
 
 	// Checks if a user (a) is banned by another (b). Returns a boolean
@@ -105,7 +114,7 @@ type AppDatabase interface {
 	// Checks if a user (a) exists
 	CheckUser(a User) (bool, error)
 
-	// Checks if a photo exists. Returns an error
+	// Checks if a photo (via its id) exists. Returns an error
 	CheckPhotoExistence(p PhotoId) (bool, error)
 
 	// Ping checks whether the database is available or not (in that case, an error will be returned)

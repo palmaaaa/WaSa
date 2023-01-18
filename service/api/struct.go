@@ -18,17 +18,6 @@ type JSONErrorMsg struct {
 	Message string `json:"message"` // Error messages
 }
 
-/*
-// Photo structure for the APIs
-type Photo struct {
-	Comments int       `json:"comments"` // Number of comments of a photo
-	Likes    int       `json:"likes"`    // Number of likes of a photo
-	Owner    string    `json:"owner"`    // Unique id of the owner
-	PhotoId  int       `json:"photo_id"` // Unique id of the photo
-	Date     time.Time `json:"date"`     // Date in which the photo was uploaded
-}
-*/
-
 // Photo structure for the APIs
 type Photo struct {
 	Comments []database.CompleteComment `json:"comments"` // Number of comments of a photo

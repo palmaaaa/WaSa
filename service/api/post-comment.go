@@ -16,15 +16,6 @@ func (rt *_router) postComment(w http.ResponseWriter, r *http.Request, ps httpro
 	photoOwnerId := ps.ByName("id")
 	requestingUserId := extractBearer(r.Header.Get("Authorization"))
 
-	/*
-		// Check if the user is logged and not trying to steal anyone's identity
-		valid := validateRequestingUser(photoOwnerId, requestingUserId)
-		if valid != 0 {
-			w.WriteHeader(valid)
-			return
-		}
-	*/
-
 	if isNotLogged(requestingUserId) {
 		w.WriteHeader(http.StatusForbidden)
 		return

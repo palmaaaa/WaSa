@@ -20,17 +20,6 @@ func (rt *_router) putFollow(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	/*
-		// Get the new follower id from the request body
-		var newFollower User
-		err := json.NewDecoder(r.Body).Decode(&newFollower)
-		if err != nil {
-			ctx.Logger.WithError(err).Error("put-follow: error decoding json")
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-	*/
-
 	// Check if the id of the follower in the request is the same of the bearer and the path parameter
 	if ps.ByName("follower_id") != requestingUserId {
 		w.WriteHeader(http.StatusBadRequest)
