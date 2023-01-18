@@ -14,7 +14,7 @@ export default {
 			try {
 				// Login (POST): "/session"
 				let response = await this.$axios.post("/session",{
-					user_id: this.identifier
+					user_id: this.identifier.trim()
 				});
 
 				localStorage.setItem('token',response.data.user_id);
@@ -57,13 +57,19 @@ export default {
 
 				<div class="row mt-2 mb-3">
 					<div class="col">
-						<input type="text" class="form-control" v-model="identifier" placeholder="Your identifier" />
+						<input 
+						type="text" 
+						class="form-control" 
+						v-model="identifier" 
+						maxlength="16"
+						minlength="3"
+						placeholder="Your identifier" />
 					</div>
 				</div>
 
 				<div class="row mt-2 mb-5 ">
 					<div class="col ">
-						<button class="btn btn-dark" :disabled="identifier == null || identifier.length >16 || identifier.length <3"> 
+						<button class="btn btn-dark" :disabled="identifier == null || identifier.length >16 || identifier.length <3 || identifier.trim().length<3"> 
 						Register/Login 
 						</button>
 					</div>
