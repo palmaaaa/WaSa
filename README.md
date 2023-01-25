@@ -7,7 +7,7 @@ Homework for the WaSa course @ Sapienza
 
 # HW3 - Frontend in Vue.js
 
-# HW4 - Deployment in Docker
+# HW4 - Deployment with Docker
 
 # Final results
 ![wasa_grades_small](https://user-images.githubusercontent.com/80824277/214653650-16a7660f-116c-4dc2-98c1-bcd41409c0db.png)
