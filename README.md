@@ -2,16 +2,16 @@
 Homework for the WaSa course @ Sapienza
 
 # HW1 - API Definition
-Description: Soon
+Definition of the API through the use of OpenAPI. The YAML document can be found at ```sh doc/api.yaml```.
 
 # HW2 - Backend in GO
-Description: Soon
+Based on the [Fantastic Coffee Template](https://github.com/sapienzaapps/fantastic-coffee-decaffeinated), the necessary functions, endpoints, and structs have been defined. Moreover, the interaction between the SQLite Database and the Golang backend has been implemented to only allow authorized users to perform any kind of operation.
 
 # HW3 - Frontend in Vue.js
-Description: Soon
+The Vue.js frontend was developed with reusability in mind. Much effort has gone into efficiently passing data from views to components.
 
 # HW4 - Deployment with Docker
-Description: Soon
+Containerization has been done with efficiency in mind. Only necessary and lightweight steps have been inserted to obtain a performant Docker container.
 
 # 📈 Score
-After an oral exam the project received a grading of 30 cum laude.
+After an oral exam, the project received a grading of 30 cum laude.
